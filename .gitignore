@@ -1,5 +1,6 @@
 .DS_Store
 .idea/
+*.sln.DotSettings.user
 **/bin/
 **/obj/
 **/TestResults/

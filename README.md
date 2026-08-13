@@ -1,6 +1,6 @@
 # Guided Coding
 
-Guided Coding is a plan-driven workflow for coding agents. Version 2 treats `ai-plans/` as an
+Guided Coding is a lightweight approach to working with Coding Agents. Version 2 treats `ai-plans/` as an
 append-only decision record: plans become immutable when their Planning Phase ends, acceptance
 criteria record verified progress, and material implementation changes are captured in Plan
 Deviations documents.

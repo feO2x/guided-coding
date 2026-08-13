@@ -1,6 +1,6 @@
 {
   "name": "guided-coding",
-  "description": "Guided Coding workflows for planning, implementation, and review.",
+  "description": "Skills for Guided Coding, a lightweight approach to developing software with AI agents. Plan, Implement, Guide, Iterate.",
   "owner": {
     "name": "Kenny Pflug",
     "url": "https://github.com/feO2x"
@@ -9,7 +9,7 @@
     {
       "name": "guided-coding",
       "source": "./claude-plugin",
-      "description": "Plan-driven coding workflows with immutable plans and explicit deviation records.",
+      "description": "Skills for Guided Coding, a lightweight approach to developing software with AI agents. Plan, Implement, Guide, Iterate.",
       "version": "2.0.0",
       "author": {
         "name": "Kenny Pflug",
@@ -20,9 +20,9 @@
       "license": "MIT",
       "category": "development",
       "tags": [
-        "coding",
-        "planning",
-        "workflow"
+        "guided-coding",
+        "software-engineering",
+        "planning"
       ]
     }
   ]

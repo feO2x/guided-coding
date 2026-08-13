@@ -23,7 +23,7 @@ public sealed class PackageValidationTests
         "guided-coding-write-plan"
     ];
 
-    private static readonly Dictionary<string, string> ExpectedClaudeSkillNames = new(
+    private static readonly Dictionary<string, string> ExpectedClaudeSkillNames = new (
         StringComparer.Ordinal
     )
     {
@@ -45,16 +45,16 @@ public sealed class PackageValidationTests
         "metadata"
     ];
 
-    public static TheoryData<string> PortableSkillNames => new(ExpectedPortableSkillNames);
+    public static TheoryData<string> PortableSkillNames => new (ExpectedPortableSkillNames);
 
-    public static TheoryData<string, string> PortableAndClaudeSkillNames => new(
+    public static TheoryData<string, string> PortableAndClaudeSkillNames => new (
         ExpectedClaudeSkillNames.Select(pair => (pair.Key, pair.Value))
     );
 
     private static string RepositoryRoot { get; } = FindRepositoryRoot();
 
     [Fact]
-    public void ManifestsUseTheSameIdentityAndVersion()
+    public void ManifestsUseTheSamePackageMetadata()
     {
         var portable = ReadJson("plugin.json");
         var claude = ReadJson("claude-plugin/.claude-plugin/plugin.json");
@@ -64,10 +64,13 @@ public sealed class PackageValidationTests
             portable.GetProperty("$schema").GetString()
         );
 
+        AssertPluginMetadataEqual(portable, claude);
         Assert.Equal(PluginName, portable.GetProperty("name").GetString());
         Assert.Equal(Version, portable.GetProperty("version").GetString());
-        Assert.Equal(PluginName, claude.GetProperty("name").GetString());
-        Assert.Equal(Version, claude.GetProperty("version").GetString());
+        Assert.Equal(
+            ReadStringArray(portable, "keywords"),
+            ReadStringArray(claude, "keywords")
+        );
         Assert.Equal("./claude-skills", claude.GetProperty("skills").GetString());
     }
 
@@ -77,11 +80,17 @@ public sealed class PackageValidationTests
         var marketplace = ReadJson(".claude-plugin/marketplace.json");
         var plugins = marketplace.GetProperty("plugins").EnumerateArray().ToArray();
         var plugin = Assert.Single(plugins);
+        var portable = ReadJson("plugin.json");
 
-        Assert.Equal(PluginName, marketplace.GetProperty("name").GetString());
-        Assert.Equal(PluginName, plugin.GetProperty("name").GetString());
+        Assert.Equal(portable.GetProperty("name").GetString(), marketplace.GetProperty("name").GetString());
+        Assert.Equal(
+            portable.GetProperty("description").GetString(),
+            marketplace.GetProperty("description").GetString()
+        );
+        AssertAuthorEqual(portable.GetProperty("author"), marketplace.GetProperty("owner"));
+        AssertPluginMetadataEqual(portable, plugin);
+        Assert.Equal(ReadStringArray(portable, "keywords"), ReadStringArray(plugin, "tags"));
         Assert.Equal("./claude-plugin", plugin.GetProperty("source").GetString());
-        Assert.Equal(Version, plugin.GetProperty("version").GetString());
     }
 
     [Fact]
@@ -129,6 +138,10 @@ public sealed class PackageValidationTests
         Assert.Equal(["description", "name"], frontmatter.Keys.Order(StringComparer.Ordinal));
         Assert.Equal(skillName, frontmatter["name"]);
         Assert.Contains(ExplicitInvocation, frontmatter["description"], StringComparison.Ordinal);
+        Assert.NotEqual(
+            ReadJson("plugin.json").GetProperty("description").GetString(),
+            frontmatter["description"]
+        );
 
         foreach (var field in ForbiddenFrontmatterFields)
         {
@@ -145,8 +158,57 @@ public sealed class PackageValidationTests
         var metadataPath = Path.Combine(RepositoryRoot, "skills", skillName, "agents", "openai.yaml");
         var metadata = File.ReadAllText(metadataPath);
 
+        Assert.Contains("display_name:", metadata, StringComparison.Ordinal);
+        Assert.Contains("short_description:", metadata, StringComparison.Ordinal);
+        Assert.Contains("default_prompt:", metadata, StringComparison.Ordinal);
         Assert.Contains($"${skillName}", metadata, StringComparison.Ordinal);
         Assert.Contains("allow_implicit_invocation: false", metadata, StringComparison.Ordinal);
+        Assert.DoesNotContain(
+            ReadJson("plugin.json").GetProperty("description").GetString()!,
+            metadata,
+            StringComparison.Ordinal
+        );
+    }
+
+    [Fact]
+    public void SkillDescriptionsRemainSpecificToEachWorkflow()
+    {
+        var packageDescription = ReadJson("plugin.json").GetProperty("description").GetString();
+        var portableDescriptions = ExpectedPortableSkillNames
+           .Select(
+                skillName =>
+                {
+                    var path = Path.Combine(RepositoryRoot, "skills", skillName, "SKILL.md");
+                    return ParseFrontmatter(path, File.ReadAllText(path))["description"];
+                }
+            )
+           .ToArray();
+        var codexDescriptions = ExpectedPortableSkillNames
+           .Select(
+                skillName =>
+                    ReadQuotedYamlValue(
+                        Path.Combine(
+                            RepositoryRoot,
+                            "skills",
+                            skillName,
+                            "agents",
+                            "openai.yaml"
+                        ),
+                        "short_description"
+                    )
+            )
+           .ToArray();
+
+        Assert.Equal(
+            ExpectedPortableSkillNames.Length,
+            portableDescriptions.Distinct(StringComparer.Ordinal).Count()
+        );
+        Assert.Equal(
+            ExpectedPortableSkillNames.Length,
+            codexDescriptions.Distinct(StringComparer.Ordinal).Count()
+        );
+        Assert.DoesNotContain(packageDescription, portableDescriptions);
+        Assert.DoesNotContain(packageDescription, codexDescriptions);
     }
 
     [Theory]
@@ -257,6 +319,55 @@ public sealed class PackageValidationTests
         return document.RootElement.Clone();
     }
 
+    private static void AssertPluginMetadataEqual(JsonElement expected, JsonElement actual)
+    {
+        foreach (
+            var property in new[]
+            {
+                "name",
+                "version",
+                "description",
+                "homepage",
+                "repository",
+                "license"
+            }
+        )
+        {
+            Assert.Equal(
+                expected.GetProperty(property).GetString(),
+                actual.GetProperty(property).GetString()
+            );
+        }
+
+        AssertAuthorEqual(expected.GetProperty("author"), actual.GetProperty("author"));
+    }
+
+    private static void AssertAuthorEqual(JsonElement expected, JsonElement actual)
+    {
+        Assert.Equal(expected.GetProperty("name").GetString(), actual.GetProperty("name").GetString());
+        Assert.Equal(expected.GetProperty("url").GetString(), actual.GetProperty("url").GetString());
+    }
+
+    private static string[] ReadStringArray(JsonElement element, string property)
+    {
+        return element
+           .GetProperty(property)
+           .EnumerateArray()
+           .Select(item => item.GetString())
+           .Cast<string>()
+           .ToArray();
+    }
+
+    private static string ReadQuotedYamlValue(string path, string property)
+    {
+        var prefix = $"  {property}: ";
+        var line = Assert.Single(
+            File.ReadLines(path),
+            candidate => candidate.StartsWith(prefix, StringComparison.Ordinal)
+        );
+        return JsonSerializer.Deserialize<string>(line[prefix.Length..])!;
+    }
+
     private static Dictionary<string, string> ParseFrontmatter(string path, string content)
     {
         var lines = content.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
@@ -294,7 +405,7 @@ public sealed class PackageValidationTests
         bool excludeAgents
     )
     {
-        return new(
+        return new (
             Directory
                .EnumerateFiles(root, "*", SearchOption.AllDirectories)
                .Where(path => Path.GetFileName(path) != "SKILL.md")
