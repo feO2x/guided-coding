@@ -1,6 +1,7 @@
 ---
 name: write-deviations
 description: "Decide whether a completed Guided Coding cycle needs a Plan Deviations document and write it when required. Run only when explicitly requested by the user."
+license: "MIT"
 disable-model-invocation: true
 ---
 

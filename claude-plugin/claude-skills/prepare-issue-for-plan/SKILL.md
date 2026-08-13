@@ -1,6 +1,7 @@
 ---
 name: prepare-issue-for-plan
 description: "Create an empty tracker issue and a clean local branch for a Guided Coding plan. Run only when explicitly requested by the user."
+license: "MIT"
 disable-model-invocation: true
 ---
 

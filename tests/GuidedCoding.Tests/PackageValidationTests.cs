@@ -41,7 +41,6 @@ public sealed class PackageValidationTests
         "argument-hint",
         "compatibility",
         "disable-model-invocation",
-        "license",
         "metadata"
     ];
 
@@ -135,7 +134,7 @@ public sealed class PackageValidationTests
         var skill = File.ReadAllText(skillPath);
         var frontmatter = ParseFrontmatter(skillPath, skill);
 
-        Assert.Equal(["description", "name"], frontmatter.Keys.Order(StringComparer.Ordinal));
+        Assert.Equal(["description", "license", "name"], frontmatter.Keys.Order(StringComparer.Ordinal));
         Assert.Equal(skillName, frontmatter["name"]);
         Assert.Contains(ExplicitInvocation, frontmatter["description"], StringComparison.Ordinal);
         Assert.NotEqual(
@@ -236,7 +235,7 @@ public sealed class PackageValidationTests
             field =>
                 Assert.Contains(
                     field,
-                    new[] { "argument-hint", "description", "disable-model-invocation", "name" }
+                    new[] { "argument-hint", "description", "disable-model-invocation", "name", "license" }
                 )
         );
         Assert.Equal(claudeName, claudeFrontmatter["name"]);

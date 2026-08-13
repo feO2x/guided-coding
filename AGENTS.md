@@ -6,7 +6,7 @@ the Agent Plugins standard and generates a dedicated Claude Code marketplace ada
 ## Skill authoring
 
 - Keep canonical skill instructions under `skills/<skill-name>/SKILL.md`.
-- Use only `name` and `description` in `SKILL.md` frontmatter.
+- Use only `name`, `description`, and `license` in `SKILL.md` frontmatter.
 - Keep the skill directory and frontmatter name identical.
 - State in every description that the skill runs only when explicitly requested.
 - Put Codex-specific interface and invocation policy in `agents/openai.yaml`.

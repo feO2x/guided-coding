@@ -232,16 +232,17 @@ public static class Program
             }
         }
 
-        if (!values.Keys.Order(StringComparer.Ordinal).SequenceEqual(["description", "name"]))
+        if (!values.Keys.Order(StringComparer.Ordinal).SequenceEqual(["description", "license", "name"]))
         {
             throw new InvalidOperationException(
-                $"{path} must contain only name and description frontmatter fields."
+                $"{path} must contain only name, description, and license frontmatter fields."
             );
         }
 
         return new(
             values["name"],
             values["description"],
+            values["license"],
             content[(closingDelimiter + "\n---\n".Length)..]
         );
     }
@@ -252,7 +253,8 @@ public static class Program
         {
             "---",
             $"name: {target.Name}",
-            $"description: {QuoteYamlString(source.Description)}"
+            $"description: {QuoteYamlString(source.Description)}",
+            $"license: {QuoteYamlString(source.License)}"
         };
 
         if (!string.IsNullOrWhiteSpace(target.ArgumentHint))
@@ -472,7 +474,7 @@ public static class Program
         File
     }
 
-    private sealed record CanonicalSkill(string Name, string Description, string Body);
+    private sealed record CanonicalSkill(string Name, string Description, string License, string Body);
 
     private sealed class ClaudeGeneratorConfig
     {

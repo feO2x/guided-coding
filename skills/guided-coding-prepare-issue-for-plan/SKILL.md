@@ -1,6 +1,7 @@
 ---
 name: guided-coding-prepare-issue-for-plan
 description: Create an empty tracker issue and a clean local branch for a Guided Coding plan. Run only when explicitly requested by the user.
+license: MIT
 ---
 
 # Prepare an Issue for a Plan

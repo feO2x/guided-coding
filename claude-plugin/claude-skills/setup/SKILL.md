@@ -1,6 +1,7 @@
 ---
 name: setup
 description: "Set up or upgrade Guided Coding repository instructions, plan storage, and verified feedback loops. Run only when explicitly requested by the user."
+license: "MIT"
 disable-model-invocation: true
 ---
 

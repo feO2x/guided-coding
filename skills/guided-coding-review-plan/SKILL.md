@@ -1,6 +1,7 @@
 ---
 name: guided-coding-review-plan
 description: Review a completed Guided Coding plan draft against the codebase before its Planning Phase ends. Run only when explicitly requested by the user.
+license: MIT
 ---
 
 # Review a Plan

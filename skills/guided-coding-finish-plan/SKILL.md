@@ -1,6 +1,7 @@
 ---
 name: guided-coding-finish-plan
 description: Validate and freeze a Guided Coding plan, then optionally publish it to its tracker issue. Run only when explicitly requested by the user.
+license: MIT
 ---
 
 # Finish a Plan
