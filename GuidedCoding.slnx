@@ -1,4 +1,13 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="AGENTS.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="plugin.json" />
+    <File Path="README.md" />
+  </Folder>
   <Project Path="tests/GuidedCoding.Tests/GuidedCoding.Tests.csproj" />
   <Project Path="tools/GuidedCoding.ClaudeGenerator/GuidedCoding.ClaudeGenerator.csproj" />
 </Solution>
