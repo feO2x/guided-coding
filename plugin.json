@@ -1,0 +1,19 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "guided-coding",
+  "version": "2.0.0",
+  "description": "Plan-driven coding workflows with immutable plans, verifiable acceptance criteria, and explicit deviation records.",
+  "author": {
+    "name": "Kenny Pflug",
+    "url": "https://github.com/feO2x"
+  },
+  "homepage": "https://kenny-codes.net/docs/guided-coding/",
+  "repository": "https://github.com/feO2x/guided-coding",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "coding-agents",
+    "event-sourcing",
+    "planning"
+  ]
+}

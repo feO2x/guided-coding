@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "guided-coding",
+  "displayName": "Guided Coding",
+  "version": "2.0.0",
+  "description": "Plan-driven coding workflows with immutable plans, verifiable acceptance criteria, and explicit deviation records.",
+  "author": {
+    "name": "Kenny Pflug",
+    "url": "https://github.com/feO2x"
+  },
+  "homepage": "https://kenny-codes.net/docs/guided-coding/",
+  "repository": "https://github.com/feO2x/guided-coding",
+  "license": "MIT",
+  "keywords": [
+    "coding",
+    "planning",
+    "agent-skills"
+  ]
+}

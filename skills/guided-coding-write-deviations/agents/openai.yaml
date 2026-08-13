@@ -1,0 +1,7 @@
+interface:
+  display_name: "Write Guided Coding Deviations"
+  short_description: "Record material differences from frozen plans"
+  default_prompt: "Use $guided-coding-write-deviations to compare the implementation with its plans."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,29 @@
+{
+  "name": "guided-coding",
+  "description": "Guided Coding workflows for planning, implementation, and review.",
+  "owner": {
+    "name": "Kenny Pflug",
+    "url": "https://github.com/feO2x"
+  },
+  "plugins": [
+    {
+      "name": "guided-coding",
+      "source": ".",
+      "description": "Plan-driven coding workflows with immutable plans and explicit deviation records.",
+      "version": "2.0.0",
+      "author": {
+        "name": "Kenny Pflug",
+        "url": "https://github.com/feO2x"
+      },
+      "homepage": "https://kenny-codes.net/docs/guided-coding/",
+      "repository": "https://github.com/feO2x/guided-coding",
+      "license": "MIT",
+      "category": "development",
+      "tags": [
+        "coding",
+        "planning",
+        "workflow"
+      ]
+    }
+  ]
+}

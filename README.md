@@ -1,0 +1,74 @@
+# Guided Coding
+
+Guided Coding is a plan-driven workflow for coding agents. Version 2 treats `ai-plans/` as an
+append-only decision record: plans become immutable when their Planning Phase ends, acceptance
+criteria record verified progress, and material implementation changes are captured in Plan
+Deviations documents.
+
+The repository is both an [Agent Plugin](https://agent-plugins.org/) and a Claude Code plugin. Its
+skills follow the [Agent Skills specification](https://agentskills.io/specification) and can also
+be installed independently into `.agents/skills`.
+
+The full method is documented at
+[kenny-codes.net/docs/guided-coding](https://kenny-codes.net/docs/guided-coding/).
+
+## Skills
+
+| Skill | Purpose |
+| --- | --- |
+| `guided-coding-setup` | Set up or upgrade Guided Coding in a repository. |
+| `guided-coding-prepare-issue-for-plan` | Create a tracker issue and clean local branch for planning. |
+| `guided-coding-write-plan` | After discussing an issue with your agent, write a plan or follow-up plan. |
+| `guided-coding-review-plan` | Review a plan draft against the repository (use in fresh conversation). |
+| `guided-coding-finish-plan` | Validate, commit, and freeze a plan. |
+| `guided-coding-write-deviations` | Record material differences between plans and implementation. |
+
+All workflows require explicit user invocation.
+
+## Install
+
+### Agent Skills
+
+Install all skills into the shared project-level `.agents/skills` directory with GitHub CLI:
+
+```sh
+gh skill install feO2x/guided-coding --all --agent universal --scope project
+```
+
+Install one skill by naming it, or add `--scope user` to make the installation available across
+repositories. GitHub CLI's skill commands are currently in preview.
+
+### Claude Code marketplace
+
+Add this repository as a marketplace and install the plugin:
+
+```text
+/plugin marketplace add feO2x/guided-coding
+/plugin install guided-coding@guided-coding
+```
+
+Claude namespaces plugin skills with the plugin name. For example, invoke the setup workflow as
+`/guided-coding:guided-coding-setup`.
+
+### Agent Plugin clients
+
+Clients supporting the Agent Plugins standard can install this repository as a plugin package.
+Installation and marketplace commands are client-specific.
+
+## Development
+
+Run the .NET 10 xUnit v3 validation suite with Microsoft.Testing.Platform v2:
+
+```sh
+dotnet test
+```
+
+When the corresponding tools are installed, also run:
+
+```sh
+claude plugin validate . --strict
+gh skill publish --dry-run
+```
+
+Keep `plugin.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and the
+release tag on the same Semantic Version.
