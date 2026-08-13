@@ -15,5 +15,6 @@
     "coding",
     "planning",
     "agent-skills"
-  ]
+  ],
+  "skills": "./claude-skills"
 }

@@ -1,6 +1,7 @@
 ---
-name: guided-coding-write-plan
-description: Write a Guided Coding plan or follow-up plan after its approach has been discussed. Run only when explicitly requested by the user.
+name: write-plan
+description: "Write a Guided Coding plan or follow-up plan after its approach has been discussed. Run only when explicitly requested by the user."
+disable-model-invocation: true
 ---
 
 # Write a Plan

@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.Json;
+using Xunit;
 
 namespace GuidedCoding.Tests;
 
@@ -8,7 +13,7 @@ public sealed class PackageValidationTests
     private const string PluginName = "guided-coding";
     private const string Version = "2.0.0";
 
-    private static readonly string[] ExpectedSkillNames =
+    private static readonly string[] ExpectedPortableSkillNames =
     [
         "guided-coding-finish-plan",
         "guided-coding-prepare-issue-for-plan",
@@ -17,6 +22,18 @@ public sealed class PackageValidationTests
         "guided-coding-write-deviations",
         "guided-coding-write-plan"
     ];
+
+    private static readonly Dictionary<string, string> ExpectedClaudeSkillNames = new(
+        StringComparer.Ordinal
+    )
+    {
+        ["guided-coding-finish-plan"] = "finish-plan",
+        ["guided-coding-prepare-issue-for-plan"] = "prepare-issue-for-plan",
+        ["guided-coding-review-plan"] = "review-plan",
+        ["guided-coding-setup"] = "setup",
+        ["guided-coding-write-deviations"] = "write-deviations",
+        ["guided-coding-write-plan"] = "write-plan"
+    };
 
     private static readonly string[] ForbiddenFrontmatterFields =
     [
@@ -28,7 +45,11 @@ public sealed class PackageValidationTests
         "metadata"
     ];
 
-    public static TheoryData<string> SkillNames => new (ExpectedSkillNames);
+    public static TheoryData<string> PortableSkillNames => new(ExpectedPortableSkillNames);
+
+    public static TheoryData<string, string> PortableAndClaudeSkillNames => new(
+        ExpectedClaudeSkillNames.Select(pair => (pair.Key, pair.Value))
+    );
 
     private static string RepositoryRoot { get; } = FindRepositoryRoot();
 
@@ -36,7 +57,7 @@ public sealed class PackageValidationTests
     public void ManifestsUseTheSameIdentityAndVersion()
     {
         var portable = ReadJson("plugin.json");
-        var claude = ReadJson(".claude-plugin/plugin.json");
+        var claude = ReadJson("claude-plugin/.claude-plugin/plugin.json");
 
         Assert.Equal(
             "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
@@ -47,10 +68,11 @@ public sealed class PackageValidationTests
         Assert.Equal(Version, portable.GetProperty("version").GetString());
         Assert.Equal(PluginName, claude.GetProperty("name").GetString());
         Assert.Equal(Version, claude.GetProperty("version").GetString());
+        Assert.Equal("./claude-skills", claude.GetProperty("skills").GetString());
     }
 
     [Fact]
-    public void MarketplacePublishesTheRootPlugin()
+    public void MarketplacePublishesTheClaudeAdapter()
     {
         var marketplace = ReadJson(".claude-plugin/marketplace.json");
         var plugins = marketplace.GetProperty("plugins").EnumerateArray().ToArray();
@@ -58,12 +80,12 @@ public sealed class PackageValidationTests
 
         Assert.Equal(PluginName, marketplace.GetProperty("name").GetString());
         Assert.Equal(PluginName, plugin.GetProperty("name").GetString());
-        Assert.Equal(".", plugin.GetProperty("source").GetString());
+        Assert.Equal("./claude-plugin", plugin.GetProperty("source").GetString());
         Assert.Equal(Version, plugin.GetProperty("version").GetString());
     }
 
     [Fact]
-    public void ExpectedSkillsArePresent()
+    public void ExpectedPortableSkillsArePresent()
     {
         var actualSkillNames = Directory
            .EnumerateFiles(Path.Combine(RepositoryRoot, "skills"), "SKILL.md", SearchOption.AllDirectories)
@@ -72,11 +94,32 @@ public sealed class PackageValidationTests
            .Order(StringComparer.Ordinal)
            .ToArray();
 
-        Assert.Equal(ExpectedSkillNames, actualSkillNames);
+        Assert.Equal(ExpectedPortableSkillNames, actualSkillNames);
+    }
+
+    [Fact]
+    public void ExpectedClaudeSkillsArePresent()
+    {
+        var actualSkillNames = Directory
+           .EnumerateFiles(
+                Path.Combine(RepositoryRoot, "claude-plugin", "claude-skills"),
+                "SKILL.md",
+                SearchOption.AllDirectories
+            )
+           .Where(
+                path =>
+                    Directory.GetParent(path)?.Parent?.FullName ==
+                    Path.Combine(RepositoryRoot, "claude-plugin", "claude-skills")
+            )
+           .Select(path => Directory.GetParent(path)!.Name)
+           .Order(StringComparer.Ordinal)
+           .ToArray();
+
+        Assert.Equal(ExpectedClaudeSkillNames.Values.Order(StringComparer.Ordinal), actualSkillNames);
     }
 
     [Theory]
-    [MemberData(nameof(SkillNames))]
+    [MemberData(nameof(PortableSkillNames))]
     public void SkillIsPortableAndRequiresExplicitInvocation(string skillName)
     {
         var skillPath = Path.Combine(RepositoryRoot, "skills", skillName, "SKILL.md");
@@ -96,7 +139,7 @@ public sealed class PackageValidationTests
     }
 
     [Theory]
-    [MemberData(nameof(SkillNames))]
+    [MemberData(nameof(PortableSkillNames))]
     public void CodexMetadataRequiresExplicitInvocation(string skillName)
     {
         var metadataPath = Path.Combine(RepositoryRoot, "skills", skillName, "agents", "openai.yaml");
@@ -104,6 +147,87 @@ public sealed class PackageValidationTests
 
         Assert.Contains($"${skillName}", metadata, StringComparison.Ordinal);
         Assert.Contains("allow_implicit_invocation: false", metadata, StringComparison.Ordinal);
+    }
+
+    [Theory]
+    [MemberData(nameof(PortableAndClaudeSkillNames))]
+    public void ClaudeSkillIsGeneratedFromPortableSkill(string portableName, string claudeName)
+    {
+        var portablePath = Path.Combine(RepositoryRoot, "skills", portableName, "SKILL.md");
+        var claudePath = Path.Combine(
+            RepositoryRoot,
+            "claude-plugin",
+            "claude-skills",
+            claudeName,
+            "SKILL.md"
+        );
+        var portable = File.ReadAllText(portablePath);
+        var claude = File.ReadAllText(claudePath);
+        var portableFrontmatter = ParseFrontmatter(portablePath, portable);
+        var claudeFrontmatter = ParseFrontmatter(claudePath, claude);
+
+        Assert.Contains("description", claudeFrontmatter.Keys);
+        Assert.Contains("disable-model-invocation", claudeFrontmatter.Keys);
+        Assert.Contains("name", claudeFrontmatter.Keys);
+        Assert.All(
+            claudeFrontmatter.Keys,
+            field =>
+                Assert.Contains(
+                    field,
+                    new[] { "argument-hint", "description", "disable-model-invocation", "name" }
+                )
+        );
+        Assert.Equal(claudeName, claudeFrontmatter["name"]);
+        Assert.Equal("true", claudeFrontmatter["disable-model-invocation"]);
+        Assert.Equal(
+            portableFrontmatter["description"],
+            JsonSerializer.Deserialize<string>(claudeFrontmatter["description"])
+        );
+        Assert.Equal(ParseBody(portable), ParseBody(claude));
+        Assert.False(
+            Directory.Exists(
+                Path.Combine(
+                    RepositoryRoot,
+                    "claude-plugin",
+                    "claude-skills",
+                    claudeName,
+                    "agents"
+                )
+            )
+        );
+    }
+
+    [Theory]
+    [MemberData(nameof(PortableAndClaudeSkillNames))]
+    public void ClaudeSkillResourcesMatchPortableSkill(string portableName, string claudeName)
+    {
+        var portableRoot = Path.Combine(RepositoryRoot, "skills", portableName);
+        var claudeRoot = Path.Combine(
+            RepositoryRoot,
+            "claude-plugin",
+            "claude-skills",
+            claudeName
+        );
+        var portableResources = EnumerateResourceFiles(portableRoot, excludeAgents: true);
+        var claudeResources = EnumerateResourceFiles(claudeRoot, excludeAgents: false);
+
+        Assert.Equal(portableResources.Keys, claudeResources.Keys);
+        foreach (var path in portableResources.Keys)
+        {
+            Assert.Equal(
+                File.ReadAllBytes(portableResources[path]),
+                File.ReadAllBytes(claudeResources[path])
+            );
+        }
+    }
+
+    [Fact]
+    public void ClaudePluginContainsTheRepositoryLicense()
+    {
+        Assert.Equal(
+            File.ReadAllBytes(Path.Combine(RepositoryRoot, "LICENSE")),
+            File.ReadAllBytes(Path.Combine(RepositoryRoot, "claude-plugin", "LICENSE"))
+        );
     }
 
     private static string FindRepositoryRoot()
@@ -155,5 +279,34 @@ public sealed class PackageValidationTests
         }
 
         return values;
+    }
+
+    private static string ParseBody(string content)
+    {
+        var lines = content.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+        var end = Array.IndexOf(lines, "---", 1);
+        Assert.True(end > 1);
+        return string.Join('\n', lines[(end + 1)..]);
+    }
+
+    private static SortedDictionary<string, string> EnumerateResourceFiles(
+        string root,
+        bool excludeAgents
+    )
+    {
+        return new(
+            Directory
+               .EnumerateFiles(root, "*", SearchOption.AllDirectories)
+               .Where(path => Path.GetFileName(path) != "SKILL.md")
+               .Where(
+                    path =>
+                        !excludeAgents ||
+                        !Path.GetRelativePath(root, path)
+                           .Split(Path.DirectorySeparatorChar)
+                           .Contains("agents", StringComparer.Ordinal)
+                )
+               .ToDictionary(path => Path.GetRelativePath(root, path), StringComparer.Ordinal),
+            StringComparer.Ordinal
+        );
     }
 }

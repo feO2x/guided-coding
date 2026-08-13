@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="tests/GuidedCoding.Tests/GuidedCoding.Tests.csproj" />
+  <Project Path="tools/GuidedCoding.ClaudeGenerator/GuidedCoding.ClaudeGenerator.csproj" />
 </Solution>

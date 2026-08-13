@@ -9,3 +9,4 @@ All notable changes to Guided Coding are documented here.
 - Freeze plans when their Planning Phase ends, except for checking acceptance criteria.
 - Require Plan Deviations documents for material departures from frozen plans.
 - Distribute Guided Coding as portable Agent Skills and an Agent Plugin.
+- Generate a Claude Code adapter with concise, manually invoked skill names.

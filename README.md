@@ -48,7 +48,8 @@ Add this repository as a marketplace and install the plugin:
 ```
 
 Claude namespaces plugin skills with the plugin name. For example, invoke the setup workflow as
-`/guided-coding:guided-coding-setup`.
+`/guided-coding:setup`. The other skill names similarly omit the redundant `guided-coding-`
+prefix used by the portable Agent Skills.
 
 ### Agent Plugin clients
 
@@ -63,6 +64,18 @@ Run the .NET 10 xUnit v3 validation suite with Microsoft.Testing.Platform v2:
 dotnet test
 ```
 
+Generate the Claude Code adapter from the canonical portable skills, or verify that the committed
+adapter is current:
+
+```sh
+dotnet run --project tools/GuidedCoding.ClaudeGenerator
+dotnet run --project tools/GuidedCoding.ClaudeGenerator -- --check
+```
+
+Configure Claude-specific skill names and frontmatter in
+`tools/GuidedCoding.ClaudeGenerator/claude-skills.json`. Do not edit
+`claude-plugin/claude-skills` directly.
+
 When the corresponding tools are installed, also run:
 
 ```sh
@@ -70,5 +83,5 @@ claude plugin validate . --strict
 gh skill publish --dry-run
 ```
 
-Keep `plugin.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and the
-release tag on the same Semantic Version.
+Keep `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`,
+`.claude-plugin/marketplace.json`, and the release tag on the same Semantic Version.

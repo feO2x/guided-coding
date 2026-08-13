@@ -1,0 +1,28 @@
+{
+  "skills": {
+    "guided-coding-finish-plan": {
+      "name": "finish-plan",
+      "disableModelInvocation": true
+    },
+    "guided-coding-prepare-issue-for-plan": {
+      "name": "prepare-issue-for-plan",
+      "disableModelInvocation": true
+    },
+    "guided-coding-review-plan": {
+      "name": "review-plan",
+      "disableModelInvocation": true
+    },
+    "guided-coding-setup": {
+      "name": "setup",
+      "disableModelInvocation": true
+    },
+    "guided-coding-write-deviations": {
+      "name": "write-deviations",
+      "disableModelInvocation": true
+    },
+    "guided-coding-write-plan": {
+      "name": "write-plan",
+      "disableModelInvocation": true
+    }
+  }
+}

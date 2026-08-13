@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "guided-coding",
-      "source": ".",
+      "source": "./claude-plugin",
       "description": "Plan-driven coding workflows with immutable plans and explicit deviation records.",
       "version": "2.0.0",
       "author": {
