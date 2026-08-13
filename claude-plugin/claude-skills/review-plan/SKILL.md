@@ -7,8 +7,9 @@ disable-model-invocation: true
 
 # Review a Plan
 
-Review the plan named by the user. If no plan is named and the target is ambiguous in git, ask for
-its path. Report findings only; never edit the plan or any other file.
+Review the plan named by the user. If none is named, proceed only when exactly one uncommitted plan
+draft exists in `ai-plans/`; otherwise ask for its path. Report findings only; never edit the plan
+or any other file.
 
 Read the plan, applicable repository instructions, the code it discusses, and every earlier
 document for the same issue, including legacy filenames. Verify assertions about existing types,

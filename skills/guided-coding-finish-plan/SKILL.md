@@ -16,6 +16,8 @@ Read the repository instructions and confirm that:
 - The filename is either
   `YYYY-MM-DD-HHMM-<issue-id>-<kebab-case-description>.md` or, without an issue,
   `YYYY-MM-DD-HHMM-<kebab-case-description>.md`.
+- Variable filename segments contain only lowercase ASCII letters, digits, and single hyphens, and
+  do not start or end with a hyphen.
 - The file starts with `# Title`, followed by exactly `## Rationale`,
   `## Acceptance Criteria`, and `## Technical Details`, in that order.
 - Every acceptance criterion is an unticked task (`- [ ]`).
@@ -27,8 +29,11 @@ until the plan is committed.
 
 ## 2. Commit and freeze
 
-Commit only the plan file, following repository commit conventions. Do not include unrelated
-changes and do not push. The successful commit ends the Planning Phase and freezes the plan.
+Inspect `git status` and the staged diff. Preserve unrelated working-tree and staged changes. Stage
+the plan if needed, then use a path-limited commit so the commit contains only the plan file. Verify
+the resulting commit's file list before continuing; if it contains anything else, stop and report
+the problem without rewriting history. Follow repository commit conventions and do not push. The
+successful commit ends the Planning Phase and freezes the plan.
 
 ## 3. Optionally publish the first plan
 
@@ -39,14 +44,17 @@ Use the tracker and target project documented by the repository. If neither is d
 them only when the git remote and tracker clearly agree, state the inferred target, and ask the
 user to confirm it. If the project has no tracker, skip this step.
 
-Ask before changing the tracker. Publish the plan body only. For GitHub:
+Read the current issue title and description before asking to publish. Explain that publishing
+replaces the complete issue description. If it is non-empty, show or summarize what would be
+replaced and require explicit confirmation to overwrite it. Publish the plan body only. For GitHub:
 
 ```sh
 gh issue edit <issue-id> --body-file <plan-path>
 ```
 
 If the plan and issue titles differ, report it without renaming either. Treat the tracker body as
-a publication snapshot, never as the source from which the committed plan is amended.
+a publication snapshot, never as the source from which the committed plan is amended. Never change
+the tracker without the user's approval.
 
 ## 4. Report
 

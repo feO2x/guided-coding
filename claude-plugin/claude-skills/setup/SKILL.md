@@ -1,6 +1,6 @@
 ---
 name: setup
-description: "Set up or upgrade Guided Coding repository instructions, plan storage, and verified feedback loops. Run only when explicitly requested by the user."
+description: "Set up or upgrade Guided Coding repository instructions, plan storage, and documented feedback-loop commands. Run only when explicitly requested by the user."
 license: "MIT"
 disable-model-invocation: true
 ---
@@ -15,7 +15,7 @@ and user-authored content. Never modify existing plan or Plan Deviations documen
 Read the root `AGENTS.md` when present, `ai-plans/AGENTS.md` when present, nested instruction
 files, build manifests, task runners, scripts, and CI configuration.
 
-Identify confirmed feedback loops and their exact commands. Look for:
+Identify feedback loops and their exact commands. Look for:
 
 - compilers, transpilers, type checkers, static analyzers, and linters;
 - unit, integration, end-to-end, coverage, and mutation tests;
@@ -23,8 +23,11 @@ Identify confirmed feedback loops and their exact commands. Look for:
 - dependency, secret, container, and source-code security scans.
 
 Do not invent commands or list tools merely because they are common for the detected language.
-Prefer the repository's documented entry points. If existing Guided Coding instructions conflict
-with this version and resolving them would discard a project-specific decision, ask before editing.
+Prefer the repository's documented entry points. When a command is safe, non-destructive, and
+reasonably bounded, run it to detect stale instructions. Do not claim that a command passed unless
+it was executed successfully; report why any documented command was not run. If existing Guided
+Coding instructions conflict with this version and resolving them would discard a project-specific
+decision, ask before editing.
 
 ## 2. Update the root instructions
 
@@ -40,8 +43,8 @@ Ensure it contains:
    - unmet criteria remain unchecked and their wording is never changed; and
    - material departures from explicit plan decisions require a Plan Deviations document rather
      than edits to the frozen plan.
-2. `## Feedback loops`, listing each confirmed command and what it verifies. State plainly when
-   no automated feedback loop can be confirmed.
+2. `## Feedback loops`, listing each repository-confirmed command and what it verifies. State
+   plainly when no automated feedback-loop command can be confirmed.
 3. `## How to write plans`, linking to `ai-plans/AGENTS.md`.
 4. `## This is your space` as the final section, inviting agents to record noteworthy repository
    discoveries for later discussion. Preserve any notes already in that section.
@@ -59,5 +62,5 @@ historical documents during an upgrade.
 
 ## 4. Report
 
-Report the files created or updated, the feedback loops documented, and any unresolved conflicts.
-Then stop.
+Report the files created or updated, the feedback loops documented, which commands were executed
+and their results, why any were not run, and any unresolved conflicts. Then stop.

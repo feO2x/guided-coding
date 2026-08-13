@@ -29,9 +29,14 @@ date -u +%F-%H%M
 
 In PowerShell, use `(Get-Date).ToUniversalTime().ToString("yyyy-MM-dd-HHmm")`.
 
-Normalize the tracker identifier to lowercase, remove a leading `#`, replace spaces with
-hyphens, and do not add zero padding. If the work requires an issue but none exists, stop and
-suggest the Guided Coding issue-preparation skill instead of creating a temporary filename.
+Normalize the tracker identifier for filenames: convert it to lowercase, remove a leading `#`,
+replace each run of characters other than `a-z` and `0-9` with one hyphen, trim leading and trailing
+hyphens, and do not add zero padding. Stop if normalization produces an empty identifier. If the
+work requires an issue but none exists, stop and suggest the Guided Coding issue-preparation skill
+instead of creating a temporary filename.
+
+Resolve the complete destination path before writing and confirm it does not exist. Never
+overwrite or reuse an existing plan or Plan Deviations document; report a collision and stop.
 
 ## Structure
 

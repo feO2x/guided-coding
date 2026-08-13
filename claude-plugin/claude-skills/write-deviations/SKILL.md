@@ -8,8 +8,11 @@ disable-model-invocation: true
 # Write Plan Deviations
 
 Use the issue or topic named by the user. Write the document into `ai-plans/`. Before writing, read
-every plan for the work oldest first, including legacy filenames. Inspect the final branch diff and
-relevant git history to determine what was actually implemented. Verify every document and
+every plan for the work oldest first, including legacy filenames. Determine the implementation
+range from the associated PR or MR when available. Otherwise, identify the target branch and its
+merge base with the implementation branch. Inspect the complete implementation delta, including
+committed, staged, and unstaged changes. Inspect the commits in that range—and earlier history when
+relevant—to understand why the implementation differs from the plans. Verify every document and
 source-file reference.
 
 ## Decide whether the document is required
@@ -40,7 +43,9 @@ YYYY-MM-DD-HHMM-<topic>-plan-deviations.md
 
 Use the second form only when there is no tracker issue. Obtain the current UTC timestamp from
 the shell; never infer it from conversation context. Normalize issue identifiers exactly as the
-related plans do.
+related plans do. Resolve the complete destination path before writing and confirm it does not
+exist. Never overwrite or reuse an existing plan or Plan Deviations document; report a collision
+and stop.
 
 ## Structure
 
@@ -63,8 +68,13 @@ Name the affected types, members, and files. Do not add entries for work that ma
 ## Finalize
 
 Allow corrections while the document is being reviewed in the current conversation. After the
-user accepts it, commit only that file following repository conventions. From that commit onward,
-the document is frozen: never edit, rename, or delete it.
+user accepts it, inspect `git status` and the staged diff, preserve unrelated changes, and use a
+path-limited commit so the commit contains only that file. Verify the resulting commit's file list;
+if it contains anything else, stop and report the problem without rewriting history. Follow
+repository commit conventions and do not push. From that commit onward, the document is frozen:
+never edit, rename, or delete it.
 
-When a PR or MR exists, offer to publish the accepted document as its description. Never update
-the tracker without the user's approval. Never edit the plans being compared.
+When a PR or MR exists, read its current description and offer to publish the accepted document as
+a replacement. Explain that publishing replaces the complete description. If it is non-empty,
+show or summarize what would be replaced and require explicit confirmation to overwrite it. Never
+update the tracker without the user's approval. Never edit the plans being compared.
