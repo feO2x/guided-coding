@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  package:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -19,3 +19,14 @@ jobs:
           global-json-file: global.json
       - run: dotnet run --project tools/GuidedCoding.ClaudeGenerator --configuration Release -- --check
       - run: dotnet test --configuration Release
+      - name: Validate Agent Skills package
+        run: gh skill publish --dry-run
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Validate Claude Code plugin
+        env:
+          DISABLE_AUTOUPDATER: "1"
+        run: npx --yes @anthropic-ai/claude-code@latest plugin validate . --strict
