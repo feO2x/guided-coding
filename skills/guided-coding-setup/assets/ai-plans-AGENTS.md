@@ -20,9 +20,10 @@ Every plan starts with `# Title` followed by exactly `## Rationale`, `## Accepta
 written as unchecked Markdown tasks. Technical Details record important decisions, constraints,
 affected components, and non-obvious interactions without prescribing routine implementation.
 
-Use a follow-up plan to correct or supersede a frozen plan. Use a Plan Deviations document when the
-final implementation materially changes or rejects an explicit plan decision. Plan Deviations must
-identify the compared plans and describe what was planned, what was implemented, why it changed,
-and the impact.
+Use a follow-up plan to correct or supersede a frozen plan. Always write a Plan Deviations document
+when at least one follow-up plan exists, summarizing which earlier decisions they superseded and the final
+outcome. Also use a Plan Deviations document when the final implementation materially changes or
+rejects an explicit plan decision. Plan Deviations must identify the compared plans and describe
+what was planned, what changed, why it changed, the final implementation, and the impact.
 
 Before writing a plan or Plan Deviations document, use the corresponding Guided Coding skill.
