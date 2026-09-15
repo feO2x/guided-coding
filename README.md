@@ -29,7 +29,7 @@ All workflows require explicit user invocation.
 
 ### Agent Skills
 
-Install all skills into the shared project-level `.agents/skills` directory with GitHub CLI:
+Install all skills into the shared project-level `.agents/skills` directory with the [GitHub CLI](https://cli.github.com/):
 
 ```sh
 gh skill install feO2x/guided-coding --all --agent universal --scope project
@@ -37,6 +37,13 @@ gh skill install feO2x/guided-coding --all --agent universal --scope project
 
 Install one skill by naming it, or add `--scope user` to make the installation available across
 repositories. GitHub CLI's skill commands are currently in preview.
+
+If you want to update, use the following command: 
+
+```sh
+gh skill update --dir .agents/skills --dry-run # checks for changes
+gh skill update --dir .agents/skills --all # updates all local skills
+```
 
 ### Claude Code marketplace
 
@@ -50,6 +57,15 @@ Add this repository as a marketplace and install the plugin:
 Claude namespaces plugin skills with the plugin name. For example, invoke the setup workflow as
 `/guided-coding:setup`. The other skill names similarly omit the redundant `guided-coding-`
 prefix used by the portable Agent Skills.
+
+If you want to update, use the following commands:
+
+```sh
+claude plugin marketplace update guided-coding
+claude plugin update guided-coding@guided-coding --scope project
+```
+
+Restart Claude Code afterwards. Only then will the updated skills be picked up.
 
 ### Agent Plugin clients
 
