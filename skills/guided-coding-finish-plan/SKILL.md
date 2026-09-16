@@ -6,56 +6,22 @@ license: MIT
 
 # Finish a Plan
 
-Finish the plan named by the user. If none is named, proceed only when exactly one uncommitted plan
-draft exists in `ai-plans/`; otherwise ask for its path.
+Finishing a plan means freezing it and providing a timestamp, both at the beginning of its file name and directly after its title. The plan is then considered ready for implementation.
 
-## 1. Validate
+The target plan should be already mentioned in the conversation, typically in the format `<topic>.md`. If not, ask the user to provide the path to the plan .md file.
 
-Read the repository instructions and confirm that:
+## 1. Determine the Timestamp
 
-- The filename is either
-  `YYYY-MM-DD-HHMM-<issue-id>-<kebab-case-description>.md` or, without an issue,
-  `YYYY-MM-DD-HHMM-<kebab-case-description>.md`.
-- Variable filename segments contain only lowercase ASCII letters, digits, and single hyphens, and
-  do not start or end with a hyphen.
-- The file starts with `# Title`, followed by exactly `## Rationale`,
-  `## Acceptance Criteria`, and `## Technical Details`, in that order.
-- Every acceptance criterion is an unticked task (`- [ ]`).
-- Referenced plan documents exist, and claims about existing source files are accurate. Paths for
-  files the plan intends to create are valid references when identified as planned work.
+The `<timestamp>` is UTC in the format `YYYY-MM-DD-HHMM`. Use these commands to get it:
 
-Report validation failures. Fix them only after the user agrees; the Planning Phase is still open
-until the plan is committed.
+- `date -u +%F-%H%M` on Unix-based shells
+- `(Get-Date).ToUniversalTime().ToString("yyyy-MM-dd-HHmm")` on PowerShell
 
-## 2. Commit and freeze
+## 2. Determine an Optional Ticket ID
 
-Inspect `git status` and the staged diff. Preserve unrelated working-tree and staged changes. Stage
-the plan if needed, then use a path-limited commit so the commit contains only the plan file. Verify
-the resulting commit's file list before continuing; if it contains anything else, stop and report
-the problem without rewriting history. Follow repository commit conventions and do not push. The
-successful commit ends the Planning Phase and freezes the plan.
+Plans are typically associated with a `<ticket-id>`. This is the ID of a work item such as a GitHub issue or a Jira Task. If you don't know it from the conversation yet, ask the user to provide it. Note that not each plan needs to be associated with a ticket.
 
-## 3. Optionally publish the first plan
+## 3. Change the Plan File Name
 
-The first plan for a tracked issue may become that issue's description. Follow-up plans are not
-published there.
-
-Use the tracker and target project documented by the repository. If neither is documented, infer
-them only when the git remote and tracker clearly agree, state the inferred target, and ask the
-user to confirm it. If the project has no tracker, skip this step.
-
-Read the current issue title and description before asking to publish. Explain that publishing
-replaces the complete issue description. If it is non-empty, show or summarize what would be
-replaced and require explicit confirmation to overwrite it. Publish the plan body only. For GitHub:
-
-```sh
-gh issue edit <issue-id> --body-file <plan-path>
-```
-
-If the plan and issue titles differ, report it without renaming either. Treat the tracker body as
-a publication snapshot, never as the source from which the committed plan is amended. Never change
-the tracker without the user's approval.
-
-## 4. Report
-
-Report the committed plan path and state that its Planning Phase has ended and it is now frozen.
+- `<timestamp>-<ticket-id>-<title>.md` if `<ticket-id>` is present
+- `<timestamp>-<title>.md` otherwise
