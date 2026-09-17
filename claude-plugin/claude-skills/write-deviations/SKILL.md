@@ -13,7 +13,7 @@ A Plan Deviations document summarizes how the completed implementation differs f
 
 ## 1. Inspect the Plans and the Implementation
 
-Read all plans for the current work, oldest first.
+Read all plans for the current ticket in `ai-plans/`, oldest first. Identify them by the `<ticket-id>` or `<short-title>` in their file names, or by the plans mentioned in the conversation. Ask the user if the set of plans is unclear.
 
 Determine the implementation range. Use the PR/MR if there is one. Otherwise, use the merge base between the target branch and the implementation branch. Inspect the commits in that range, all committed, staged, and unstaged changes, and any relevant earlier history. Verify every document and source-file reference you rely on.
 
@@ -35,12 +35,12 @@ The file name is:
 - `<timestamp>-<ticket-id>-plan-deviations.md` if a `<ticket-id>` is present
 - `<timestamp>-<short-title>-plan-deviations.md` otherwise
 
-The `<timestamp>` is UTC in the format `YYYY-MM-DD-HHMM`. Use these commands to get it:
+Take `<ticket-id>` or `<short-title>` from the file name of the Initial Plan. The `<timestamp>` is UTC in the format `YYYY-MM-DD-HHMM`. Use these commands to get it:
 
 - `date -u +%F-%H%M` on Unix-based shells
 - `(Get-Date).ToUniversalTime().ToString("yyyy-MM-dd-HHmm")` on PowerShell
 
-If a plan or Plan Deviations document with this file name already exists, report the collision and stop. Never overwrite or reuse an existing file. Existing Plan Deviations documents are immutable.
+If a plan or Plan Deviations document with this file name already exists, report the collision and stop. Never overwrite or reuse an existing file. Committed Plan Deviations documents are frozen.
 
 ## 4. Write the Document
 

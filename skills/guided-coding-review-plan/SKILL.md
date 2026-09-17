@@ -19,4 +19,4 @@ Amongst other things, check for:
 - **Omissions:** Judge relevant risks such as error handling, compatibility, migration, performance, security boundaries, and observability against the change at hand.
 - **History:** A follow-up plan explicitly identifies and explains any earlier decisions it supersedes.
 
-Say explicitly when there are no findings. If the plan is already frozen, note that corrections require a follow-up plan rather than edits.
+Say explicitly when there are no findings. If the plan is already frozen (timestamp in its file name and a `*Frozen at ...*` line below its title), note that it can no longer be edited; changes are decided in the Guiding Phase and recorded in a Follow-Up Plan.

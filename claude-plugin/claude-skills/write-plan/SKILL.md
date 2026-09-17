@@ -11,7 +11,7 @@ Your goal is to write an Initial Plan or Follow-Up Plan into the `ai-plans/` fol
 
 ## Plan File Name
 
-The initial file name of the new plan file is `<short-title>.md`. `<short-title>` is a shortened kebab-case version of the issue title. At this point in the conversation, you should be able to derive a full title from the discussion that you can shorten. If not, ask the user to provide one and shorten it.
+The initial file name of the new plan file is `<short-title>.md`. `<short-title>` is a shortened kebab-case version of the ticket title. At this point in the conversation, you should be able to derive a full title from the discussion that you can shorten. If not, ask the user to provide one and shorten it.
 
 ## Plan Structure
 
@@ -19,13 +19,13 @@ Check whether `ai-plans/AGENTS.md` contains the plan structure. If not, fall bac
 
 ## What Happens After Writing a Plan?
 
-The user reviews the plan. He or she will provide feedback, aspects of the plan might change. Once both you and the user agree on the plan being ready for implementation, it is frozen and becomes largely immutable (except for checking off Acceptance Criteria). When a plan is frozen, its file name is changed to `<timestamp>-<ticket-id>-<short-title>.md`, or `<timestamp>-<short-title>.md` (if no Ticket ID is present). Also, the timestamp is inserted right below the `# Title` of the plan. All this doesn't happen in this step of the conversation. 
+The user reviews the plan. They will provide feedback, aspects of the plan might change. Once both you and the user agree on the plan being ready for implementation, it is frozen and becomes largely immutable (except for checking off Acceptance Criteria). When a plan is frozen, its file name is changed to `<timestamp>-<ticket-id>-<short-title>.md`, or `<timestamp>-<short-title>.md` (if no `<ticket-id>` is present). Also, a `*Frozen at ...*` line is inserted right below the `# Title` of the plan. All this doesn't happen in this step of the conversation.
 
 ## Follow-up Plans
 
-After a plan is implemented, a reviewer of the corresponding implementation could decide to overhaul it, which results in a Follow-Up Plan.  
+A Follow-Up Plan supersedes decisions of a Frozen Plan. The decision to write one is made in the Guiding Phase, when the review of the implementation calls for larger changes.
 
-Use the same format and file naming convention. Read every earlier document for the ticket. In the Rationale, name the plans this one follows by exact filename.
+Use the same format and file naming convention. Read every earlier document for the ticket. In the opening section of the plan (`## Rationale` in the default structure), name the plans this one follows by exact filename.
 
 Record only the changed decisions and outcomes. State exactly which earlier decisions this plan supersedes and why. Do not repeat unchanged decisions or contradict earlier plans silently.
 

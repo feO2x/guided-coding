@@ -4,13 +4,15 @@ description: Freeze a Guided Coding plan. Run only when explicitly requested by 
 license: MIT
 ---
 
-# Finish a Plan
+# Freeze a Plan
 
-Finishing a plan means freezing it by providing a timestamp, both at the beginning of its file name and directly after its title. An optional Ticket ID is also inserted into the file name after the timestamp.
+Freezing a plan means providing a timestamp, both at the beginning of its file name and directly after its title. An optional `<ticket-id>` is also inserted into the file name after the timestamp.
 
 The plan is then considered ready for implementation, only its acceptance criteria are allowed to be checked off by the implementer.
 
 The target plan should be already mentioned in the conversation, typically in the format `<short-title>.md`. If not, first inspect the `ai-plans/` folder for a single plan Markdown file which is untracked or has changes. Otherwise, ask the user to provide the path to the plan file.
+
+If the plan already carries a timestamp in its file name or a `*Frozen at ...*` line below its title, it is frozen. Report this to the user and stop.
 
 ## 1. Determine the Timestamp
 
@@ -21,12 +23,14 @@ The `<timestamp>` is UTC in the format `YYYY-MM-DD-HHMM`. Use these commands to 
 
 ## 2. Determine an Optional Ticket ID
 
-Plans are typically associated with a `<ticket-id>`. This is the ID of a work item such as a GitHub issue or a Jira Task. If you don't know it from the conversation yet, ask the user to provide it. Note that not each plan needs to be associated with a ticket ID.
+Plans are typically associated with a `<ticket-id>`. This is the ID of a work item such as a GitHub issue or a Jira task. If you don't know it from the conversation yet, ask the user to provide it. Note that not each plan needs to be associated with a `<ticket-id>`.
 
 ## 3. Change the Plan File Name
 
 - `<timestamp>-<ticket-id>-<short-title>.md` if `<ticket-id>` is present
 - `<timestamp>-<short-title>.md` otherwise
+
+If a file with this name already exists in `ai-plans/`, report the collision and stop. Never overwrite an existing file.
 
 ## 4. Stamp the Plan Content
 

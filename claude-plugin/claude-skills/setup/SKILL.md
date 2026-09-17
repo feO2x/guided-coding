@@ -36,10 +36,10 @@ Create `AGENTS.md` in the repository root if it does not exist. Otherwise, make 
 
 Ensure it contains:
 
-1. `## Feedback Loops`: each command and what it verifies. Report to the user when no feedback loops could be found.
+1. `## Feedback Loops`: each command and what it verifies. Report to the user when no feedback loops could be found, and warn that `guided-coding-write-plan` refuses to write plans until at least one is listed.
 2. `## Guided Coding`: a link to `ai-plans/AGENTS.md`, and the rules for implementing a Frozen Plan:
-   - plans in `ai-plans/` are frozen once they carry a timestamp in their file name and a `*Frozen at ...*` line below their title;
-   - the only permitted edit to a Frozen Plan is checking an Acceptance Criterion from `- [ ]` to `- [x]` after the implementation and the relevant feedback loops verify it; unmet criteria stay unchecked; 
+   - plans in `ai-plans/` are frozen once they carry a timestamp in their file name and a `*Frozen at ...*` line below their title.
+   - the only permitted edit to a Frozen Plan is checking an Acceptance Criterion from `- [ ]` to `- [x]` after the implementation and the relevant feedback loops verify it. Unmet criteria stay unchecked.
 
 If both sections already exist and are current, leave the file alone.
 
@@ -52,12 +52,12 @@ Create `ai-plans/` if it is missing. Compare `ai-plans/AGENTS.md` with `assets/a
 
 ## 4. Report and Give Customization Tips
 
-List the files you created, updated, or left unchanged, the feedback loops you documented, and which commands you ran. Report to the user that he or she should verify the changes.
+List the files you created, updated, or left unchanged, the feedback loops you documented, and which commands you ran. Report to the user that they should verify the changes.
 
 Then explain how Guided Coding can be customized, so the user knows the defaults are only a starting point:
 
 - **Plan structure:** `guided-coding-write-plan` uses a default structure with `## Rationale`, `## Acceptance Criteria`, and `## Technical Details`. Describing a different structure in `ai-plans/AGENTS.md` overrides the default.
-- **File names:** the skills use the placeholders `<timestamp>` (UTC, `YYYY-MM-DD-HHMM`), `<ticket-id>`, and `<short-title>` (kebab-case, shortened issue title). Conventions for these, e.g., a ticket ID format like `GH-123` or a maximum length for `<short-title>`, belong in `ai-plans/AGENTS.md`.
+- **File names:** the skills use the placeholders `<timestamp>` (UTC, `YYYY-MM-DD-HHMM`), `<ticket-id>`, and `<short-title>` (kebab-case, shortened ticket title). Conventions for these, e.g., a `<ticket-id>` format or a maximum length for `<short-title>`, belong in `ai-plans/AGENTS.md`.
 - **Feedback loops:** plans should reference the feedback loops in the root `AGENTS.md` to make Acceptance Criteria verifiable. Adding or removing a feedback loop later only requires updating that list.
 - **Deviations:** the threshold for what counts as a material deviation can be tightened or relaxed in `ai-plans/AGENTS.md`.
 
