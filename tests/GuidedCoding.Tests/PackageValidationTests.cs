@@ -15,8 +15,7 @@ public sealed class PackageValidationTests
 
     private static readonly string[] ExpectedPortableSkillNames =
     [
-        "guided-coding-finish-plan",
-        "guided-coding-prepare-issue-for-plan",
+        "guided-coding-freeze-plan",
         "guided-coding-review-plan",
         "guided-coding-setup",
         "guided-coding-write-deviations",
@@ -27,8 +26,7 @@ public sealed class PackageValidationTests
         StringComparer.Ordinal
     )
     {
-        ["guided-coding-finish-plan"] = "finish-plan",
-        ["guided-coding-prepare-issue-for-plan"] = "prepare-issue-for-plan",
+        ["guided-coding-freeze-plan"] = "freeze-plan",
         ["guided-coding-review-plan"] = "review-plan",
         ["guided-coding-setup"] = "setup",
         ["guided-coding-write-deviations"] = "write-deviations",

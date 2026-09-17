@@ -1,11 +1,7 @@
 {
   "skills": {
-    "guided-coding-finish-plan": {
-      "name": "finish-plan",
-      "disableModelInvocation": true
-    },
-    "guided-coding-prepare-issue-for-plan": {
-      "name": "prepare-issue-for-plan",
+    "guided-coding-freeze-plan": {
+      "name": "freeze-plan",
       "disableModelInvocation": true
     },
     "guided-coding-review-plan": {
