@@ -17,10 +17,9 @@ The full method is documented at
 | Skill | Purpose |
 | --- | --- |
 | `guided-coding-setup` | Set up or upgrade Guided Coding in a repository. |
-| `guided-coding-prepare-issue-for-plan` | Create a tracker issue and clean local branch for planning. |
 | `guided-coding-write-plan` | After discussing an issue with your agent, write a plan or follow-up plan. |
 | `guided-coding-review-plan` | Review a plan draft against the repository (use in fresh conversation). |
-| `guided-coding-finish-plan` | Validate, commit, and freeze a plan. |
+| `guided-coding-freeze-plan` | Freeze a plan by timestamping its file name and title. |
 | `guided-coding-write-deviations` | Summarize follow-up plans and record material implementation differences. |
 
 All workflows require explicit user invocation.
