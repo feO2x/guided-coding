@@ -1,7 +1,6 @@
 # Repository Instructions
 
-This repository is the canonical distribution of Guided Coding skills. The root package supports
-the Agent Plugins standard and generates a dedicated Claude Code marketplace adapter.
+This repository contains skills for Guided Coding. The root package supports the Agent Plugins standard and generates a dedicated Claude Code marketplace adapter.
 
 ## Skill authoring
 
@@ -10,18 +9,13 @@ the Agent Plugins standard and generates a dedicated Claude Code marketplace ada
 - Keep the skill directory and frontmatter name identical.
 - State in every description that the skill runs only when explicitly requested.
 - Put Codex-specific interface and invocation policy in `agents/openai.yaml`.
-- Configure Claude-specific names and frontmatter in
-  `tools/GuidedCoding.ClaudeGenerator/claude-skills.json`.
-- Do not edit `claude-plugin/claude-skills` directly. Regenerate it with
-  `dotnet run --project tools/GuidedCoding.ClaudeGenerator`.
-- Do not hand-author duplicate skill bodies for individual coding-agent harnesses.
-- Keep the generated directory named `claude-skills`. A standard `claude-plugin/skills` directory
-  is also discovered by GitHub CLI and would duplicate the portable skills during publication.
+- Configure Claude-specific names and frontmatter in `tools/GuidedCoding.ClaudeGenerator/claude-skills.json`.
+- Do not edit `claude-plugin/claude-skills` directly. Regenerate it with `dotnet run --project tools/GuidedCoding.ClaudeGenerator`.
+- Keep the generated directory named `claude-skills`. A standard `claude-plugin/skills` directory is also discovered by GitHub CLI and would duplicate the portable skills during publication.
 
 ## Manifests and versions
 
-Keep the version synchronized across `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`,
-`.claude-plugin/marketplace.json`, and release tags.
+Keep the version synchronized across `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`,`.claude-plugin/marketplace.json`, and release tags.
 
 Use Conventional Commits messages.
 
