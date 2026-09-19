@@ -1,0 +1,7 @@
+interface:
+  display_name: "Implement and Learn by Solving"
+  short_description: "Solve implementation milestones with coaching"
+  default_prompt: "Use $guided-coding-implement-and-learn-by-solving to help me implement the Frozen Plan by solving each milestone myself."
+
+policy:
+  allow_implicit_invocation: false

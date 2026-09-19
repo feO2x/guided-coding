@@ -1,0 +1,7 @@
+interface:
+  display_name: "Implement and Learn by Example"
+  short_description: "Learn implementation through worked examples"
+  default_prompt: "Use $guided-coding-implement-and-learn-by-example to help me implement the Frozen Plan through worked code examples that I enter and discuss."
+
+policy:
+  allow_implicit_invocation: false

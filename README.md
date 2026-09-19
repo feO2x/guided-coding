@@ -20,6 +20,8 @@ The full method is documented at
 | `guided-coding-write-plan` | After discussing an issue with your agent, write a plan or follow-up plan. |
 | `guided-coding-review-plan` | Review a plan draft against the repository (use in fresh conversation). |
 | `guided-coding-freeze-plan` | Freeze a plan by timestamping its file name and title. |
+| `guided-coding-implement-and-learn-by-example` | Implement a frozen plan through worked code examples that you enter and discuss. |
+| `guided-coding-implement-and-learn-by-solving` | Implement a frozen plan yourself through coached, verifiable milestones. |
 | `guided-coding-write-deviations` | Summarize follow-up plans and record material implementation differences. |
 
 All workflows require explicit user invocation.
