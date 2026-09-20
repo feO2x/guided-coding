@@ -39,6 +39,15 @@ public sealed class PackageValidationTests
         ["guided-coding-write-plan"] = "write-plan"
     };
 
+    private const string SharedTargetSection = "Establish the Target";
+
+    private static readonly string[] SkillsSharingTheTargetSection =
+    [
+        "guided-coding-implement",
+        "guided-coding-implement-coach-me",
+        "guided-coding-implement-show-me"
+    ];
+
     private static readonly string[] ForbiddenFrontmatterFields =
     [
         "allowed-tools",
@@ -295,6 +304,33 @@ public sealed class PackageValidationTests
         );
     }
 
+    [Fact]
+    public void SkillsSharingASectionKeepItIdentical()
+    {
+        var sections = SkillsSharingTheTargetSection
+           .Select(
+                skillName => (
+                    SkillName: skillName,
+                    Body: ReadSectionBody(
+                        Path.Combine(RepositoryRoot, "skills", skillName, "SKILL.md"),
+                        SharedTargetSection
+                    )
+                )
+            )
+           .ToArray();
+        var reference = sections[0];
+
+        foreach (var section in sections[1..])
+        {
+            Assert.True(
+                string.Equals(reference.Body, section.Body, StringComparison.Ordinal),
+                $"\"{SharedTargetSection}\" differs between {reference.SkillName} and {section.SkillName}. " +
+                "The section is duplicated on purpose because skills are standalone; " +
+                "apply the change to every skill that shares it."
+            );
+        }
+    }
+
     private static string FindRepositoryRoot()
     {
         for (
@@ -401,6 +437,39 @@ public sealed class PackageValidationTests
         var end = Array.IndexOf(lines, "---", 1);
         Assert.True(end > 1);
         return string.Join('\n', lines[(end + 1)..]);
+    }
+
+    private static string ReadSectionBody(string path, string heading)
+    {
+        var lines = File.ReadAllText(path).Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+        var start = Array.FindIndex(lines, line => IsSectionHeading(line, heading));
+        Assert.True(start >= 0, $"\"{heading}\" is missing from {path}.");
+
+        var end = Array.FindIndex(
+            lines,
+            start + 1,
+            line => line.StartsWith("## ", StringComparison.Ordinal)
+        );
+        var body = end < 0 ? lines[(start + 1)..] : lines[(start + 1)..end];
+        return string.Join('\n', body).Trim();
+    }
+
+    private static bool IsSectionHeading(string line, string heading)
+    {
+        if (!line.StartsWith("## ", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        // Section numbers differ between skills, so match on the heading text alone.
+        var text = line[3..].Trim();
+        var separator = text.IndexOf(". ", StringComparison.Ordinal);
+        if (separator > 0 && text[..separator].All(char.IsDigit))
+        {
+            text = text[(separator + 2)..];
+        }
+
+        return string.Equals(text, heading, StringComparison.Ordinal);
     }
 
     private static SortedDictionary<string, string> EnumerateResourceFiles(
