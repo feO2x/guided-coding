@@ -4,6 +4,10 @@
       "name": "freeze-plan",
       "disableModelInvocation": true
     },
+    "guided-coding-implement": {
+      "name": "implement",
+      "disableModelInvocation": true
+    },
     "guided-coding-implement-and-learn-by-example": {
       "name": "implement-and-learn-by-example",
       "disableModelInvocation": true
