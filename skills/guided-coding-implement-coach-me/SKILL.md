@@ -1,6 +1,6 @@
 ---
-name: guided-coding-implement-and-learn-by-solving
-description: Guide a user through implementing a Frozen Guided Coding Plan by giving them one problem at a time, reviewing their solution, and offering progressive hints without writing the implementation. Run only when explicitly requested by the user.
+name: guided-coding-implement-coach-me
+description: Coach a user how to implement a Frozen Guided Coding Plan by giving them one problem at a time, reviewing their solution, and offering progressive hints without describing the complete implementation. Run only when explicitly requested by the user.
 license: MIT
 ---
 
@@ -12,18 +12,9 @@ Remain read-only. Do not edit repository files, check Acceptance Criteria, creat
 
 ## 1. Establish the Target
 
-Use the plan named by the user. If none is named, proceed only when exactly one Frozen Plan with incomplete Acceptance Criteria can be identified in `ai-plans/`; otherwise ask for its path.
+Use the plan named by the user. If none is named, proceed only when there is exactly one plan in `ai-plans/` that has all its Acceptance Criteria unchecked, and it has the latest timestamp of all plans. Otherwise, ask for its path.
 
-Verify that the plan is frozen: its file name carries a timestamp and it has a `*Frozen at ...*` line below its title. If either marker is missing, explain that the Planning Phase is unfinished and stop.
-
-Read:
-
-- applicable repository instructions and documented feedback loops;
-- the target plan and every earlier plan for the same ticket that it refers to or supersedes;
-- the relevant implementation and tests; and
-- the current git status and diff, including the user's existing changes.
-
-Treat later plans as superseding only the decisions they explicitly replace. Preserve all existing changes.
+Verify that the plan is frozen: its file name has a timestamp, and it has a `*Frozen at ...*` line below its title. If either marker is missing, explain that the Planning Phase is unfinished and stop.
 
 ## 2. Create the Milestone Roadmap
 
@@ -72,7 +63,7 @@ When the user is stuck, provide one additional aid at a time:
 4. Provide pseudocode or an API-level outline.
 5. Show a small code fragment only when it demonstrates incidental syntax rather than the decision or mechanism the user is trying to learn.
 
-After each hint, let the user try again. Never provide the complete implementation of a milestone, a patch, or a sequence of fragments that collectively reveals the solution. If the user wants a complete worked example, tell them to explicitly switch to `guided-coding-implement-and-learn-by-example` rather than changing this workflow's contract.
+After each hint, let the user try again. Never provide the complete implementation of a milestone, a patch, or a sequence of fragments that collectively reveals the solution. If the user wants a complete worked example, tell them to explicitly switch to `guided-coding-implement-show-me` rather than changing this workflow's contract.
 
 Answer direct conceptual questions directly. Do not turn every exchange into a quiz or withhold basic facts merely to make the user discover them.
 

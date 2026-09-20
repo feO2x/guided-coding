@@ -16,8 +16,9 @@ public sealed class PackageValidationTests
     private static readonly string[] ExpectedPortableSkillNames =
     [
         "guided-coding-freeze-plan",
-        "guided-coding-implement-and-learn-by-example",
-        "guided-coding-implement-and-learn-by-solving",
+        "guided-coding-implement",
+        "guided-coding-implement-coach-me",
+        "guided-coding-implement-show-me",
         "guided-coding-review-plan",
         "guided-coding-setup",
         "guided-coding-write-deviations",
@@ -29,8 +30,9 @@ public sealed class PackageValidationTests
     )
     {
         ["guided-coding-freeze-plan"] = "freeze-plan",
-        ["guided-coding-implement-and-learn-by-example"] = "implement-and-learn-by-example",
-        ["guided-coding-implement-and-learn-by-solving"] = "implement-and-learn-by-solving",
+        ["guided-coding-implement"] = "implement",
+        ["guided-coding-implement-coach-me"] = "implement-coach-me",
+        ["guided-coding-implement-show-me"] = "implement-show-me",
         ["guided-coding-review-plan"] = "review-plan",
         ["guided-coding-setup"] = "setup",
         ["guided-coding-write-deviations"] = "write-deviations",

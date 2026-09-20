@@ -1,6 +1,6 @@
 ---
-name: implement-and-learn-by-example
-description: "Guide a user through implementing a Frozen Guided Coding Plan by presenting and explaining complete code for one milestone at a time for the user to enter and examine. Run only when explicitly requested by the user."
+name: implement-show-me
+description: "Instruct a user how to implement a Frozen Guided Coding Plan by presenting and explaining complete code. Run only when explicitly requested by the user."
 license: "MIT"
 disable-model-invocation: true
 ---
@@ -13,22 +13,13 @@ Remain read-only. Do not edit repository files, check Acceptance Criteria, creat
 
 ## 1. Establish the Target
 
-Use the plan named by the user. If none is named, proceed only when exactly one Frozen Plan with incomplete Acceptance Criteria can be identified in `ai-plans/`; otherwise ask for its path.
+Use the plan named by the user. If none is named, proceed only when there is exactly one plan in `ai-plans/` that has all its Acceptance Criteria unchecked, and it has the latest timestamp of all plans. Otherwise, ask for its path.
 
-Verify that the plan is frozen: its file name carries a timestamp and it has a `*Frozen at ...*` line below its title. If either marker is missing, explain that the Planning Phase is unfinished and stop.
-
-Read:
-
-- applicable repository instructions and documented feedback loops;
-- the target plan and every earlier plan for the same ticket that it refers to or supersedes;
-- the relevant implementation and tests; and
-- the current git status and diff, including the user's existing changes.
-
-Treat later plans as superseding only the decisions they explicitly replace. Preserve all existing changes.
+Verify that the plan is frozen: its file name has a timestamp, and it has a `*Frozen at ...*` line below its title. If either marker is missing, explain that the Planning Phase is unfinished and stop.
 
 ## 2. Create the Milestone Roadmap
 
-Break the remaining implementation into dependency-ordered milestones. Present a concise roadmap of outcomes without revealing all the code up front, then start with the first incomplete milestone.
+Break the implementation into dependency-ordered milestones. Present a concise roadmap of outcomes without revealing all the code up front, then start with the first incomplete milestone.
 
 Each milestone should:
 
@@ -65,7 +56,7 @@ After the user enters the code:
 - explain any discrepancy and provide a corrected fragment when needed; and
 - run the relevant feedback loops, or review their output when the user ran them.
 
-Advance only after the milestone behaves as described and its feedback loops pass. If the user wants to devise the solution rather than receive the next worked example, tell them they can explicitly switch to `guided-coding-implement-and-learn-by-solving`.
+Advance only after the milestone behaves as described and its feedback loops pass. If the user wants to devise the solution rather than receive the next worked example, tell them they can explicitly switch to `guided-coding-implement-coach-me`.
 
 ## 5. Handle Plan Issues During Implementation
 

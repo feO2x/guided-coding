@@ -11,9 +11,9 @@ Your goal is to set up or upgrade Guided Coding in the current repository. After
 
 Guided Coding needs these artifacts:
 
-- `AGENTS.md` at the repository root, listing the feedback loops and the rules for implementing a Frozen Plan.
+- `AGENTS.md` at the repository root, listing the feedback loops and pointing to `ai-plans/AGENTS.md`.
 - `ai-plans/`, the folder holding all plans and Plan Deviations documents.
-- `ai-plans/AGENTS.md`, describing the folder and its file naming rules.
+- `ai-plans/AGENTS.md`, describing the folder, its file naming rules, and how Frozen Plans are treated.
 
 The outcome must be idempotent. Running this skill on a repository sets the artifacts up from scratch, brings outdated ones up to date, or leaves current ones untouched. Content unrelated to Guided Coding, such as project-specific instructions or user-authored notes, is never changed.
 
@@ -37,9 +37,7 @@ Create `AGENTS.md` in the repository root if it does not exist. Otherwise, make 
 Ensure it contains:
 
 1. `## Feedback Loops`: each command and what it verifies. Report to the user when no feedback loops could be found, and warn that `guided-coding-write-plan` refuses to write plans until at least one is listed.
-2. `## Guided Coding`: a link to `ai-plans/AGENTS.md`, and the rules for implementing a Frozen Plan:
-   - plans in `ai-plans/` are frozen once they carry a timestamp in their file name and a `*Frozen at ...*` line below their title.
-   - the only permitted edit to a Frozen Plan is checking an Acceptance Criterion from `- [ ]` to `- [x]` after the implementation and the relevant feedback loops verify it. Unmet criteria stay unchecked.
+2. `## Guided Coding`: a link to `ai-plans/AGENTS.md`, noting that it holds the file naming conventions and the rules for working with Frozen Plans. Do not restate those rules here; they live next to the plans they govern, and agents pick them up when they read the folder.
 
 If both sections already exist and are current, leave the file alone.
 

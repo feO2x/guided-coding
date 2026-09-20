@@ -8,12 +8,12 @@
       "name": "implement",
       "disableModelInvocation": true
     },
-    "guided-coding-implement-and-learn-by-example": {
-      "name": "implement-and-learn-by-example",
+    "guided-coding-implement-coach-me": {
+      "name": "implement-coach-me",
       "disableModelInvocation": true
     },
-    "guided-coding-implement-and-learn-by-solving": {
-      "name": "implement-and-learn-by-solving",
+    "guided-coding-implement-show-me": {
+      "name": "implement-show-me",
       "disableModelInvocation": true
     },
     "guided-coding-review-plan": {
