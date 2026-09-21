@@ -22,7 +22,7 @@ The only allowed plan edit is ticking an Acceptance Criterion from `- [ ]` to `-
 
 ## 3. Handle Plan Issues
 
-If an explicit plan decision is wrong or an Acceptance Criterion cannot be met as written, try to solve it or find a workaround, and report it. If a problem genuinely cannot be solved, that's totally fine - simply report it.
+If a plan decision is wrong or an Acceptance Criterion cannot be met as written, try to solve it or find a workaround, and report it. If a problem genuinely cannot be solved, that's totally fine - simply report it.
 
 In the Guiding Phase, the reviewer can decide how to proceed with your findings.
 
