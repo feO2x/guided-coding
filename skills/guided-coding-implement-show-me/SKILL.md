@@ -1,14 +1,14 @@
 ---
 name: guided-coding-implement-show-me
-description: Instruct a user how to implement a Frozen Guided Coding Plan by presenting and explaining complete code. Run only when explicitly requested by the user.
+description: Instruct a user how to implement a Guided Coding Frozen Plan by presenting and explaining complete code. Run only when explicitly requested by the user.
 license: MIT
 ---
 
-# Implement and Learn by Example
+# Show the User How to Implement a Frozen Plan
 
-Your goal is to teach the user how to implement a Frozen Plan through repository-specific worked examples. You provide the complete code for one milestone at a time and explain it; the user enters the code, runs it, and asks questions.
+Your goal is to teach the user how to implement a Guided Coding Frozen Plan by breaking it up into useful teachable milestones. You output one code fragment at a time for one milestone and explain it; they enter it, execute feedback loops and manual tests, and ask about whatever is unclear. This skill is intended for users at the Beginning stage, so please provide the complete code of a fragment, do not leave any parts out. The user should not figure out parts of the implementation by themselves.
 
-Remain read-only. Do not edit repository files, check Acceptance Criteria, create commits, or publish anything.
+Let the user make every change to the repository themselves. Typing the code by hand is where a good part of the learning happens, so encourage that over copying and pasting, and leave committing and publishing to them.
 
 ## 1. Establish the Target
 
@@ -18,67 +18,32 @@ Verify that the plan is frozen: its file name has a timestamp, and it has a `*Fr
 
 ## 2. Create the Milestone Roadmap
 
-Break the implementation into dependency-ordered milestones. Present a concise roadmap of outcomes without revealing all the code up front, then start with the first incomplete milestone.
+Break the plan into milestones and present them as a short roadmap, not showing any code yet.
 
-Each milestone should:
+A good milestone depends on the size of the plan: you could use file-by-file for smaller plans, or break the work into vertical slices if the plan is larger. A single milestone should produce a compilable codebase where all feedback loops pass and at least one commit can be created. Additionally, you can instruct the user to do manual testing, e.g., for UI changes.
 
-- produce one observable behavior or establish one internal invariant;
-- introduce one primary mechanism or a tightly related concept cluster;
-- include the tests or other verification that make it independently demonstrable; and
-- have a completion condition that can be stated in one sentence.
+It is totally fine if you break up a plan into a single milestone. We trust your teaching expertise here, look at the extent of the plan and consider how you can teach users the corresponding concepts effectively through one or several milestones.
 
-Prefer coherent behavioral slices over divisions by file, layer, or line count. As a rough pacing signal, the user should usually be able to enter, study, and verify one example in 10–30 minutes. Split a milestone when its code or explanation contains multiple independently teachable concepts or verification points.
+## 3. How to Work Through a Single Milestone
 
-## 3. Present One Worked Example
+When you begin working with the user on a new milestone, first output a description of the changes it introduces to the codebase from a high-level perspective, and which parts of the plan it addresses. Ask the user whether they understood this. 
 
-For the current milestone, provide:
+Then continue by presenting code to the user. Please do not output all code at once, but fragment-by-fragment so that the user can comprehend the changes step-by-step and build up their mental model of the codebase over time. Verify that each fragment was entered correctly once the user signals completion.
 
-1. **Outcome:** What the example adds and how the user will observe it.
-2. **Placement:** The exact files and locations where each fragment belongs.
-3. **Code:** Complete, repository-specific code for this milestone, including tests when they are part of the same coherent example.
-4. **Explanation:** What the code does, how its pieces interact, and every language or framework mechanism likely to be new to the user.
-5. **Reasoning:** Why this implementation fits the Frozen Plan and the surrounding architecture. Discuss alternatives only when they clarify an important decision.
-6. **Verification:** The exact feedback-loop command or manual check, plus the expected result.
+After all code fragments are in place, instruct the user how to run feedback loop commands to verify the changes, or how to execute manual tests. Before they run these, it is worth asking what they expect to happen and why - one question, not a quiz. This tells you whether the explanation actually landed.
 
-Providing the code is the purpose of this workflow; do not replace it with hints or pseudocode. At the same time, do not provide later milestones or combine fragments into a solution for the entire plan.
+The user might ask questions about details of the code at any point - be helpful here. If something does not compile or a test fails, let the user read the error first, explain what to focus on in the error message (for example, exceptions carry a lot of information).
 
-Do not apply the code yourself. After presenting the example, stop so the user can enter it, inspect it, run it, and ask questions.
+Once the user signals readiness, you verified the milestone behaves as described, and a commit was created by the user, let the user tick the corresponding Acceptance Criteria in the plan from `- [ ]` to `- [x]` and move to the next milestone or finish the Implementing Phase.
 
-## 4. Discuss and Verify the Example
+## 4. Handle Plan Issues
 
-Answer the user's questions directly and remain on the current milestone until they say they understand it and are ready to continue. Explain unfamiliar syntax when asked, but do not require a quiz or make the user restate every explanation.
+If a plan decision is wrong or an Acceptance Criterion cannot be met as written, try to solve it or find a workaround. If a problem genuinely cannot be solved, that's totally fine - simply report it to the user.
 
-After the user enters the code:
+Ideally, you can catch this directly while you are creating the milestones for the plan, but you might also encounter an issue while the user is working through a milestone. It is up to you to decide whether the Implementation Phase should be interrupted or aborted if you need external input to solve the plan problem.
 
-- inspect their actual changes before evaluating them;
-- distinguish transcription or adaptation mistakes from errors in the example you supplied;
-- explain any discrepancy and provide a corrected fragment when needed; and
-- run the relevant feedback loops, or review their output when the user ran them.
+In the Guiding Phase, the reviewer can decide how to proceed with your findings.
 
-Advance only after the milestone behaves as described and its feedback loops pass. If the user wants to devise the solution rather than receive the next worked example, tell them they can explicitly switch to `guided-coding-implement-coach-me`.
+## 5. After the Last Milestone
 
-## 5. Handle Plan Issues During Implementation
-
-Routine choices that the plans leave open may be resolved in the worked example. Explain consequential choices so the user can understand them.
-
-If implementation reveals that an explicit plan decision is wrong or an Acceptance Criterion cannot be met as written:
-
-- identify the exact decision or criterion and explain why it does not work;
-- provide a recommended solution or workaround, including its trade-offs and repository-specific code when code is needed;
-- clearly label the approach as provisional rather than silently treating it as a new plan decision;
-- state which Acceptance Criteria the workaround satisfies and which remain unmet; and
-- retain the issue and provisional approach for the final Guiding Phase handoff.
-
-Remain in the Implementing Phase and continue the worked-example workflow with the provisional approach. Do not edit the Frozen Plan or decide whether the departure is accepted. In the Guiding Phase, a senior developer reviews the complete implementation and decides whether to accept the difference and record it in a Plan Deviations document, or return to the Planning Phase and write a Follow-Up Plan.
-
-## 6. Finish the Learning Implementation
-
-After all milestones:
-
-- inspect the complete implementation diff;
-- compare it with every Acceptance Criterion;
-- run all applicable feedback loops and identify any required manual checks; and
-- report which criteria are verified and which remain incomplete; and
-- summarize every plan issue, its provisional solution or workaround, and its impact.
-
-Do not check the criteria yourself or claim that an unmet criterion is satisfied. The implementation pass is ready for the Guiding Phase when its milestones and applicable feedback loops are complete, even when a known plan issue leaves a criterion unmet. State clearly that the senior review must decide whether each provisional departure becomes a Plan Deviation or requires a return to the Planning Phase.
+Summarize everything you and the user have accomplished and tell them to go over to the Guiding Phase. If you didn't face any plan issues, all Acceptance Criteria should be ticked.
