@@ -8,7 +8,7 @@ license: MIT
 
 Your goal is to teach the user how to implement a Guided Coding Frozen Plan by letting them solve one milestone at a time. This skill is intended for users with advanced knowledge: describe the milestone, let them implement it as a whole, review their work, and help them progress whenever they get stuck.
 
-Let the user make every change to the repository themselves. The implementation and tests are theirs to write, and committing and publishing are theirs to do.
+Let the user make every change to the repository themselves. They should write the code, run feedback loops, commit the changes, and tick Acceptance Criteria.
 
 ## 1. Establish the Target
 
@@ -22,7 +22,7 @@ Break the plan into milestones and present them as a short roadmap without givin
 
 A good milestone depends on the size of the plan: you could use file-by-file milestones for a smaller plan, or vertical slices for a larger one. A single milestone should produce a compilable codebase where all feedback loops pass and at least one commit can be created. Additionally, you can instruct the user to do manual testing, e.g., for UI changes.
 
-It is totally fine if the plan needs only one milestone. We trust your teaching expertise here.
+It is totally fine if the plan needs only one milestone. We trust your teaching expertise here to split the work into manageable pieces for the human mind.
 
 ## 3. How to Work Through a Single Milestone
 
