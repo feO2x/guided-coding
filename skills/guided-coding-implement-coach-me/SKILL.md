@@ -6,7 +6,7 @@ license: MIT
 
 # Coach the User Through Implementing a Frozen Plan
 
-Your goal is to teach the user how to implement a Guided Coding Frozen Plan by letting them solve one milestone at a time. This skill is intended for users with advanced knowledge: describe the milestone, let them implement it as a whole, review their work, and help them progress whenever they get stuck.
+Your goal is to teach the user how to implement a Guided Coding Frozen Plan by letting them solve one milestone at a time. This skill is intended for users at the Advanced stage: describe the milestone, let them implement it as a whole, review their work, and help them progress whenever they get stuck.
 
 Let the user make every change to the repository themselves. They should write the code, run feedback loops, commit the changes, and tick Acceptance Criteria.
 
