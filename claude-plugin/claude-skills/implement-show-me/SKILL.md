@@ -27,7 +27,7 @@ It is totally fine if you break up a plan into a single milestone. We trust your
 
 ## 3. How to Work Through a Single Milestone
 
-When you begin working with the user on a new milestone, first output a description of the changes it introduces to the codebase from a high-level perspective, and which parts of the plan it addresses. Ask the user whether they understood this. 
+When you begin working with the user on a new milestone, first output a description of the changes it introduces to the codebase from a high-level perspective, and which parts of the plan it addresses. Ask the user whether they understood this.
 
 Then continue by presenting code to the user. Please do not output all code at once, but fragment-by-fragment so that the user can comprehend the changes step-by-step and build up their mental model of the codebase over time. Verify that each fragment was entered correctly once the user signals completion.
 
