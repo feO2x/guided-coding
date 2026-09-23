@@ -39,13 +39,17 @@ public sealed class PackageValidationTests
         ["guided-coding-write-plan"] = "write-plan"
     };
 
-    private const string SharedTargetSection = "Establish the Target";
-
-    private static readonly string[] SkillsSharingTheTargetSection =
+    private static readonly string[] GuidedLearningSkillNames =
     [
-        "guided-coding-implement",
         "guided-coding-implement-coach-me",
         "guided-coding-implement-show-me"
+    ];
+
+    private static readonly (string Section, string[] SkillNames)[] SharedSections =
+    [
+        ("Establish the Target", ["guided-coding-implement", .. GuidedLearningSkillNames]),
+        ("Read the Learning Profile", GuidedLearningSkillNames),
+        ("Update the Learning Profile", GuidedLearningSkillNames)
     ];
 
     private static readonly string[] ForbiddenFrontmatterFields =
@@ -304,16 +308,22 @@ public sealed class PackageValidationTests
         );
     }
 
-    [Fact]
-    public void SkillsSharingASectionKeepItIdentical()
+    public static TheoryData<string> SharedSectionNames => new (
+        SharedSections.Select(shared => shared.Section)
+    );
+
+    [Theory]
+    [MemberData(nameof(SharedSectionNames))]
+    public void SkillsSharingASectionKeepItIdentical(string sectionName)
     {
-        var sections = SkillsSharingTheTargetSection
+        var skillNames = SharedSections.Single(shared => shared.Section == sectionName).SkillNames;
+        var sections = skillNames
            .Select(
                 skillName => (
                     SkillName: skillName,
                     Body: ReadSectionBody(
                         Path.Combine(RepositoryRoot, "skills", skillName, "SKILL.md"),
-                        SharedTargetSection
+                        sectionName
                     )
                 )
             )
@@ -324,9 +334,35 @@ public sealed class PackageValidationTests
         {
             Assert.True(
                 string.Equals(reference.Body, section.Body, StringComparison.Ordinal),
-                $"\"{SharedTargetSection}\" differs between {reference.SkillName} and {section.SkillName}. " +
+                $"\"{sectionName}\" differs between {reference.SkillName} and {section.SkillName}. " +
                 "The section is duplicated on purpose because skills are standalone; " +
                 "apply the change to every skill that shares it."
+            );
+        }
+    }
+
+    [Fact]
+    public void GuidedLearningSkillsShipTheSameProfileTemplate()
+    {
+        var templates = GuidedLearningSkillNames
+           .Select(
+                skillName => (
+                    SkillName: skillName,
+                    Content: File.ReadAllText(
+                        Path.Combine(RepositoryRoot, "skills", skillName, "assets", "profile.md")
+                    )
+                )
+            )
+           .ToArray();
+        var reference = templates[0];
+
+        foreach (var template in templates[1..])
+        {
+            Assert.True(
+                string.Equals(reference.Content, template.Content, StringComparison.Ordinal),
+                $"assets/profile.md differs between {reference.SkillName} and {template.SkillName}. " +
+                "The template is duplicated on purpose because skills are standalone; " +
+                "apply the change to every skill that ships it."
             );
         }
     }
