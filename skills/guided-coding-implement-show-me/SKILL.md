@@ -20,15 +20,15 @@ Verify that the plan is frozen: its file name has a timestamp, and it has a `*Fr
 
 `~/.guided-learning/profile.md` is the memory of Guided Learning across sessions. If it is missing, run `git init -b main "$HOME/.guided-learning"` unless that folder already is a git repository, copy `assets/profile.md` relative to this skill file there, and commit it.
 
-It holds the user's **Goals**, their **Preferences** for how to be taught, and their **Knowledge**: a tree of areas, each at one of three stages:
+It holds the user's **Preferences** for how to be taught, such as the language to speak or explanation before code, and their **Knowledge**: a tree of areas, each at one of three stages:
 
 - **Beginning**: new to a domain, needs to learn the fundamental concepts and mechanisms, mostly by copying information. Adaptation and transformation of these do not happen yet.
 - **Advancing**: fluent in the fundamentals and able to adapt them to new problems. Does not question the fundamentals.
 - **Mastering**: able to adapt and transform concepts quickly, and to question or replace the fundamentals themselves.
 
-Let the goals decide which parts of the plan deserve a milestone of their own, and teach the way the preferences ask. Let the stages of the areas the plan draws on decide how large you make the milestones, how much you explain, and how much help you offer at the start. The deepest node covering an area wins; technology and discipline nodes each apply to their own part of the work. Treat areas the profile does not cover as being at the stage this skill is intended for. What you observe always takes precedence over the profile.
+Teach the way the preferences ask. Let the stages of the areas the plan draws on decide how large you make the milestones, how much you explain, and how much help you offer at the start. The deepest node covering an area wins; technology and discipline nodes each apply to their own part of the work. Treat areas the profile does not cover as being at the stage this skill is intended for. What you observe always takes precedence over the profile.
 
-Before you create the roadmap, present the goals and preferences and ask the user whether anything has changed, or ask for them if there are none yet. If the profile places the user at a different stage than this skill is intended for across most of the plan, point that out in the same message and let them decide whether to continue.
+If you created the profile in this session, ask the user how they like to be taught before you create the roadmap. Otherwise, restate the preferences in one line when you present the roadmap, so that the user can object.
 
 ## 3. Create the Milestone Roadmap
 
@@ -44,17 +44,17 @@ Begin each milestone with a high-level description of the changes it introduces 
 
 Then present the code fragment by fragment, never all at once, so that the user builds their mental model of the codebase step by step. Verify each fragment once the user has entered it.
 
-When all fragments are in place, explain how to run the feedback loops or manual tests. Before the user runs them, ask what they expect to happen and why - one question, not a quiz. It tells you whether your explanation landed.
+When all fragments are in place, explain how to run the feedback loops or manual tests. Before the user runs them, ask what they expect to happen and why. Their answer tells you whether your explanation landed.
 
 Answer questions about the code at any point. When something does not compile or a test fails, let the user read the error first, then point out what to focus on, for example, the information an exception carries.
 
-Once the milestone behaves as described, you verified it, and the user created a commit, let them tick its Acceptance Criteria from `- [ ]` to `- [x]`. Then update the learning profile and move on.
+Once the milestone behaves as described and you verified it, let the user tick its Acceptance Criteria from `- [ ]` to `- [x]` and commit them together with the milestone. Then update the learning profile and move on.
 
 ## 5. Update the Learning Profile
 
-Update the profile whenever something changed: after the user answered your question about goals and preferences, after each milestone once the user committed it, and when the user stops early. Re-read the file right before you edit it, and commit to `main` using `git -C "$HOME/.guided-learning"` with a Conventional Commits message whose body states what you observed. Never create branches or push, and keep learning notes out of the repository you are working in.
+Update the profile whenever something changed: when the user expresses a preference, after each milestone once the user committed it, and when the user stops early. Re-read the file right before you edit it, and commit to `main` using `git -C "$HOME/.guided-learning"` with a Conventional Commits message whose body states what you observed. Never create branches or push, and keep learning notes out of the repository you are working in.
 
-Change goals and preferences only as the user says. Write knowledge nodes as nested list items:
+Change preferences only as the user says. Write knowledge nodes as nested list items:
 
 ```markdown
 - **<Name>** `<Stage>` — covers <thing>, <thing>
