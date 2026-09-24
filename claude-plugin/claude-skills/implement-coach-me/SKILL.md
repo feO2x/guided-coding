@@ -19,13 +19,17 @@ Verify that the plan is frozen: its file name has a timestamp, and it has a `*Fr
 
 ## 2. Read the Learning Profile
 
-The user's learning progress is tracked across conversations in `~/.guided-learning/profile.md`. Read it before you create the milestone roadmap. It contains the user's goals and teaching preferences, items carried forward from earlier passes, a tree of knowledge areas that are each assigned to one of the stages Beginning, Advancing, or Mastering, and a section for the agent that explains how to read and maintain the file - please follow it. If the file does not exist yet, read `assets/profile.md` relative to this skill file instead: it is the empty template and contains the same instructions.
+`~/.guided-learning/profile.md` is the memory of Guided Learning across sessions. If it is missing, run `git init -b main "$HOME/.guided-learning"` unless that folder already is a git repository, copy `assets/profile.md` relative to this skill file there, and commit it.
 
-Look up the areas the plan draws on and let their stages decide how large you make the milestones, how much you explain, and how much help you offer at the start. Let the goals, preferences, and carry-forward items shape the roadmap as well. If the profile does not cover an area, ask the user how familiar they are with it. The profile is only a starting point, though - what you observe while working with the user always takes precedence.
+It holds the user's **Goals**, their **Preferences** for how to be taught, and their **Knowledge**: a tree of areas, each at one of three stages:
 
-If the profile places the user at a different stage than this skill is intended for across most of the plan, point that out and let them decide whether to continue.
+- **Beginning**: new to a domain, needs to learn the fundamental concepts and mechanisms, mostly by copying information. Adaptation and transformation of these do not happen yet.
+- **Advancing**: fluent in the fundamentals and able to adapt them to new problems. Does not question the fundamentals.
+- **Mastering**: able to adapt and transform concepts quickly, and to question or replace the fundamentals themselves.
 
-Finally, ask the user once whether you may keep the profile up to date during this session. If they decline, skip the section Update the Learning Profile - that's totally fine.
+Let the goals decide which parts of the plan deserve a milestone of their own, and teach the way the preferences ask. Let the stages of the areas the plan draws on decide how large you make the milestones, how much you explain, and how much help you offer at the start. The deepest node covering an area wins; technology and discipline nodes each apply to their own part of the work. Treat areas the profile does not cover as being at the stage this skill is intended for. What you observe always takes precedence over the profile.
+
+Before you create the roadmap, present the goals and preferences and ask the user whether anything has changed, or ask for them if there are none yet. If the profile places the user at a different stage than this skill is intended for across most of the plan, point that out in the same message and let them decide whether to continue.
 
 ## 3. Create the Milestone Roadmap
 
@@ -57,11 +61,22 @@ Do not provide code before it is needed. If explanations and outlines are not en
 
 ## 6. Update the Learning Profile
 
-Update the profile after each milestone, once the user created the commit, and once more when the pass ends - after the last milestone, or earlier when the user stops. The profile's section for the agent explains what each update contains; please follow it, including its rules on how far a stage may move in a single pass. Show the user what you changed, but do not ask for permission again.
+Update the profile whenever something changed: after the user answered your question about goals and preferences, after each milestone once the user committed it, and when the user stops early. Re-read the file right before you edit it, and commit to `main` using `git -C "$HOME/.guided-learning"` with a Conventional Commits message whose body states what you observed. Never create branches or push, and keep learning notes out of the repository you are working in.
 
-Re-read `~/.guided-learning/profile.md` right before each write and apply your changes to what is there - the user or another session may have changed it in the meantime. If `~/.guided-learning/profile.md` does not exist yet, copy `assets/profile.md` relative to this skill file there before your first update. Add what the user told you about their familiarity with an area during this conversation as `self-reported` nodes.
+Change goals and preferences only as the user says. Write knowledge nodes as nested list items:
 
-Keep everything inside `~/.guided-learning/`. Learning notes never belong in the repository you are working in.
+```markdown
+- **<Name>** `<Stage>` — covers <thing>, <thing>
+```
+
+Knowledge that would survive a switch to another technology stack belongs to a discipline, anything else to a technology. Nest at most three levels:
+
+- **Technologies**: `<ecosystem>` → `<technology>` → `<area>`, for example `.NET` → `EF Core` → `change tracking`. The ecosystem is the one whose package manager distributes the technology, so React belongs to `JavaScript`, which includes TypeScript. A technology outside any ecosystem, such as PostgreSQL, is a root itself.
+- **Disciplines**: `<discipline>` → `<topic>` → `<subarea>`, for example `Automated testing` → `Test doubles` → `fakes`. Roots are limited to Algorithms and data structures, Software design and architecture, Automated testing, Data modeling and persistence, Security, Concurrency and distributed systems, Performance, Delivery and operations, and User interface design. Ask the user before you add another one.
+
+Reuse existing nodes, and name technologies the way their official documentation does. Add a child only when its stage differs from its parent's; otherwise, list it in the parent's optional `covers`.
+
+Move a stage only on what you observed. Promote at most one step per plan: to Advancing when the user carried a milestone in that area without being handed the implementation, to Mastering when they shaped the design or pushed back on the plan for a reason that held up. Correct a wrong node any distance. A pass with the show-me skill never moves a node above Beginning, because it hands over the implementation; suggest the coach-me skill instead. Change the node where you saw the evidence, and a parent only when your evidence covers all of it.
 
 ## 7. Handle Plan Issues
 
@@ -73,4 +88,4 @@ In the Guiding Phase, the reviewer can decide how to proceed with your findings.
 
 ## 8. After the Last Milestone
 
-Finish the learning profile for this pass as described in Update the Learning Profile. Then summarize everything you and the user have accomplished and tell them to go over to the Guiding Phase. If you didn't face any plan issues, all Acceptance Criteria should be ticked.
+Summarize everything you and the user have accomplished and tell them to go over to the Guiding Phase. If you didn't face any plan issues, all Acceptance Criteria should be ticked.
