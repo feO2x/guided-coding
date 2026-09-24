@@ -11,3 +11,4 @@ All notable changes to Guided Coding are documented here.
 - Distribute Guided Coding as portable Agent Skills and an Agent Plugin.
 - Generate a Claude Code adapter with concise, manually invoked skill names.
 - Add learning workflows for implementing plans through worked examples or coached problem solving.
+- Track learning progress across sessions in a private, git-backed Guided Learning profile.

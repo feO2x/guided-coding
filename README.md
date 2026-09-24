@@ -27,6 +27,24 @@ The full method is documented at
 
 All workflows require explicit user invocation.
 
+## Guided Learning
+
+With `guided-coding-implement-show-me` and `guided-coding-implement-coach-me`, you implement a
+frozen plan yourself while the agent teaches you. Pick the skill that matches your stage in the
+plan's domain:
+
+| Stage | Skill | How the agent teaches |
+| --- | --- | --- |
+| **Beginning**: new to the domain, learning its fundamental concepts | `guided-coding-implement-show-me` | Splits the plan into layers and presents complete code, fragment by fragment, for you to type and discuss. |
+| **Advancing**: fluent in the fundamentals, adapting them to new problems | `guided-coding-implement-coach-me` | Splits the plan into vertical slices that you implement yourself, reviews your work, and reveals hints progressively. |
+| **Mastering**: questioning and replacing the fundamentals themselves | `guided-coding-implement` | Implements the plan while you guide it. |
+
+Both skills track your progress in `~/.guided-learning/profile.md`: your preferences for how to be
+taught and a tree of knowledge areas, each at one of the three stages. On first use, the agent
+creates this folder as a local git repository (Git 2.28 or later), commits every update with a
+message stating what it observed, and never pushes. The profile never ends up in your project
+repository, and you can edit or delete it at any time.
+
 ## Install
 
 ### Agent Skills
