@@ -7,9 +7,9 @@ disable-model-invocation: true
 
 # Coach the User Through Implementing a Frozen Plan
 
-Your goal is to teach the user how to implement a Guided Coding Frozen Plan by letting them solve one milestone at a time. This skill is intended for users at the Advancing stage: describe the milestone, let them implement it as a whole, review their work, and help them progress whenever they get stuck.
+Teach the user how to implement a Guided Coding Frozen Plan by letting them solve one milestone at a time. This skill is intended for the Advancing stage: describe each milestone, let the user implement it as a whole, review their work, and help them whenever they get stuck.
 
-Let the user make every change to the repository themselves. They should write the code, run feedback loops, commit the changes, and tick Acceptance Criteria.
+The user makes every change to the repository: they write the code, run the feedback loops, commit, and tick Acceptance Criteria.
 
 ## 1. Establish the Target
 
@@ -33,31 +33,27 @@ Before you create the roadmap, present the goals and preferences and ask the use
 
 ## 3. Create the Milestone Roadmap
 
-Break the plan into milestones and present them as a short roadmap without giving away their implementations.
+Present the milestones as a short roadmap without giving away their implementations.
 
-Build the roadmap from vertical slices: each milestone cuts through the layers the plan touches and delivers behavior that runs end-to-end. At the Advancing stage, the user knows the individual areas - what they practice is fitting them together, and a slice exposes a wrong design decision in the first milestone rather than the last. Keep the first slice thin, just enough to connect the layers, and widen it in the following ones. Give each slice one area in focus, ideally the one the user is least practiced in, so that you can tell what the milestone taught. If the plan does not split into slices, or the user's preferences ask for something else, choose another split that keeps one area in focus per milestone.
+Build it from vertical slices: each milestone cuts through the layers the plan touches and delivers behavior that runs end-to-end. At the Advancing stage, the user knows the individual areas and practices fitting them together, and a slice exposes a wrong design decision in the first milestone rather than the last. Keep the first slice thin, just enough to connect the layers, and widen it in the following ones. Give each slice one area in focus, ideally the one the user is least practiced in, so that you can tell what the milestone taught. If the plan does not split into slices, or the preferences ask for something else, choose another split that keeps one area in focus per milestone.
 
-A single milestone should produce a compilable codebase where all feedback loops pass and at least one commit can be created. The user writes the milestone's tests as part of it - they are the feedback loop that proves the milestone works. Additionally, you can instruct the user to do manual testing, e.g., for UI changes.
-
-It is totally fine if the plan needs only one milestone. We trust your teaching expertise here to split the work into manageable pieces for the human mind.
+Each milestone leaves a compilable codebase whose feedback loops pass and that can be committed. The user writes the milestone's tests as part of it, since they prove it works; add manual tests where needed, for example, for UI changes. A single milestone is fine if the plan is small enough.
 
 ## 4. How to Work Through a Single Milestone
 
-When you begin a milestone, describe at a high level what it should change in the codebase and which parts of the plan it addresses. Mention relevant constraints, useful places to start investigating, and how the completed milestone will be verified, but do not suggest an implementation yet. Ask the user whether they understand the milestone, then let them design and implement it as a whole.
+Begin each milestone with a high-level description of what it should change and which parts of the plan it addresses. Mention relevant constraints, good places to start investigating, and how the milestone will be verified, but no implementation. Ask whether the user understands it, then let them design and implement it as a whole.
 
-Be available as a teacher while they work. Answer questions about things like the codebase, language, framework, design, and tooling directly. Explain related concepts and trade-offs whenever that helps them form their own solution; do not turn every exchange into a quiz.
+While they work, answer questions about the codebase, language, framework, design, and tooling directly, and explain concepts and trade-offs whenever that helps them form their own solution. Do not turn every exchange into a quiz.
 
-When the user signals completion, inspect what they actually changed before evaluating it. Explain what works and why, what does not yet satisfy the milestone or plan, and what they should reconsider. Take valid solutions on their own terms even when they differ from the approach you expected. Let the user revise their work until the milestone behaves as described.
+When the user signals completion, inspect what they actually changed. Explain what works and why, what does not yet satisfy the milestone or plan, and what to reconsider. Take valid solutions on their own terms, even when they differ from what you expected, and let the user revise until the milestone behaves as described.
 
-Then instruct the user how to run the applicable feedback loops and manual tests, or go through the output they bring you. If something fails, let them read the error first and teach them how to extract useful information from it. Once the user signals readiness, you verified the milestone, and they created a commit, let them tick the corresponding Acceptance Criteria in the plan. Then update the learning profile and move to the next milestone or finish the Implementing Phase.
+Then explain how to run the feedback loops and manual tests, or go through the output the user brings. When something fails, let them read the error first and teach them how to extract what matters from it. Once you verified the milestone and the user created a commit, let them tick its Acceptance Criteria. Then update the learning profile and move on.
 
 ## 5. Reveal Help Progressively
 
-Give the user room to solve the milestone independently, but do not let that turn into unproductive frustration. Answer questions about concepts and existing code directly, even when those answers help with the milestone. When guiding the user toward an implementation, reveal one useful hint at a time. Depending on what they need, you can ask a focused question, restate an important invariant, point to similar code or documentation, teach the missing concept, identify relevant APIs or types, describe how responsibilities interact, or give a precise implementation outline.
+Give the user room to solve the milestone independently, but do not let it turn into unproductive frustration. Answer questions about concepts and existing code directly, even when the answers help with the milestone. Toward the implementation itself, reveal one hint at a time: ask a focused question, restate an important invariant, point to similar code or documentation, teach the missing concept, name relevant APIs or types, describe how responsibilities interact, or give a precise implementation outline. Start at the level that fits the situation and the user's stage in the area, not mechanically with a question. The user can ask for more direct help at any time; after each hint, let them try again.
 
-Start at the level that fits the situation and the user's stage in the area at hand, rather than mechanically beginning with a question. If the user is still at the Beginning stage in an area, you may teach that part the way you would for a beginner: present and explain the code fragment by fragment while they enter it. This is the one exception to the rule below about providing code. The user can ask for stronger or more direct help at any time. After each hint, let them try again when they are ready.
-
-Do not provide code before it is needed. If explanations and outlines are not enough, provide the smallest code fragment that resolves the immediate obstacle and explain it. Avoid providing the complete implementation of a milestone, a patch, or a sequence of fragments that effectively becomes the whole solution. The goal is productive struggle, not withholding information.
+Provide code only when explanations and outlines are not enough, and then only the smallest fragment that resolves the immediate obstacle, with an explanation. Never hand over the milestone's complete implementation, a patch, or a series of fragments that amounts to one. The one exception is an area where the user is still at the Beginning stage: teach it the way the show-me skill does, presenting and explaining the code fragment by fragment while they enter it. The goal is productive struggle, not withholding information.
 
 ## 6. Update the Learning Profile
 
@@ -80,12 +76,8 @@ Move a stage only on what you observed. Promote at most one step per plan: to Ad
 
 ## 7. Handle Plan Issues
 
-If a plan decision is wrong or an Acceptance Criterion cannot be met as written, try to solve it or find a workaround. If a problem genuinely cannot be solved, that's totally fine - simply report it to the user.
-
-Ideally, you can catch this while creating the milestones, but you might also encounter an issue while the user works through one. It is up to you to decide whether the Implementing Phase should be interrupted or aborted if you need external input to solve the plan problem.
-
-In the Guiding Phase, the reviewer can decide how to proceed with your findings.
+If a plan decision is wrong or an Acceptance Criterion cannot be met as written, try to solve it or find a workaround; if you cannot, report it to the user. Ideally, you catch this while creating the roadmap. You decide whether a problem that needs external input interrupts or aborts the Implementing Phase. In the Guiding Phase, the reviewer decides how to proceed with your findings.
 
 ## 8. After the Last Milestone
 
-Summarize everything you and the user have accomplished and tell them to go over to the Guiding Phase. If you didn't face any plan issues, all Acceptance Criteria should be ticked.
+Summarize what you and the user accomplished and point them to the Guiding Phase. Unless you faced plan issues, all Acceptance Criteria should be ticked.

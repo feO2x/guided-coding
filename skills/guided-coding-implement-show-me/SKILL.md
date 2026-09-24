@@ -6,9 +6,9 @@ license: MIT
 
 # Show the User How to Implement a Frozen Plan
 
-Your goal is to teach the user how to implement a Guided Coding Frozen Plan by breaking it up into useful teachable milestones. You output one code fragment at a time for one milestone and explain it; they enter it, execute feedback loops and manual tests, and ask about whatever is unclear. This skill is intended for users at the Beginning stage, so please provide the complete code of a fragment, do not leave any parts out. The user should not figure out parts of the implementation by themselves.
+Your goal is to teach the user how to implement a Guided Coding Frozen Plan by splitting it into teachable milestones. For each milestone, you present and explain the code one fragment at a time; the user enters it, runs the feedback loops and manual tests, and asks about whatever is unclear. This skill is intended for the Beginning stage, so always present complete fragments: the user should not have to figure out any part of the implementation.
 
-Let the user make every change to the repository themselves. Typing the code by hand is where a good part of the learning happens, so encourage that over copying and pasting, and leave committing and publishing to them.
+The user makes every change to the repository, including commits. Typing the code by hand is where much of the learning happens, so encourage it over copying and pasting.
 
 ## 1. Establish the Target
 
@@ -32,25 +32,23 @@ Before you create the roadmap, present the goals and preferences and ask the use
 
 ## 3. Create the Milestone Roadmap
 
-Break the plan into milestones and present them as a short roadmap, not showing any code yet.
+Present the milestones as a short roadmap without any code.
 
-Build the roadmap layer by layer, so that each milestone puts one area in focus and builds upon the previous ones. For a backend feature, this could be the domain model first, then database access, followed by a service, and finally the endpoint. This way, the user can take in the concepts of one area at a time. Because nothing runs end-to-end before the last layer is in place, explain in the roadmap how the layers will connect in the end, and remind the user where the current layer sits in that picture whenever a milestone begins. If the plan has no layers, or the user's preferences ask for something else, choose another split that keeps one area in focus per milestone.
+Build it layer by layer, each milestone putting one area in focus and building on the previous ones. For a backend feature, this could be the domain model, then database access, a service, and finally the endpoint. Since nothing runs end-to-end before the last layer, explain in the roadmap how the layers will connect, and remind the user where the current layer sits whenever a milestone begins. If the plan has no layers, or the preferences ask for something else, choose another split that keeps one area in focus per milestone.
 
-A single milestone should produce a compilable codebase where all feedback loops pass and at least one commit can be created. This includes the milestone's tests - they are part of the code you present, because they are the feedback loop that proves the milestone works. Additionally, you can instruct the user to do manual testing, e.g., for UI changes.
-
-It is totally fine if you break up a plan into a single milestone. We trust your teaching expertise here, look at the extent of the plan and consider how you can teach users the corresponding concepts effectively through one or several milestones.
+Each milestone leaves a compilable codebase whose feedback loops pass and that can be committed. Its tests are part of the code you present, since they prove the milestone works; add manual tests where needed, for example, for UI changes. A single milestone is fine if that teaches the plan best.
 
 ## 4. How to Work Through a Single Milestone
 
-When you begin working with the user on a new milestone, first output a description of the changes it introduces to the codebase from a high-level perspective, and which parts of the plan it addresses. Ask the user whether they understand this.
+Begin each milestone with a high-level description of the changes it introduces and which parts of the plan it addresses, and ask whether the user understands it.
 
-Then continue by presenting code to the user. Please do not output all code at once, but fragment-by-fragment so that the user can comprehend the changes step-by-step and build up their mental model of the codebase over time. Verify that each fragment was entered correctly once the user signals completion.
+Then present the code fragment by fragment, never all at once, so that the user builds their mental model of the codebase step by step. Verify each fragment once the user has entered it.
 
-After all code fragments are in place, instruct the user how to run feedback loop commands to verify the changes, or how to execute manual tests. Before they run these, it is worth asking what they expect to happen and why - one question, not a quiz. This tells you whether the explanation actually landed.
+When all fragments are in place, explain how to run the feedback loops or manual tests. Before the user runs them, ask what they expect to happen and why - one question, not a quiz. It tells you whether your explanation landed.
 
-The user might ask questions about details of the code at any point. Be helpful here. If something does not compile or a test fails, let the user read the error first, explain what to focus on in the error message (for example, exceptions carry a lot of information).
+Answer questions about the code at any point. When something does not compile or a test fails, let the user read the error first, then point out what to focus on, for example, the information an exception carries.
 
-Once the user signals readiness, you verified the milestone behaves as described, and a commit was created by the user, let the user tick the corresponding Acceptance Criteria in the plan from `- [ ]` to `- [x]`. Then update the learning profile and move to the next milestone or finish the Implementing Phase.
+Once the milestone behaves as described, you verified it, and the user created a commit, let them tick its Acceptance Criteria from `- [ ]` to `- [x]`. Then update the learning profile and move on.
 
 ## 5. Update the Learning Profile
 
@@ -73,12 +71,8 @@ Move a stage only on what you observed. Promote at most one step per plan: to Ad
 
 ## 6. Handle Plan Issues
 
-If a plan decision is wrong or an Acceptance Criterion cannot be met as written, try to solve it or find a workaround. If a problem genuinely cannot be solved, that's totally fine - simply report it to the user.
-
-Ideally, you can catch this directly while you are creating the milestones for the plan, but you might also encounter an issue while the user is working through a milestone. It is up to you to decide whether the Implementation Phase should be interrupted or aborted if you need external input to solve the plan problem.
-
-In the Guiding Phase, the reviewer can decide how to proceed with your findings.
+If a plan decision is wrong or an Acceptance Criterion cannot be met as written, try to solve it or find a workaround; if you cannot, report it to the user. Ideally, you catch this while creating the roadmap. You decide whether a problem that needs external input interrupts or aborts the Implementing Phase. In the Guiding Phase, the reviewer decides how to proceed with your findings.
 
 ## 7. After the Last Milestone
 
-Summarize everything you and the user have accomplished and tell them to go over to the Guiding Phase. If you didn't face any plan issues, all Acceptance Criteria should be ticked.
+Summarize what you and the user accomplished and point them to the Guiding Phase. Unless you faced plan issues, all Acceptance Criteria should be ticked.
