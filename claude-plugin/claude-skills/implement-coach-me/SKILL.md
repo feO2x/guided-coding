@@ -43,11 +43,11 @@ Each milestone leaves a compilable codebase whose feedback loops pass and that c
 
 Begin each milestone with a high-level description of what it should change and which parts of the plan it addresses. Mention relevant constraints, good places to start investigating, and how the milestone will be verified, but no implementation. Ask whether the user understands it, then let them design and implement it as a whole.
 
-While they work, answer questions about the codebase, language, framework, design, and tooling directly, and explain concepts and trade-offs whenever that helps them form their own solution. Do not turn every exchange into a quiz.
+While they work, answer questions about the codebase, language, framework, design, and tooling directly, and explain concepts and trade-offs whenever that helps them form their own solution.
 
 When the user signals completion, inspect what they actually changed. Explain what works and why, what does not yet satisfy the milestone or plan, and what to reconsider. Take valid solutions on their own terms, even when they differ from what you expected, and let the user revise until the milestone behaves as described.
 
-Then explain how to run the feedback loops and manual tests, or go through the output the user brings. When something fails, let them read the error first and teach them how to extract what matters from it. Once you verified the milestone, let the user tick its Acceptance Criteria and commit them together with the milestone. Then update the learning profile and move on.
+Then explain how to run the feedback loops and manual tests, or go through the output the user brings. When something fails, let them read the error first and teach them how to extract what matters from it. Once you verified the milestone, let the user tick the Acceptance Criteria it fully satisfies, if any, and commit them together with the milestone. Then update the learning profile and move on.
 
 ## 5. Reveal Help Progressively
 
@@ -70,13 +70,13 @@ Knowledge that would survive a switch to another technology stack belongs to a d
 - **Technologies**: `<ecosystem>` → `<technology>` → `<area>`, for example `.NET` → `EF Core` → `change tracking`. The ecosystem is the one whose package manager distributes the technology, so React belongs to `JavaScript`, which includes TypeScript. A technology outside any ecosystem, such as PostgreSQL, is a root itself.
 - **Disciplines**: `<discipline>` → `<topic>` → `<subarea>`, for example `Automated testing` → `Test doubles` → `fakes`. Roots are limited to Algorithms and data structures, Software design and architecture, Automated testing, Data modeling and persistence, Security, Concurrency and distributed systems, Performance, Delivery and operations, and User interface design. Ask the user before you add another one.
 
-Reuse existing nodes, and name technologies the way their official documentation does. Add a child only when its stage differs from its parent's; otherwise, list it in the parent's optional `covers`.
+After each milestone, add a node for every area it drew on that the profile does not cover yet. Reuse existing nodes, and name technologies the way their official documentation does. Add a child only when its stage differs from its parent's; otherwise, list it in the parent's optional `covers`.
 
-Move a stage only on what you observed. Promote at most one step per plan: to Advancing when the user carried a milestone in that area without being handed the implementation, to Mastering when they shaped the design or pushed back on the plan for a reason that held up. Correct a wrong node any distance. A pass with the show-me skill never moves a node above Beginning, because it hands over the implementation; suggest the coach-me skill instead. Change the node where you saw the evidence, and a parent only when your evidence covers all of it.
+Move a stage only on what you observed. Promote at most one step per plan: to Advancing when the user carried a milestone in that area without being handed the implementation, to Mastering when they shaped the design or pushed back on the plan for a reason that held up. Correct a wrong node any distance. The show-me skill never moves a node above Beginning, because it hands over the implementation; suggest the coach-me skill instead. Change the node where you saw the evidence, and a parent only when your evidence covers all of it.
 
 ## 7. Handle Plan Issues
 
-If a plan decision is wrong or an Acceptance Criterion cannot be met as written, try to solve it or find a workaround; if you cannot, report it to the user. Ideally, you catch this while creating the roadmap. You decide whether a problem that needs external input interrupts or aborts the Implementing Phase. In the Guiding Phase, the reviewer decides how to proceed with your findings.
+If a plan decision is wrong or an Acceptance Criterion cannot be met as written, work out a solution or workaround and teach it like any other part of the plan; if you cannot, report it to the user. Ideally, you catch this while creating the roadmap. You decide whether a problem that needs external input interrupts or aborts the Implementing Phase. In the Guiding Phase, the reviewer decides how to proceed with your findings.
 
 ## 8. After the Last Milestone
 
