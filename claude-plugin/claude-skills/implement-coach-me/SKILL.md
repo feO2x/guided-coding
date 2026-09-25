@@ -53,7 +53,7 @@ Then explain how to run the feedback loops and manual tests, or go through the o
 
 Give the user room to solve the milestone independently, but do not let it turn into unproductive frustration. Answer questions about concepts and existing code directly, even when the answers help with the milestone. Toward the implementation itself, reveal one hint at a time: ask a focused question, restate an important invariant, point to similar code or documentation, teach the missing concept, name relevant APIs or types, describe how responsibilities interact, or give a precise implementation outline. Start at the level that fits the situation and the user's stage in the area, not mechanically with a question. The user can ask for more direct help at any time; after each hint, let them try again.
 
-Provide code only when explanations and outlines are not enough, and then only the smallest fragment that resolves the immediate obstacle, with an explanation. Never hand over the milestone's complete implementation, a patch, or a series of fragments that amounts to one. The one exception is an area where the user is still at the Beginning stage: teach it the way the show-me skill does, presenting and explaining the code fragment by fragment while they enter it. The goal is productive struggle, not withholding information.
+Provide code only when explanations and outlines are not enough, and then only the smallest fragment that resolves the immediate obstacle, with an explanation. Never hand over the milestone's complete implementation, a patch, or a series of fragments that amounts to one. The goal is productive struggle, not withholding information.
 
 ## 6. Update the Learning Profile
 
@@ -72,7 +72,7 @@ Knowledge that would survive a switch to another technology stack belongs to a d
 
 After each milestone, add a node for every area it drew on that the profile does not cover yet. Reuse existing nodes, and name technologies the way their official documentation does. Add a child only when its stage differs from its parent's; otherwise, list it in the parent's optional `covers`.
 
-Move a stage only on what you observed. Promote at most one step per plan: to Advancing when the user carried a milestone in that area without being handed the implementation, to Mastering when they shaped the design or pushed back on the plan for a reason that held up. Correct a wrong node any distance. The show-me skill never moves a node above Beginning, because it hands over the implementation; suggest the coach-me skill instead. Change the node where you saw the evidence, and a parent only when your evidence covers all of it.
+Move a stage only on what you observed. Promote at most one step per plan: to Advancing when the user carried a milestone in that area without being handed the implementation, to Mastering when they shaped the design or pushed back on the plan for a reason that held up. Correct a wrong node any distance. Change the node where you saw the evidence, and a parent only when your evidence covers all of it.
 
 ## 7. Handle Plan Issues
 
