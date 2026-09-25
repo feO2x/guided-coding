@@ -15,7 +15,7 @@ This repository contains skills for Guided Coding. The root package supports the
 
 ## Manifests and versions
 
-Keep the version synchronized across `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`,`.claude-plugin/marketplace.json`, and release tags.
+Keep the version synchronized across `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and release tags.
 
 Use Conventional Commits messages.
 
