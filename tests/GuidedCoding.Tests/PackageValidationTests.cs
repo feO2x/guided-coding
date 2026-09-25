@@ -50,7 +50,8 @@ public sealed class PackageValidationTests
     [
         "Create the Milestone Roadmap",
         "How to Work Through a Single Milestone",
-        "Reveal Help Progressively"
+        "Reveal Help Progressively",
+        "Update the Learning Profile"
     ];
 
     private static readonly (string Section, string[] SkillNames)[] SharedSections =
