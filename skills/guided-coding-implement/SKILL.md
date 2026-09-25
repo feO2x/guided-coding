@@ -1,6 +1,6 @@
 ---
 name: guided-coding-implement
-description: Implement a Frozen Guided Coding Plan independently and verify the implementation through the repository's feedback loops. Run only when explicitly requested by the user.
+description: Implement a Guided Coding Frozen Plan independently and verify the implementation through the repository's feedback loops. Run only when explicitly requested by the user.
 license: MIT
 ---
 
