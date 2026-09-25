@@ -4,6 +4,18 @@
       "name": "freeze-plan",
       "disableModelInvocation": true
     },
+    "guided-coding-implement": {
+      "name": "implement",
+      "disableModelInvocation": true
+    },
+    "guided-coding-implement-coach-me": {
+      "name": "implement-coach-me",
+      "disableModelInvocation": true
+    },
+    "guided-coding-implement-show-me": {
+      "name": "implement-show-me",
+      "disableModelInvocation": true
+    },
     "guided-coding-review-plan": {
       "name": "review-plan",
       "disableModelInvocation": true

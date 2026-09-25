@@ -16,6 +16,9 @@ public sealed class PackageValidationTests
     private static readonly string[] ExpectedPortableSkillNames =
     [
         "guided-coding-freeze-plan",
+        "guided-coding-implement",
+        "guided-coding-implement-coach-me",
+        "guided-coding-implement-show-me",
         "guided-coding-review-plan",
         "guided-coding-setup",
         "guided-coding-write-deviations",
@@ -27,11 +30,43 @@ public sealed class PackageValidationTests
     )
     {
         ["guided-coding-freeze-plan"] = "freeze-plan",
+        ["guided-coding-implement"] = "implement",
+        ["guided-coding-implement-coach-me"] = "implement-coach-me",
+        ["guided-coding-implement-show-me"] = "implement-show-me",
         ["guided-coding-review-plan"] = "review-plan",
         ["guided-coding-setup"] = "setup",
         ["guided-coding-write-deviations"] = "write-deviations",
         ["guided-coding-write-plan"] = "write-plan"
     };
+
+    private static readonly string[] GuidedLearningSkillNames =
+    [
+        "guided-coding-implement-coach-me",
+        "guided-coding-implement-show-me"
+    ];
+
+    // The Guided Learning skills share every section except these, which differ on purpose.
+    private static readonly string[] GuidedLearningSectionsThatDiffer =
+    [
+        "Create the Milestone Roadmap",
+        "How to Work Through a Single Milestone",
+        "Reveal Help Progressively",
+        "Update the Learning Profile"
+    ];
+
+    private static readonly (string Section, string[] SkillNames)[] SharedSections =
+    [
+        ("Establish the Target", ["guided-coding-implement", .. GuidedLearningSkillNames])
+    ];
+
+    // A snippet is the list that follows its lead-in line.
+    private static readonly (string LeadIn, string[] SkillNames)[] SharedSnippets =
+    [
+        (
+            "Use these commands to get it:",
+            ["guided-coding-freeze-plan", "guided-coding-write-deviations"]
+        )
+    ];
 
     private static readonly string[] ForbiddenFrontmatterFields =
     [
@@ -49,6 +84,14 @@ public sealed class PackageValidationTests
     );
 
     private static string RepositoryRoot { get; } = FindRepositoryRoot();
+
+    public static TheoryData<string> SharedSectionNames => new (
+        SharedSections.Select(shared => shared.Section)
+    );
+
+    public static TheoryData<string> SharedSnippetLeadIns => new (
+        SharedSnippets.Select(shared => shared.LeadIn)
+    );
 
     [Fact]
     public void ManifestsUseTheSamePackageMetadata()
@@ -289,6 +332,166 @@ public sealed class PackageValidationTests
         );
     }
 
+    [Theory]
+    [MemberData(nameof(SharedSectionNames))]
+    public void SkillsSharingASectionKeepItIdentical(string sectionName)
+    {
+        var skillNames = SharedSections.Single(shared => shared.Section == sectionName).SkillNames;
+        var sections = skillNames
+           .Select(
+                skillName => (
+                    SkillName: skillName,
+                    Body: ReadSectionBody(
+                        Path.Combine(RepositoryRoot, "skills", skillName, "SKILL.md"),
+                        sectionName
+                    )
+                )
+            )
+           .ToArray();
+        var reference = sections[0];
+
+        foreach (var section in sections[1..])
+        {
+            Assert.True(
+                string.Equals(reference.Body, section.Body, StringComparison.Ordinal),
+                $"\"{sectionName}\" differs between {reference.SkillName} and {section.SkillName}. " +
+                "The section is duplicated on purpose because skills are standalone; " +
+                "apply the change to every skill that shares it."
+            );
+        }
+    }
+
+    [Fact]
+    public void GuidedLearningSkillsShareAllUndeclaredSections()
+    {
+        var skills = GuidedLearningSkillNames
+           .Select(
+                skillName => (
+                    SkillName: skillName,
+                    Path: Path.Combine(RepositoryRoot, "skills", skillName, "SKILL.md")
+                )
+            )
+           .Select(
+                skill => (
+                    skill.SkillName,
+                    skill.Path,
+                    Headings: ReadSectionHeadings(skill.Path)
+                       .Where(heading => !GuidedLearningSectionsThatDiffer.Contains(heading))
+                       .ToArray()
+                )
+            )
+           .ToArray();
+        var reference = skills[0];
+
+        foreach (var skill in skills[1..])
+        {
+            var unmatched = reference
+               .Headings
+               .Except(skill.Headings)
+               .Concat(skill.Headings.Except(reference.Headings))
+               .ToArray();
+            Assert.True(
+                reference.Headings.SequenceEqual(skill.Headings),
+                $"{reference.SkillName} and {skill.SkillName} have different sections " +
+                (unmatched.Length > 0 ?
+                    $"(unmatched: {string.Join(", ", unmatched.Select(heading => $"\"{heading}\""))}). " :
+                    "(same sections in a different order). ") +
+                "Guided Learning skills share every section by default; add the section to the other " +
+                $"skill or declare it in {nameof(GuidedLearningSectionsThatDiffer)}."
+            );
+
+            foreach (var heading in reference.Headings)
+            {
+                Assert.True(
+                    string.Equals(
+                        ReadSectionBody(reference.Path, heading),
+                        ReadSectionBody(skill.Path, heading),
+                        StringComparison.Ordinal
+                    ),
+                    $"\"{heading}\" differs between {reference.SkillName} and {skill.SkillName}. " +
+                    "Apply the change to both skills, or declare the section in " +
+                    $"{nameof(GuidedLearningSectionsThatDiffer)} if it should differ."
+                );
+            }
+        }
+    }
+
+    [Fact]
+    public void GuidedLearningSectionsThatDifferExist()
+    {
+        var headings = GuidedLearningSkillNames
+           .SelectMany(
+                skillName => ReadSectionHeadings(
+                    Path.Combine(RepositoryRoot, "skills", skillName, "SKILL.md")
+                )
+            )
+           .ToHashSet(StringComparer.Ordinal);
+
+        foreach (var heading in GuidedLearningSectionsThatDiffer)
+        {
+            Assert.True(
+                headings.Contains(heading),
+                $"\"{heading}\" is declared in {nameof(GuidedLearningSectionsThatDiffer)} " +
+                "but no Guided Learning skill has this section anymore."
+            );
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(SharedSnippetLeadIns))]
+    public void SkillsSharingASnippetKeepItIdentical(string leadIn)
+    {
+        var skillNames = SharedSnippets.Single(shared => shared.LeadIn == leadIn).SkillNames;
+        var snippets = skillNames
+           .Select(
+                skillName => (
+                    SkillName: skillName,
+                    Lines: ReadSnippet(
+                        Path.Combine(RepositoryRoot, "skills", skillName, "SKILL.md"),
+                        leadIn
+                    )
+                )
+            )
+           .ToArray();
+        var reference = snippets[0];
+
+        foreach (var snippet in snippets[1..])
+        {
+            Assert.True(
+                reference.Lines.SequenceEqual(snippet.Lines, StringComparer.Ordinal),
+                $"The list after \"{leadIn}\" differs between {reference.SkillName} and " +
+                $"{snippet.SkillName}. The snippet is duplicated on purpose because skills are " +
+                "standalone; apply the change to every skill that shares it."
+            );
+        }
+    }
+
+    [Fact]
+    public void GuidedLearningSkillsShipTheSameProfileTemplate()
+    {
+        var templates = GuidedLearningSkillNames
+           .Select(
+                skillName => (
+                    SkillName: skillName,
+                    Content: File.ReadAllText(
+                        Path.Combine(RepositoryRoot, "skills", skillName, "assets", "profile.md")
+                    )
+                )
+            )
+           .ToArray();
+        var reference = templates[0];
+
+        foreach (var template in templates[1..])
+        {
+            Assert.True(
+                string.Equals(reference.Content, template.Content, StringComparison.Ordinal),
+                $"assets/profile.md differs between {reference.SkillName} and {template.SkillName}. " +
+                "The template is duplicated on purpose because skills are standalone; " +
+                "apply the change to every skill that ships it."
+            );
+        }
+    }
+
     private static string FindRepositoryRoot()
     {
         for (
@@ -395,6 +598,73 @@ public sealed class PackageValidationTests
         var end = Array.IndexOf(lines, "---", 1);
         Assert.True(end > 1);
         return string.Join('\n', lines[(end + 1)..]);
+    }
+
+    private static string ReadSectionBody(string path, string heading)
+    {
+        var lines = File.ReadAllText(path).Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+        var start = Array.FindIndex(lines, line => IsSectionHeading(line, heading));
+        Assert.True(start >= 0, $"\"{heading}\" is missing from {path}.");
+
+        var end = Array.FindIndex(
+            lines,
+            start + 1,
+            line => line.StartsWith("## ", StringComparison.Ordinal)
+        );
+        var body = end < 0 ? lines[(start + 1)..] : lines[(start + 1)..end];
+        return string.Join('\n', body).Trim();
+    }
+
+    private static bool IsSectionHeading(string line, string heading)
+    {
+        return string.Equals(ReadHeadingText(line), heading, StringComparison.Ordinal);
+    }
+
+    private static string[] ReadSectionHeadings(string path)
+    {
+        return File
+           .ReadAllText(path)
+           .Replace("\r\n", "\n", StringComparison.Ordinal)
+           .Split('\n')
+           .Select(ReadHeadingText)
+           .OfType<string>()
+           .ToArray();
+    }
+
+    private static string? ReadHeadingText(string line)
+    {
+        if (!line.StartsWith("## ", StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        // Section numbers differ between skills, so match on the heading text alone.
+        var text = line[3..].Trim();
+        var separator = text.IndexOf(". ", StringComparison.Ordinal);
+        if (separator > 0 && text[..separator].All(char.IsDigit))
+        {
+            text = text[(separator + 2)..];
+        }
+
+        return text;
+    }
+
+    private static string[] ReadSnippet(string path, string leadIn)
+    {
+        var lines = File.ReadAllText(path).Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+        var matches = lines
+           .Select((line, index) => (Line: line, Index: index))
+           .Where(candidate => candidate.Line.TrimEnd().EndsWith(leadIn, StringComparison.Ordinal))
+           .ToArray();
+        Assert.True(matches.Length == 1, $"{path} must contain \"{leadIn}\" exactly once.");
+
+        var snippet = lines
+           .Skip(matches[0].Index + 1)
+           .SkipWhile(string.IsNullOrWhiteSpace)
+           .TakeWhile(line => line.StartsWith("- ", StringComparison.Ordinal))
+           .ToArray();
+        Assert.True(snippet.Length > 0, $"No list follows \"{leadIn}\" in {path}.");
+        return snippet;
     }
 
     private static SortedDictionary<string, string> EnumerateResourceFiles(
