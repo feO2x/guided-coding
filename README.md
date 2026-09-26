@@ -41,16 +41,17 @@ Both skills track your progress in `~/.guided-learning/profile.md`: this file co
 
 ## Install
 
+Many of the following commands use `gh` which refers to the [GitHub CLI](https://cli.github.com/). 
+
 ### Agent Skills
 
-Install all skills into the shared project-level `.agents/skills` directory with the [GitHub CLI](https://cli.github.com/):
+All major harnesses except Claude Code support Agent Skills. Install all skills into the shared project-level `.agents/skills` directory with the [GitHub CLI](https://cli.github.com/):
 
 ```sh
 gh skill install feO2x/guided-coding --all --agent universal --scope project
 ```
 
-Install one skill by naming it, or add `--scope user` to make the installation available across
-repositories.
+Install one skill by naming it or add `--scope user` to make the installation available across repositories.
 
 If you want to update, use the following command: 
 
@@ -59,18 +60,28 @@ gh skill update --dir .agents/skills --dry-run # checks for changes
 gh skill update --dir .agents/skills --all # updates all local skills
 ```
 
-### Claude Code marketplace
+### Claude Code
 
-Add this repository as a marketplace and install the plugin:
+#### Via the GitHub CLI
+
+You can use `gh` to install the skills, too:
+
+```
+gh skill install feO2x/guided-coding --all --agent claude-code --scope project
+```
+
+Install one skill by naming it or add `--scope user` to make the installation available across repositories.
+
+#### As a Claude Code Marketplace and Plugin
+
+Alternatively, you can add Guided Coding as a marketplace and install the plugin:
 
 ```text
 /plugin marketplace add feO2x/guided-coding
 /plugin install guided-coding@guided-coding
 ```
 
-Claude namespaces plugin skills with the plugin name. For example, invoke the setup workflow as
-`/guided-coding:setup`. The other skill names similarly omit the redundant `guided-coding-`
-prefix used by the portable Agent Skills.
+Claude namespaces plugin skills with the plugin name. For example, invoke the setup workflow as `/guided-coding:setup`. The other skill names similarly omit the redundant `guided-coding-` prefix used by the portable Agent Skills.
 
 If you want to update, use the following commands:
 
