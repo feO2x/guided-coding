@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="../../tools/GuidedCoding.Release/GuidedCoding.Release.csproj" />
+  </ItemGroup>
+
+</Project>

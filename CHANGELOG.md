@@ -2,7 +2,7 @@
 
 All notable changes to Guided Coding are documented here.
 
-## [2.0.0] - Unreleased
+## [Unreleased]
 
 - Add UTC timestamps to plan and Plan Deviations filenames.
 - Treat `ai-plans/` as an append-only, event-sourced decision record.
