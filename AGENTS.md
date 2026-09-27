@@ -26,6 +26,8 @@ Use Conventional Commits messages. The commit type decides the next version:
 - `feat` releases a minor version, `fix` and `perf` release a patch version.
 - `!` after the type or a `BREAKING CHANGE:` footer releases a major version. Removing or renaming a skill is a breaking change.
 - Other types, such as `docs`, `test`, `refactor`, and `chore`, do not trigger a release. Changes to shipped skill content are therefore `feat` or `fix`, never `docs` or `chore`.
+- Dependency updates do not reach users, so Dependabot commits as `build(deps)`. Keep this prefix in `.github/dependabot.yml`.
+- Pin third-party actions in workflows to a commit SHA with a version comment. Dependabot keeps both up to date.
 
 ## Feedback loops
 
