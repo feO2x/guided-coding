@@ -124,5 +124,21 @@ claude plugin validate . --strict
 gh skill publish --dry-run
 ```
 
-Keep `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`,
-`.claude-plugin/marketplace.json`, and the release tag on the same Semantic Version.
+### Releasing
+
+Releases are made from an up-to-date `main` branch. Describe the changes under `## [Unreleased]`
+in `CHANGELOG.md` first, then run:
+
+```sh
+dotnet run --project tools/GuidedCoding.Release -- --dry-run          # show the proposed version
+dotnet run --project tools/GuidedCoding.Release                       # release the proposed version
+dotnet run --project tools/GuidedCoding.Release -- --version 3.0.0    # release a specific version
+```
+
+The tool derives the next version from the Conventional Commits since the last `vMAJOR.MINOR.PATCH`
+tag: breaking changes release a major version, `feat` a minor version, and `fix` or `perf` a patch
+version. After you confirm, it updates `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`,
+`.claude-plugin/marketplace.json`, and `CHANGELOG.md`, runs the validations, commits, tags, pushes
+`main` together with the tag, and publishes the Agent Skills with `gh skill publish`. Pushing the new
+version to `main` releases the Claude Code plugin. The first release needs `--version` because there
+is no release tag to start from.

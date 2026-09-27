@@ -15,16 +15,24 @@ This repository contains skills for Guided Coding. The root package supports the
 
 ## Manifests and versions
 
-Keep the version synchronized across `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and release tags.
+- Keep the version synchronized across `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and `vMAJOR.MINOR.PATCH` release tags.
+- Do not bump versions manually. Between releases, the manifests hold the last released version. Release with `dotnet run --project tools/GuidedCoding.Release`, which derives the next version from the commits since the last release tag, updates the manifests and `CHANGELOG.md`, validates, commits, tags, pushes, and runs `gh skill publish`.
+- Describe user-facing changes under `## [Unreleased]` in `CHANGELOG.md`.
 
-Use Conventional Commits messages.
+## Commit messages
+
+Use Conventional Commits messages. The commit type decides the next version:
+
+- `feat` releases a minor version, `fix` and `perf` release a patch version.
+- `!` after the type or a `BREAKING CHANGE:` footer releases a major version. Removing or renaming a skill is a breaking change.
+- Other types, such as `docs`, `test`, `refactor`, and `chore`, do not trigger a release. Changes to shipped skill content are therefore `feat` or `fix`, never `docs` or `chore`.
 
 ## Feedback loops
 
 - Regenerate the Claude adapter and run `dotnet test` after changing skills or manifests.
 - Run `dotnet run --project tools/GuidedCoding.ClaudeGenerator -- --check` to detect drift.
 - Run `claude plugin validate . --strict` when Claude Code is installed.
-- Run `gh skill publish --dry-run` before publishing a release.
+- Run `gh skill publish --dry-run` before publishing a release. The release tool runs it for you.
 
 ## This is your space
 
