@@ -80,11 +80,20 @@ public sealed class ReleaseWorkflow(
         }
 
         _git.FetchOrigin();
-        var behind = _git.CountCommitsBehindOrigin();
+        var (behind, ahead) = _git.CompareWithOrigin();
         if (behind > 0)
         {
             throw new InvalidOperationException(
                 $"{Git.MainBranch} is {behind} commit(s) behind {Git.Remote}/{Git.MainBranch}. Pull before releasing."
+            );
+        }
+
+        // Pushing the release would also push these commits, bypassing pull requests and CI.
+        if (ahead > 0)
+        {
+            throw new InvalidOperationException(
+                $"{Git.MainBranch} is {ahead} commit(s) ahead of {Git.Remote}/{Git.MainBranch}. " +
+                "Merge them through a pull request or drop them before releasing."
             );
         }
     }

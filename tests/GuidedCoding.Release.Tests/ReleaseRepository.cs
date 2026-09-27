@@ -117,6 +117,13 @@ internal sealed class ReleaseRepository : IDisposable
         Git("commit", "--allow-empty", "-m", message);
     }
 
+    // Commits and pushes the current branch, like a merged pull request.
+    public void CommitAndPush(string message)
+    {
+        Commit(message);
+        Git("push", "origin", "HEAD");
+    }
+
     public void Tag(string tag) => Git("tag", "-a", tag, "-m", tag);
 
     public void PushCommitFromAnotherClone(string message)

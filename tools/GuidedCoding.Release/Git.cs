@@ -17,8 +17,13 @@ public sealed class Git(string repositoryRoot)
 
     public void FetchOrigin() => Run("fetch", "--tags", Remote);
 
-    public int CountCommitsBehindOrigin() =>
-        int.Parse(Run("rev-list", "--count", $"HEAD..{Remote}/{MainBranch}").Trim(), CultureInfo.InvariantCulture);
+    // Counts the commits that only origin/main contains and the commits that only HEAD contains.
+    public (int Behind, int Ahead) CompareWithOrigin()
+    {
+        var counts = Run("rev-list", "--left-right", "--count", $"{Remote}/{MainBranch}...HEAD")
+           .Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        return (int.Parse(counts[0], CultureInfo.InvariantCulture), int.Parse(counts[1], CultureInfo.InvariantCulture));
+    }
 
     // Release tags are plain MAJOR.MINOR.PATCH versions. Only tags reachable from HEAD count, so a tag on
     // another branch cannot become the base of a release.

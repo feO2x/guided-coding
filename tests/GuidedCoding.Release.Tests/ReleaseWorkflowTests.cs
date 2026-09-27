@@ -22,8 +22,8 @@ public sealed class ReleaseWorkflowTests
     public void ReleasesTheNextVersionDerivedFromConventionalCommits()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("fix: correct a typo");
-        repository.Commit("feat: add a skill");
+        repository.CommitAndPush("fix: correct a typo");
+        repository.CommitAndPush("feat: add a skill");
 
         var result = Release(repository);
 
@@ -57,8 +57,8 @@ public sealed class ReleaseWorkflowTests
     public void ProposesTheLargestBumpOfAllCommits(string message, string expectedVersion)
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("docs: explain the change");
-        repository.Commit(message);
+        repository.CommitAndPush("docs: explain the change");
+        repository.CommitAndPush(message);
 
         Release(repository, "--dry-run");
 
@@ -69,8 +69,8 @@ public sealed class ReleaseWorkflowTests
     public void DryRunReportsTheProposalWithoutChangingAnything()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("feat: add a skill");
-        repository.Commit("docs: explain the skill");
+        repository.CommitAndPush("feat: add a skill");
+        repository.CommitAndPush("docs: explain the skill");
         var head = repository.Head;
 
         var result = Release(repository, "--dry-run");
@@ -95,7 +95,7 @@ public sealed class ReleaseWorkflowTests
     public void UsesTheRequestedVersionInsteadOfTheProposal()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
 
         var result = Release(repository, "--version 3.0.0");
 
@@ -139,8 +139,8 @@ public sealed class ReleaseWorkflowTests
     public void RefusesToReleaseWhenNoCommitRequiresIt()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("docs: explain a skill");
-        repository.Commit("chore: tidy up");
+        repository.CommitAndPush("docs: explain a skill");
+        repository.CommitAndPush("chore: tidy up");
         var head = repository.Head;
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
@@ -167,7 +167,7 @@ public sealed class ReleaseWorkflowTests
     public void RefusesARequestedVersionThatIsNotNewerThanTheLastRelease(string version)
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
         var head = repository.Head;
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository, $"--version {version}"));
@@ -184,7 +184,7 @@ public sealed class ReleaseWorkflowTests
         repository.Commit("fix: try something");
         repository.Tag("1.0.1");
         repository.Git("switch", "main");
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
         var head = repository.Head;
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
@@ -213,7 +213,7 @@ public sealed class ReleaseWorkflowTests
     public void RefusesToReleaseWithUncommittedChanges()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("feat: add a skill");
+        repository.CommitAndPush("feat: add a skill");
         repository.WriteFile("notes.md", "Work in progress");
         var head = repository.Head;
 
@@ -240,11 +240,31 @@ public sealed class ReleaseWorkflowTests
     }
 
     [Fact]
+    public void RefusesToReleaseWhenMainIsAheadOfOrigin()
+    {
+        using var repository = ReleaseRepository.Create();
+        repository.CommitAndPush("fix: correct a typo");
+        repository.Commit("feat: add a skill");
+        repository.Commit("feat: add another skill");
+        var head = repository.Head;
+        var originHead = repository.Origin("rev-parse", "main").Trim();
+
+        var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
+
+        Assert.Equal(
+            "main is 2 commit(s) ahead of origin/main. Merge them through a pull request or drop them before releasing.",
+            exception.Message
+        );
+        AssertNothingChanged(repository, head);
+        Assert.Equal(originHead, repository.Origin("rev-parse", "main").Trim());
+    }
+
+    [Fact]
     public void RefusesToReleaseWithoutChangelogEntries()
     {
         using var repository = ReleaseRepository.Create();
         repository.WriteFile("CHANGELOG.md", "# Changelog\n\n## [Unreleased]\n\n## [1.0.0] - 2026-01-01\n\n- Start.\n");
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
         var head = repository.Head;
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
@@ -259,7 +279,7 @@ public sealed class ReleaseWorkflowTests
     public void ChangesNothingWhenTheReleaseIsNotConfirmed(string answer)
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("feat: add a skill");
+        repository.CommitAndPush("feat: add a skill");
         var head = repository.Head;
 
         var result = Release(repository, answer: answer);
@@ -273,7 +293,7 @@ public sealed class ReleaseWorkflowTests
     public void ReleasesWithoutAskingWhenConfirmedUpFront()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("feat: add a skill");
+        repository.CommitAndPush("feat: add a skill");
 
         var result = Release(repository, "--yes", answer: "");
 
@@ -286,7 +306,7 @@ public sealed class ReleaseWorkflowTests
     public void ValidatesTheBumpedFilesBeforeCommitting()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
         var head = repository.Head;
         string? manifestDuringTests = null;
         string? headDuringTests = null;
@@ -309,7 +329,7 @@ public sealed class ReleaseWorkflowTests
     public void RevertsTheReleaseChangesWhenValidationFails()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
         var head = repository.Head;
         _commands.FailingCommand = Tests;
 
@@ -329,7 +349,7 @@ public sealed class ReleaseWorkflowTests
     public void RevertsTheReleaseChangesWhenCommittingFails()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
         var head = repository.Head;
         repository.RejectCommits();
 
@@ -349,7 +369,7 @@ public sealed class ReleaseWorkflowTests
     public void RevertsTheReleaseCommitWhenTaggingFails()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
         var head = repository.Head;
         var originHead = repository.Origin("rev-parse", "main").Trim();
         // Someone else creates the tag while the validations run.
@@ -377,7 +397,7 @@ public sealed class ReleaseWorkflowTests
     public void ExplainsHowToFinishWhenPushingFails()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
         repository.RejectPushes();
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
@@ -396,7 +416,7 @@ public sealed class ReleaseWorkflowTests
     public void PublishesAfterTheTagReachedOrigin()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
         string? originTagsDuringPublish = null;
         _commands.OnRun = command =>
         {
@@ -415,7 +435,7 @@ public sealed class ReleaseWorkflowTests
     public void ExplainsHowToFinishWhenPublishingFails()
     {
         using var repository = ReleaseRepository.Create();
-        repository.Commit("fix: correct a typo");
+        repository.CommitAndPush("fix: correct a typo");
         _commands.FailingCommand = "gh skill publish --tag 1.0.1";
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));

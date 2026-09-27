@@ -126,8 +126,8 @@ gh skill publish --dry-run
 
 ### Releasing
 
-Releases are made from an up-to-date `main` branch. Describe the changes under `## [Unreleased]`
-in `CHANGELOG.md` first, then run:
+Releases are made from a `main` branch that matches `origin/main`, so the release pushes nothing
+but its own commit. Describe the changes under `## [Unreleased]` in `CHANGELOG.md` first, then run:
 
 ```sh
 dotnet run --project tools/GuidedCoding.Release -- --dry-run          # show the proposed version
