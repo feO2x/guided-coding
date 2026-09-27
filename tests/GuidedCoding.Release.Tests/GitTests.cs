@@ -10,7 +10,7 @@ public sealed class GitTests
     public void FindsTheHighestReleaseTagNumerically()
     {
         using var repository = ReleaseRepository.Create();
-        foreach (var tag in new[] { "v1.9.0", "v1.10.0", "latest", "v2.0", "v3.0.0-beta.1", "4.0.0" })
+        foreach (var tag in new[] { "1.9.0", "1.10.0", "latest", "2.0", "3.0.0-beta.1", "v4.0.0" })
         {
             repository.Commit($"fix: prepare {tag}");
             repository.Tag(tag);
@@ -27,7 +27,7 @@ public sealed class GitTests
         using var repository = ReleaseRepository.Create();
         repository.Git("switch", "--create", "experiment");
         repository.Commit("feat!: try something");
-        repository.Tag("v2.0.0");
+        repository.Tag("2.0.0");
         repository.Git("switch", "main");
 
         var version = new Git(repository.WorkingDirectory).FindLatestReleaseVersion();

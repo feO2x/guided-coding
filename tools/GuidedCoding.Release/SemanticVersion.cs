@@ -6,8 +6,6 @@ namespace GuidedCoding.Release;
 // Releases use plain MAJOR.MINOR.PATCH versions without pre-release or build metadata.
 public readonly record struct SemanticVersion(int Major, int Minor, int Patch) : IComparable<SemanticVersion>
 {
-    private const string TagPrefix = "v";
-
     public int CompareTo(SemanticVersion other)
     {
         var major = Major.CompareTo(other.Major);
@@ -43,17 +41,6 @@ public readonly record struct SemanticVersion(int Major, int Minor, int Patch) :
         return false;
     }
 
-    public static bool TryParseTag(string tag, out SemanticVersion version)
-    {
-        if (tag.StartsWith(TagPrefix, StringComparison.Ordinal))
-        {
-            return TryParse(tag[TagPrefix.Length..], out version);
-        }
-
-        version = default;
-        return false;
-    }
-
     public SemanticVersion Bump(ReleaseType releaseType) =>
         releaseType switch
         {
@@ -62,8 +49,6 @@ public readonly record struct SemanticVersion(int Major, int Minor, int Patch) :
             ReleaseType.Patch => new (Major, Minor, Patch + 1),
             _ => throw new ArgumentOutOfRangeException(nameof(releaseType), releaseType, "Nothing to bump.")
         };
-
-    public string ToTag() => TagPrefix + this;
 
     public override string ToString() =>
         string.Create(CultureInfo.InvariantCulture, $"{Major}.{Minor}.{Patch}");

@@ -20,13 +20,14 @@ public sealed class Git(string repositoryRoot)
     public int CountCommitsBehindOrigin() =>
         int.Parse(Run("rev-list", "--count", $"HEAD..{Remote}/{MainBranch}").Trim(), CultureInfo.InvariantCulture);
 
-    // Only tags reachable from HEAD count, so a tag on another branch cannot become the base of a release.
+    // Release tags are plain MAJOR.MINOR.PATCH versions. Only tags reachable from HEAD count, so a tag on
+    // another branch cannot become the base of a release.
     public SemanticVersion? FindLatestReleaseVersion()
     {
         SemanticVersion? latest = null;
-        foreach (var tag in Lines(Run("tag", "--list", "v*", "--merged", "HEAD")))
+        foreach (var tag in Lines(Run("tag", "--list", "--merged", "HEAD")))
         {
-            if (SemanticVersion.TryParseTag(tag, out var version) && (latest is null || version > latest.Value))
+            if (SemanticVersion.TryParse(tag, out var version) && (latest is null || version > latest.Value))
             {
                 latest = version;
             }
@@ -39,7 +40,7 @@ public sealed class Git(string repositoryRoot)
 
     public IReadOnlyList<string> CommitMessagesSince(SemanticVersion? release)
     {
-        var range = release is { } version ? $"{version.ToTag()}..HEAD" : "HEAD";
+        var range = release is { } version ? $"refs/tags/{version}..HEAD" : "HEAD";
         return Run("log", "--no-merges", "--format=%B%x1e", range)
            .Split('\x1e', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }

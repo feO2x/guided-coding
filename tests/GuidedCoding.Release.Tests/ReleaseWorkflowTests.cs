@@ -40,12 +40,12 @@ public sealed class ReleaseWorkflowTests
         Assert.Equal("chore(release): 1.1.0", repository.Git("log", "-1", "--format=%s").Trim());
         Assert.True(repository.IsClean);
         Assert.Equal(repository.Head, repository.Origin("rev-parse", "main").Trim());
-        Assert.Equal(repository.Head, repository.Origin("rev-parse", "v1.1.0^{commit}").Trim());
+        Assert.Equal(repository.Head, repository.Origin("rev-parse", "1.1.0^{commit}").Trim());
         Assert.Equal(
-            [GeneratorCheck, Tests, PublishDryRun, "gh skill publish --tag v1.1.0"],
+            [GeneratorCheck, Tests, PublishDryRun, "gh skill publish --tag 1.1.0"],
             _commands.Commands
         );
-        Assert.EndsWith("Pushed main and v1.1.0 to origin.\nReleased v1.1.0.\n", Output);
+        Assert.EndsWith("Pushed main and 1.1.0 to origin.\nReleased 1.1.0.\n", Output);
     }
 
     [Theory]
@@ -78,7 +78,7 @@ public sealed class ReleaseWorkflowTests
         Assert.Equal(ReleaseResult.DryRun, result);
         Assert.Equal(
             """
-            Last release: v1.0.0
+            Last release: 1.0.0
             Commits to release:
               none   docs: explain the skill
               minor  feat: add a skill
@@ -102,7 +102,7 @@ public sealed class ReleaseWorkflowTests
         Assert.Equal(ReleaseResult.Released, result);
         Assert.Contains("Next version: 3.0.0 (requested)\n", Output);
         Assert.Equal(ReleaseRepository.Manifest("plugin.json", "3.0.0"), repository.ReadFile("plugin.json"));
-        Assert.Equal(repository.Head, repository.Origin("rev-parse", "v3.0.0^{commit}").Trim());
+        Assert.Equal(repository.Head, repository.Origin("rev-parse", "3.0.0^{commit}").Trim());
     }
 
     [Fact]
@@ -120,7 +120,7 @@ public sealed class ReleaseWorkflowTests
         }
 
         Assert.Contains("## [1.0.0] - 2026-09-26\n", repository.ReadFile("CHANGELOG.md"));
-        Assert.Equal(repository.Head, repository.Origin("rev-parse", "v1.0.0^{commit}").Trim());
+        Assert.Equal(repository.Head, repository.Origin("rev-parse", "1.0.0^{commit}").Trim());
     }
 
     [Fact]
@@ -157,7 +157,7 @@ public sealed class ReleaseWorkflowTests
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository, "--version 2.0.0"));
 
-        Assert.Equal("There are no commits since v1.0.0.", exception.Message);
+        Assert.Equal("There are no commits since 1.0.0.", exception.Message);
         AssertNothingChanged(repository, head);
     }
 
@@ -182,14 +182,14 @@ public sealed class ReleaseWorkflowTests
         using var repository = ReleaseRepository.Create();
         repository.Git("switch", "--create", "experiment");
         repository.Commit("fix: try something");
-        repository.Tag("v1.0.1");
+        repository.Tag("1.0.1");
         repository.Git("switch", "main");
         repository.Commit("fix: correct a typo");
         var head = repository.Head;
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
 
-        Assert.Equal("Tag v1.0.1 already exists.", exception.Message);
+        Assert.Equal("Tag 1.0.1 already exists.", exception.Message);
         Assert.True(repository.IsClean);
         Assert.Equal(head, repository.Head);
         Assert.Empty(_commands.Commands);
@@ -265,7 +265,7 @@ public sealed class ReleaseWorkflowTests
         var result = Release(repository, answer: answer);
 
         Assert.Equal(ReleaseResult.Cancelled, result);
-        Assert.EndsWith("Release v1.1.0? [y/N] Release cancelled.\n", Output);
+        Assert.EndsWith("Release 1.1.0? [y/N] Release cancelled.\n", Output);
         AssertNothingChanged(repository, head);
     }
 
@@ -279,7 +279,7 @@ public sealed class ReleaseWorkflowTests
 
         Assert.Equal(ReleaseResult.Released, result);
         Assert.DoesNotContain("[y/N]", Output);
-        Assert.Equal(repository.Head, repository.Origin("rev-parse", "v1.1.0^{commit}").Trim());
+        Assert.Equal(repository.Head, repository.Origin("rev-parse", "1.1.0^{commit}").Trim());
     }
 
     [Fact]
@@ -321,7 +321,7 @@ public sealed class ReleaseWorkflowTests
         );
         Assert.True(repository.IsClean);
         Assert.Equal(head, repository.Head);
-        Assert.Equal("v1.0.0", repository.Git("tag", "--list").Trim());
+        Assert.Equal("1.0.0", repository.Git("tag", "--list").Trim());
         Assert.Equal([GeneratorCheck, Tests], _commands.Commands);
     }
 
@@ -341,7 +341,7 @@ public sealed class ReleaseWorkflowTests
         );
         Assert.True(repository.IsClean);
         Assert.Equal(head, repository.Head);
-        Assert.Equal("v1.0.0", repository.Git("tag", "--list").Trim());
+        Assert.Equal("1.0.0", repository.Git("tag", "--list").Trim());
         Assert.Equal([GeneratorCheck, Tests, PublishDryRun], _commands.Commands);
     }
 
@@ -357,19 +357,19 @@ public sealed class ReleaseWorkflowTests
         {
             if (command == PublishDryRun)
             {
-                repository.Tag("v1.0.1");
+                repository.Tag("1.0.1");
             }
         };
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
 
         Assert.StartsWith(
-            "The release changes were reverted. 'git tag -a v1.0.1 -m v1.0.1' failed with exit code 128.",
+            "The release changes were reverted. 'git tag -a 1.0.1 -m 1.0.1' failed with exit code 128.",
             exception.Message
         );
         Assert.True(repository.IsClean);
         Assert.Equal(head, repository.Head);
-        Assert.Equal(head, repository.Git("rev-parse", "v1.0.1^{commit}").Trim());
+        Assert.Equal(head, repository.Git("rev-parse", "1.0.1^{commit}").Trim());
         Assert.Equal(originHead, repository.Origin("rev-parse", "main").Trim());
     }
 
@@ -383,12 +383,12 @@ public sealed class ReleaseWorkflowTests
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
 
         Assert.StartsWith(
-            "The release commit and v1.0.1 were created locally, but pushing failed. " +
-            "Run 'git push --atomic origin main v1.0.1' and 'gh skill publish --tag v1.0.1' to finish the release.",
+            "The release commit and 1.0.1 were created locally, but pushing failed. " +
+            "Run 'git push --atomic origin main 1.0.1' and 'gh skill publish --tag 1.0.1' to finish the release.",
             exception.Message
         );
-        Assert.Equal(repository.Head, repository.Git("rev-parse", "v1.0.1^{commit}").Trim());
-        Assert.Equal("v1.0.0", repository.Origin("tag", "--list").Trim());
+        Assert.Equal(repository.Head, repository.Git("rev-parse", "1.0.1^{commit}").Trim());
+        Assert.Equal("1.0.0", repository.Origin("tag", "--list").Trim());
         Assert.Equal([GeneratorCheck, Tests, PublishDryRun], _commands.Commands);
     }
 
@@ -400,7 +400,7 @@ public sealed class ReleaseWorkflowTests
         string? originTagsDuringPublish = null;
         _commands.OnRun = command =>
         {
-            if (command == "gh skill publish --tag v1.0.1")
+            if (command == "gh skill publish --tag 1.0.1")
             {
                 originTagsDuringPublish = repository.Origin("tag", "--list").ReplaceLineEndings("\n");
             }
@@ -408,7 +408,7 @@ public sealed class ReleaseWorkflowTests
 
         Release(repository);
 
-        Assert.Equal("v1.0.0\nv1.0.1\n", originTagsDuringPublish);
+        Assert.Equal("1.0.0\n1.0.1\n", originTagsDuringPublish);
     }
 
     [Fact]
@@ -416,15 +416,15 @@ public sealed class ReleaseWorkflowTests
     {
         using var repository = ReleaseRepository.Create();
         repository.Commit("fix: correct a typo");
-        _commands.FailingCommand = "gh skill publish --tag v1.0.1";
+        _commands.FailingCommand = "gh skill publish --tag 1.0.1";
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
 
         Assert.StartsWith(
-            "v1.0.1 was pushed, but publishing failed. Run 'gh skill publish --tag v1.0.1' to finish the release.",
+            "1.0.1 was pushed, but publishing failed. Run 'gh skill publish --tag 1.0.1' to finish the release.",
             exception.Message
         );
-        Assert.Equal(repository.Head, repository.Origin("rev-parse", "v1.0.1^{commit}").Trim());
+        Assert.Equal(repository.Head, repository.Origin("rev-parse", "1.0.1^{commit}").Trim());
     }
 
     private ReleaseResult Release(ReleaseRepository repository, string arguments = "", string answer = "y")
@@ -447,7 +447,7 @@ public sealed class ReleaseWorkflowTests
         Assert.Equal(ReleaseRepository.Manifest("plugin.json", "1.0.0"), repository.ReadFile("plugin.json"));
         Assert.All(
             repository.Git("tag", "--list").Split('\n', StringSplitOptions.RemoveEmptyEntries),
-            tag => Assert.Equal("v1.0.0", tag)
+            tag => Assert.Equal("1.0.0", tag)
         );
         Assert.Empty(_commands.Commands);
     }

@@ -42,7 +42,7 @@ internal sealed class ReleaseRepository : IDisposable
 
     private string OriginDirectory { get; }
 
-    // Creates a repository at version 1.0.0 whose initial commit is tagged v1.0.0 unless released is false.
+    // Creates a repository at version 1.0.0 whose initial commit is tagged 1.0.0 unless released is false.
     public static ReleaseRepository Create(bool released = true)
     {
         var repository = new ReleaseRepository(
@@ -61,7 +61,7 @@ internal sealed class ReleaseRepository : IDisposable
         repository.Commit("chore: initial commit");
         if (released)
         {
-            repository.Tag("v1.0.0");
+            repository.Tag("1.0.0");
         }
 
         repository.Git("remote", "add", "origin", repository.OriginDirectory);

@@ -66,20 +66,4 @@ public sealed class SemanticVersionTests
         Assert.True(lesserVersion <= greaterVersion);
         Assert.True(greaterVersion >= SemanticVersion.Parse(greater));
     }
-
-    [Fact]
-    public void UsesAVPrefixForTags()
-    {
-        Assert.Equal("v1.2.3", new SemanticVersion(1, 2, 3).ToTag());
-    }
-
-    [Theory]
-    [InlineData("v1.2.3", true)]
-    [InlineData("1.2.3", false)]
-    [InlineData("v1.2", false)]
-    [InlineData("latest", false)]
-    public void ParsesOnlyReleaseTags(string tag, bool isReleaseTag)
-    {
-        Assert.Equal(isReleaseTag, SemanticVersion.TryParseTag(tag, out _));
-    }
 }

@@ -37,7 +37,7 @@ public sealed class ReleaseWorkflow(
         EnsureReleasableCheckout();
 
         var version = DetermineVersion(options.Version, _git.FindLatestReleaseVersion());
-        var tag = version.ToTag();
+        var tag = version.ToString();
         if (_git.TagExists(tag))
         {
             throw new InvalidOperationException($"Tag {tag} already exists.");
@@ -91,7 +91,7 @@ public sealed class ReleaseWorkflow(
 
     private SemanticVersion DetermineVersion(SemanticVersion? requested, SemanticVersion? lastRelease)
     {
-        var lastTag = lastRelease?.ToTag();
+        var lastTag = lastRelease?.ToString();
         var commits = _git.CommitMessagesSince(lastRelease);
         if (commits.Count == 0)
         {

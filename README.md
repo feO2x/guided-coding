@@ -135,7 +135,7 @@ dotnet run --project tools/GuidedCoding.Release                       # release 
 dotnet run --project tools/GuidedCoding.Release -- --version 3.0.0    # release a specific version
 ```
 
-The tool derives the next version from the Conventional Commits since the last `vMAJOR.MINOR.PATCH`
+The tool derives the next version from the Conventional Commits since the last `MAJOR.MINOR.PATCH`
 tag: breaking changes release a major version, `feat` a minor version, and `fix` or `perf` a patch
 version. After you confirm, it updates `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`,
 `.claude-plugin/marketplace.json`, and `CHANGELOG.md`, runs the validations, commits, tags, pushes
