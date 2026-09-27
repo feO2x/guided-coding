@@ -205,7 +205,7 @@ public sealed class ReleaseWorkflow(
             throw new InvalidOperationException(
                 $"The release commit and {tag} were created locally, but pushing failed. " +
                 $"Run 'git push --atomic {Git.Remote} {Git.MainBranch} {tag}' and " +
-                $"'gh skill publish --tag {tag}' to finish the release. {exception.Message}",
+                $"'{PublishCommand(tag)}' to finish the release. {exception.Message}",
                 exception
             );
         }
@@ -213,21 +213,27 @@ public sealed class ReleaseWorkflow(
         output.WriteLine($"Pushed {Git.MainBranch} and {tag} to {Git.Remote}.");
     }
 
+    // 'gh skill publish --tag' refuses tags that already exist on the remote, because it creates the tag itself
+    // from the branch head. The tag is pushed atomically with main, so publishing creates the release for it instead.
+    // 'gh skill publish --dry-run' already validated the skills, and the agent-skills topic is set on the repository.
     private void Publish(string tag)
     {
         try
         {
-            commands.Run(new("gh", "skill", "publish", "--tag", tag));
+            commands.Run(PublishCommand(tag));
         }
         catch (Exception exception)
         {
             throw new InvalidOperationException(
-                $"{tag} was pushed, but publishing failed. Run 'gh skill publish --tag {tag}' to finish the release. " +
+                $"{tag} was pushed, but publishing failed. Run '{PublishCommand(tag)}' to finish the release. " +
                 exception.Message,
                 exception
             );
         }
     }
+
+    private static Command PublishCommand(string tag) =>
+        new("gh", "release", "create", tag, "--verify-tag", "--generate-notes");
 
     private bool Confirm(string tag)
     {

@@ -42,7 +42,7 @@ public sealed class ReleaseWorkflowTests
         Assert.Equal(repository.Head, repository.Origin("rev-parse", "main").Trim());
         Assert.Equal(repository.Head, repository.Origin("rev-parse", "1.1.0^{commit}").Trim());
         Assert.Equal(
-            [GeneratorCheck, Tests, PublishDryRun, "gh skill publish --tag 1.1.0"],
+            [GeneratorCheck, Tests, PublishDryRun, "gh release create 1.1.0 --verify-tag --generate-notes"],
             _commands.Commands
         );
         Assert.EndsWith("Pushed main and 1.1.0 to origin.\nReleased 1.1.0.\n", Output);
@@ -404,7 +404,7 @@ public sealed class ReleaseWorkflowTests
 
         Assert.StartsWith(
             "The release commit and 1.0.1 were created locally, but pushing failed. " +
-            "Run 'git push --atomic origin main 1.0.1' and 'gh skill publish --tag 1.0.1' to finish the release.",
+            "Run 'git push --atomic origin main 1.0.1' and 'gh release create 1.0.1 --verify-tag --generate-notes' to finish the release.",
             exception.Message
         );
         Assert.Equal(repository.Head, repository.Git("rev-parse", "1.0.1^{commit}").Trim());
@@ -420,7 +420,7 @@ public sealed class ReleaseWorkflowTests
         string? originTagsDuringPublish = null;
         _commands.OnRun = command =>
         {
-            if (command == "gh skill publish --tag 1.0.1")
+            if (command == "gh release create 1.0.1 --verify-tag --generate-notes")
             {
                 originTagsDuringPublish = repository.Origin("tag", "--list").ReplaceLineEndings("\n");
             }
@@ -436,12 +436,12 @@ public sealed class ReleaseWorkflowTests
     {
         using var repository = ReleaseRepository.Create();
         repository.CommitAndPush("fix: correct a typo");
-        _commands.FailingCommand = "gh skill publish --tag 1.0.1";
+        _commands.FailingCommand = "gh release create 1.0.1 --verify-tag --generate-notes";
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
 
         Assert.StartsWith(
-            "1.0.1 was pushed, but publishing failed. Run 'gh skill publish --tag 1.0.1' to finish the release.",
+            "1.0.1 was pushed, but publishing failed. Run 'gh release create 1.0.1 --verify-tag --generate-notes' to finish the release.",
             exception.Message
         );
         Assert.Equal(repository.Head, repository.Origin("rev-parse", "1.0.1^{commit}").Trim());
