@@ -3,14 +3,15 @@ using System.Collections.Generic;
 
 namespace GuidedCoding.Release;
 
-public sealed record ReleaseOptions(SemanticVersion? Version, bool DryRun)
+public sealed record ReleaseOptions(SemanticVersion? Version, bool DryRun, bool Confirmed)
 {
-    private const string Usage = "Usage: GuidedCoding.Release [--version MAJOR.MINOR.PATCH] [--dry-run]";
+    private const string Usage = "Usage: GuidedCoding.Release [--version MAJOR.MINOR.PATCH] [--dry-run] [--yes]";
 
     public static ReleaseOptions Parse(IReadOnlyList<string> args)
     {
         SemanticVersion? version = null;
         var dryRun = false;
+        var confirmed = false;
 
         for (var index = 0; index < args.Count; index++)
         {
@@ -18,6 +19,9 @@ public sealed record ReleaseOptions(SemanticVersion? Version, bool DryRun)
             {
                 case "--dry-run" when !dryRun:
                     dryRun = true;
+                    break;
+                case "--yes" when !confirmed:
+                    confirmed = true;
                     break;
                 case "--version" when version is null && index + 1 < args.Count:
                     version = SemanticVersion.Parse(args[++index]);
@@ -27,6 +31,6 @@ public sealed record ReleaseOptions(SemanticVersion? Version, bool DryRun)
             }
         }
 
-        return new(version, dryRun);
+        return new(version, dryRun, confirmed);
     }
 }

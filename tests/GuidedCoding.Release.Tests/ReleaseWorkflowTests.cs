@@ -10,7 +10,6 @@ public sealed class ReleaseWorkflowTests
         "dotnet run --project tools/GuidedCoding.ClaudeGenerator --configuration Release -- --check";
     private const string Tests = "dotnet test --configuration Release";
     private const string PublishDryRun = "gh skill publish --dry-run";
-    private const string AddTopic = "gh repo edit --add-topic agent-skills";
 
     private static readonly DateOnly Today = new(2026, 9, 26);
 
@@ -43,7 +42,7 @@ public sealed class ReleaseWorkflowTests
         Assert.Equal(repository.Head, repository.Origin("rev-parse", "main").Trim());
         Assert.Equal(repository.Head, repository.Origin("rev-parse", "v1.1.0^{commit}").Trim());
         Assert.Equal(
-            [GeneratorCheck, Tests, PublishDryRun, AddTopic, "gh skill publish --tag v1.1.0"],
+            [GeneratorCheck, Tests, PublishDryRun, "gh skill publish --tag v1.1.0"],
             _commands.Commands
         );
         Assert.EndsWith("Pushed main and v1.1.0 to origin.\nReleased v1.1.0.\n", Output);
@@ -268,6 +267,19 @@ public sealed class ReleaseWorkflowTests
         Assert.Equal(ReleaseResult.Cancelled, result);
         Assert.EndsWith("Release v1.1.0? [y/N] Release cancelled.\n", Output);
         AssertNothingChanged(repository, head);
+    }
+
+    [Fact]
+    public void ReleasesWithoutAskingWhenConfirmedUpFront()
+    {
+        using var repository = ReleaseRepository.Create();
+        repository.Commit("feat: add a skill");
+
+        var result = Release(repository, "--yes", answer: "");
+
+        Assert.Equal(ReleaseResult.Released, result);
+        Assert.DoesNotContain("[y/N]", Output);
+        Assert.Equal(repository.Head, repository.Origin("rev-parse", "v1.1.0^{commit}").Trim());
     }
 
     [Fact]

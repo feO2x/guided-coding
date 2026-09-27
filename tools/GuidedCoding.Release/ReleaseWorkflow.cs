@@ -50,8 +50,7 @@ public sealed class ReleaseWorkflow(
             return ReleaseResult.DryRun;
         }
 
-        output.Write($"Release {tag}? [y/N] ");
-        if (input.ReadLine()?.Trim().ToLowerInvariant() is not ("y" or "yes"))
+        if (!options.Confirmed && !Confirm(tag))
         {
             output.WriteLine("Release cancelled.");
             return ReleaseResult.Cancelled;
@@ -203,7 +202,6 @@ public sealed class ReleaseWorkflow(
     {
         try
         {
-            commands.Run(new("gh", "repo", "edit", "--add-topic", "agent-skills"));
             commands.Run(new("gh", "skill", "publish", "--tag", tag));
         }
         catch (Exception exception)
@@ -214,6 +212,12 @@ public sealed class ReleaseWorkflow(
                 exception
             );
         }
+    }
+
+    private bool Confirm(string tag)
+    {
+        output.Write($"Release {tag}? [y/N] ");
+        return input.ReadLine()?.Trim().ToLowerInvariant() is "y" or "yes";
     }
 
     private string ReadFile(string relativePath) => File.ReadAllText(Path.Combine(repositoryRoot, relativePath));
