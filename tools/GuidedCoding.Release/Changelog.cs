@@ -22,7 +22,7 @@ public static class Changelog
         var hasEntries = lines
            .Skip(headingIndex + 1)
            .TakeWhile(line => !line.StartsWith("## ", StringComparison.Ordinal))
-           .Any(line => !string.IsNullOrWhiteSpace(line));
+           .Any(line => !string.IsNullOrWhiteSpace(line) && !line.TrimStart().StartsWith('#'));
         if (!hasEntries)
         {
             throw new InvalidOperationException(

@@ -24,6 +24,14 @@ public sealed class ChangelogTests
     }
 
     [Fact]
+    public void KeepsSubsectionHeadingsWithTheirEntries()
+    {
+        var released = Changelog.Release("## [Unreleased]\n\n### Added\n\n- Add a skill.\n", Version, Date);
+
+        Assert.Equal("## [Unreleased]\n\n## [1.1.0] - 2026-09-26\n\n### Added\n\n- Add a skill.\n", released);
+    }
+
+    [Fact]
     public void NormalizesLineEndings()
     {
         var released = Changelog.Release("## [Unreleased]\r\n\r\n- Add a skill.\r\n", Version, Date);
@@ -44,6 +52,7 @@ public sealed class ChangelogTests
     [Theory]
     [InlineData("# Changelog\n\n## [Unreleased]\n")]
     [InlineData("# Changelog\n\n## [Unreleased]\n\n  \n## [1.0.0] - 2026-01-01\n\n- Start.\n")]
+    [InlineData("# Changelog\n\n## [Unreleased]\n\n### Added\n\n### Fixed\n\n## [1.0.0] - 2026-01-01\n\n- Start.\n")]
     public void RequiresUnreleasedEntries(string changelog)
     {
         var exception = Assert.Throws<InvalidOperationException>(() => Changelog.Release(changelog, Version, Date));
