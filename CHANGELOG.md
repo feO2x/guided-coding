@@ -4,6 +4,8 @@ All notable changes to Guided Coding are documented here.
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-09-27
+
 - Add UTC timestamps to plan and Plan Deviations filenames.
 - Treat `ai-plans/` as an append-only, event-sourced decision record.
 - Freeze plans when their Planning Phase ends, except for checking acceptance criteria.
