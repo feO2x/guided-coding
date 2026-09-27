@@ -59,4 +59,33 @@ public sealed class ChangelogTests
 
         Assert.StartsWith("CHANGELOG.md has no entries under '## [Unreleased]'.", exception.Message);
     }
+
+    [Fact]
+    public void ExtractsTheEntriesOfAReleasedVersionAsNotes()
+    {
+        const string changelog =
+            "# Changelog\n\n## [Unreleased]\n\n## [1.1.0] - 2026-09-26\n\n### Added\n\n- Add a skill.\n\n" +
+            "## [1.0.0] - 2026-01-01\n\n- Start.\n";
+
+        Assert.Equal("### Added\n\n- Add a skill.\n", Changelog.Notes(changelog, Version));
+    }
+
+    [Fact]
+    public void ExtractsTheNotesOfTheLatestVersionUpToTheEnd()
+    {
+        var notes =
+            Changelog.Notes("## [Unreleased]\r\n\r\n## [1.1.0] - 2026-09-26\r\n\r\n- Add a skill.\r\n", Version);
+
+        Assert.Equal("- Add a skill.\n", notes);
+    }
+
+    [Fact]
+    public void RequiresTheSectionOfTheVersionForNotes()
+    {
+        var exception = Assert.Throws<InvalidOperationException>(
+            () => Changelog.Notes("# Changelog\n\n## [1.0.0] - 2026-01-01\n\n- Start.\n", Version)
+        );
+
+        Assert.Equal("CHANGELOG.md has no '## [1.1.0]' section.", exception.Message);
+    }
 }

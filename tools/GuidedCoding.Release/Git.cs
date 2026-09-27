@@ -26,9 +26,9 @@ public sealed class Git(string repositoryRoot)
         return (int.Parse(counts[0], CultureInfo.InvariantCulture), int.Parse(counts[1], CultureInfo.InvariantCulture));
     }
 
-    // Every tag is a release tag in the form MAJOR.MINOR.PATCH. Any other tag, such as one with a v prefix
-    // created by a manual 'gh skill publish', stops the release instead of being skipped. Only tags reachable
-    // from HEAD count, so a tag on another branch cannot become the base of a release.
+    // Every tag is a release tag in the form MAJOR.MINOR.PATCH. Any other tag, such as one with a v prefix,
+    // stops the release instead of being skipped. Only tags reachable from HEAD count, so a tag on another
+    // branch cannot become the base of a release.
     public SemanticVersion? FindLatestReleaseVersion()
     {
         var invalidTags = Lines(Run("tag", "--list")).Where(tag => !SemanticVersion.TryParse(tag, out _)).ToList();
@@ -71,6 +71,9 @@ public sealed class Git(string repositoryRoot)
         Run(["add", "--", .. paths]);
         Run("commit", "-m", message);
     }
+
+    // Resolves a path inside the git directory, relative to the repository root unless it lies elsewhere.
+    public string GitPath(string path) => Run("rev-parse", "--git-path", path).Trim();
 
     public void CreateTag(string tag) => Run("tag", "-a", tag, "-m", tag);
 

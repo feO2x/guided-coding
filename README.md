@@ -140,17 +140,19 @@ tag: breaking changes release a major version, `feat` a minor version, and `fix`
 version. After you confirm, it updates `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`,
 `.claude-plugin/marketplace.json`, and `CHANGELOG.md`, runs the validations, commits, tags, pushes
 `main` together with the tag, and publishes the Agent Skills by creating a GitHub release for the tag
-with `gh release create`. It does not use `gh skill publish --tag`, because that command refuses tags
-that already exist and would create the tag itself. Pushing the new version to `main` releases the
-Claude Code plugin. The first release needs `--version` because there
-is no release tag to start from. Pass `--yes` to skip the confirmation.
+with `gh release create`. The release notes are the version's entries from `CHANGELOG.md`. Pushing
+the new version to `main` releases the Claude Code plugin. Pass `--yes` to skip the confirmation.
 
 Every tag in the repository must be a plain `MAJOR.MINOR.PATCH` version, and the tool refuses to
-release while any other tag exists. If you ever publish by hand, pass `--tag MAJOR.MINOR.PATCH` to
-`gh skill publish`, because its interactive prompt suggests `v`-prefixed tags.
+release while any other tag exists. If a release fails after the push, run the commands from the
+error message to finish it. To publish a pushed tag by hand, run
+`gh release create MAJOR.MINOR.PATCH --verify-tag` with the version's `CHANGELOG.md` entries as
+notes. Do not use `gh skill publish --tag`: it refuses tags that already exist and, for a new tag,
+tags the remote branch head, which misses the release commit.
 
-The repository must carry the `agent-skills` topic to be discoverable as Agent Skills. It is already
-set; the tool does not set it because GitHub's workflow token lacks the required admin permission.
+The repository must carry the `agent-skills` topic to be discoverable as Agent Skills. The tool
+checks it before releasing but does not set it, because GitHub's workflow token lacks the required
+admin permission.
 
 #### Releasing from GitHub Actions
 
