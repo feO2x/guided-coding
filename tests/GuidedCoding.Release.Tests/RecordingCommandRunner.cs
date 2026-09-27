@@ -14,6 +14,9 @@ internal sealed class RecordingCommandRunner : ICommandRunner
 
     public Action<string>? OnRun { get; set; }
 
+    // The output that Capture returns for a command line. Other commands produce no output.
+    public Dictionary<string, string> Outputs { get; } = [];
+
     public void Run(Command command)
     {
         var commandLine = command.ToString();
@@ -24,5 +27,11 @@ internal sealed class RecordingCommandRunner : ICommandRunner
         {
             throw new InvalidOperationException($"'{commandLine}' failed with exit code 1.");
         }
+    }
+
+    public string Capture(Command command)
+    {
+        Run(command);
+        return Outputs.GetValueOrDefault(command.ToString(), "");
     }
 }

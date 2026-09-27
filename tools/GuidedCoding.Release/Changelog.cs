@@ -36,4 +36,21 @@ public static class Changelog
             lines[..headingIndex].Concat([UnreleasedHeading, "", releasedHeading]).Concat(lines[(headingIndex + 1)..])
         );
     }
+
+    // Returns the entries of a released version, which become the notes of its GitHub release.
+    public static string Notes(string content, SemanticVersion version)
+    {
+        var lines = content.ReplaceLineEndings("\n").Split('\n');
+        var heading = $"## [{version}]";
+        var headingIndex = Array.FindIndex(lines, line => line.StartsWith(heading, StringComparison.Ordinal));
+        if (headingIndex < 0)
+        {
+            throw new InvalidOperationException($"{FileName} has no '{heading}' section.");
+        }
+
+        var entries = lines
+           .Skip(headingIndex + 1)
+           .TakeWhile(line => !line.StartsWith("## ", StringComparison.Ordinal));
+        return string.Join('\n', entries).Trim() + "\n";
+    }
 }

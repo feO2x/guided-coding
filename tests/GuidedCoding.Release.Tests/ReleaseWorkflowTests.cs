@@ -8,13 +8,19 @@ public sealed class ReleaseWorkflowTests
 {
     private const string GeneratorCheck =
         "dotnet run --project tools/GuidedCoding.ClaudeGenerator --configuration Release -- --check";
+
     private const string Tests = "dotnet test --configuration Release";
     private const string PublishDryRun = "gh skill publish --dry-run";
+    private const string TopicsQuery = "gh repo view --json repositoryTopics";
+    private const string NotesFile = ".git/RELEASE_NOTES.md";
 
-    private static readonly DateOnly Today = new(2026, 9, 26);
+    private static readonly DateOnly Today = new (2026, 9, 26);
 
-    private readonly RecordingCommandRunner _commands = new();
-    private readonly StringWriter _output = new();
+    private readonly RecordingCommandRunner _commands = new ();
+    private readonly StringWriter _output = new ();
+
+    public ReleaseWorkflowTests() =>
+        _commands.Outputs[TopicsQuery] = """{"repositoryTopics":[{"name":"agent-skills"}]}""";
 
     private string Output => _output.ToString().ReplaceLineEndings("\n");
 
@@ -42,10 +48,11 @@ public sealed class ReleaseWorkflowTests
         Assert.Equal(repository.Head, repository.Origin("rev-parse", "main").Trim());
         Assert.Equal(repository.Head, repository.Origin("rev-parse", "1.1.0^{commit}").Trim());
         Assert.Equal(
-            [GeneratorCheck, Tests, PublishDryRun, "gh skill publish --tag 1.1.0"],
+            [TopicsQuery, GeneratorCheck, Tests, PublishDryRun, PublishCommand("1.1.0")],
             _commands.Commands
         );
         Assert.EndsWith("Pushed main and 1.1.0 to origin.\nReleased 1.1.0.\n", Output);
+        Assert.False(File.Exists(Path.Combine(repository.WorkingDirectory, NotesFile)));
     }
 
     [Theory]
@@ -342,7 +349,7 @@ public sealed class ReleaseWorkflowTests
         Assert.True(repository.IsClean);
         Assert.Equal(head, repository.Head);
         Assert.Equal("1.0.0", repository.Git("tag", "--list").Trim());
-        Assert.Equal([GeneratorCheck, Tests], _commands.Commands);
+        Assert.Equal([TopicsQuery, GeneratorCheck, Tests], _commands.Commands);
     }
 
     [Fact]
@@ -362,7 +369,7 @@ public sealed class ReleaseWorkflowTests
         Assert.True(repository.IsClean);
         Assert.Equal(head, repository.Head);
         Assert.Equal("1.0.0", repository.Git("tag", "--list").Trim());
-        Assert.Equal([GeneratorCheck, Tests, PublishDryRun], _commands.Commands);
+        Assert.Equal([TopicsQuery, GeneratorCheck, Tests, PublishDryRun], _commands.Commands);
     }
 
     [Fact]
@@ -404,12 +411,13 @@ public sealed class ReleaseWorkflowTests
 
         Assert.StartsWith(
             "The release commit and 1.0.1 were created locally, but pushing failed. " +
-            "Run 'git push --atomic origin main 1.0.1' and 'gh skill publish --tag 1.0.1' to finish the release.",
+            $"Run 'git push --atomic origin main 1.0.1' and '{PublishCommand("1.0.1")}' to finish the release.",
             exception.Message
         );
+        Assert.Equal("- Add a skill.\n", repository.ReadFile(NotesFile));
         Assert.Equal(repository.Head, repository.Git("rev-parse", "1.0.1^{commit}").Trim());
         Assert.Equal("1.0.0", repository.Origin("tag", "--list").Trim());
-        Assert.Equal([GeneratorCheck, Tests, PublishDryRun], _commands.Commands);
+        Assert.Equal([TopicsQuery, GeneratorCheck, Tests, PublishDryRun], _commands.Commands);
     }
 
     [Fact]
@@ -420,7 +428,7 @@ public sealed class ReleaseWorkflowTests
         string? originTagsDuringPublish = null;
         _commands.OnRun = command =>
         {
-            if (command == "gh skill publish --tag 1.0.1")
+            if (command == PublishCommand("1.0.1"))
             {
                 originTagsDuringPublish = repository.Origin("tag", "--list").ReplaceLineEndings("\n");
             }
@@ -432,20 +440,73 @@ public sealed class ReleaseWorkflowTests
     }
 
     [Fact]
+    public void PublishesTheChangelogEntriesAsReleaseNotes()
+    {
+        using var repository = ReleaseRepository.Create();
+        repository.WriteFile(
+            "CHANGELOG.md",
+            "# Changelog\n\n## [Unreleased]\n\n- Fix a typo.\n- Clarify a skill.\n\n## [1.0.0] - 2026-01-01\n\n- Start.\n"
+        );
+        repository.CommitAndPush("fix: correct a typo");
+        string? notesDuringPublish = null;
+        _commands.OnRun = command =>
+        {
+            if (command == PublishCommand("1.0.1"))
+            {
+                notesDuringPublish = repository.ReadFile(NotesFile);
+            }
+        };
+
+        Release(repository);
+
+        Assert.Equal("- Fix a typo.\n- Clarify a skill.\n", notesDuringPublish);
+        Assert.True(repository.IsClean);
+    }
+
+    [Theory]
+    [InlineData("""{"repositoryTopics":[{"name":"skills"}]}""")]
+    [InlineData("""{"repositoryTopics":[]}""")]
+    [InlineData("""{"repositoryTopics":null}""")]
+    public void RefusesToReleaseWithoutTheAgentSkillsTopic(string topics)
+    {
+        using var repository = ReleaseRepository.Create();
+        repository.CommitAndPush("fix: correct a typo");
+        var head = repository.Head;
+        _commands.Outputs[TopicsQuery] = topics;
+
+        var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
+
+        Assert.Equal(
+            "The repository lacks the agent-skills topic that makes the skills discoverable. " +
+            "Add it with 'gh repo edit --add-topic agent-skills' before releasing.",
+            exception.Message
+        );
+        Assert.True(repository.IsClean);
+        Assert.Equal(head, repository.Head);
+        Assert.Equal("1.0.0", repository.Git("tag", "--list").Trim());
+        Assert.Equal([TopicsQuery], _commands.Commands);
+    }
+
+    [Fact]
     public void ExplainsHowToFinishWhenPublishingFails()
     {
         using var repository = ReleaseRepository.Create();
         repository.CommitAndPush("fix: correct a typo");
-        _commands.FailingCommand = "gh skill publish --tag 1.0.1";
+        _commands.FailingCommand = PublishCommand("1.0.1");
 
         var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
 
         Assert.StartsWith(
-            "1.0.1 was pushed, but publishing failed. Run 'gh skill publish --tag 1.0.1' to finish the release.",
+            "1.0.1 was pushed, but publishing failed. Run 'gh release view 1.0.1' to check whether the release exists. " +
+            $"If it does not, run '{PublishCommand("1.0.1")}' to finish the release.",
             exception.Message
         );
         Assert.Equal(repository.Head, repository.Origin("rev-parse", "1.0.1^{commit}").Trim());
+        Assert.Equal("- Add a skill.\n", repository.ReadFile(NotesFile));
     }
+
+    private static string PublishCommand(string tag) =>
+        $"gh release create {tag} --verify-tag --notes-file {NotesFile}";
 
     private ReleaseResult Release(ReleaseRepository repository, string arguments = "", string answer = "y")
     {
