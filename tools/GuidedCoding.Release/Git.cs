@@ -11,6 +11,8 @@ public sealed class Git(string repositoryRoot)
 
     public string CurrentBranch() => Run("branch", "--show-current").Trim();
 
+    public string Head() => Run("rev-parse", "HEAD").Trim();
+
     public bool HasUncommittedChanges() => Run("status", "--porcelain").Length > 0;
 
     public void FetchOrigin() => Run("fetch", "--tags", Remote);
@@ -43,6 +45,9 @@ public sealed class Git(string repositoryRoot)
     }
 
     public void Restore(IEnumerable<string> paths) => Run(["checkout", "HEAD", "--", .. paths]);
+
+    // Moves the branch back to the commit, leaving the index and working tree as they are.
+    public void ResetSoft(string commit) => Run("reset", "--soft", commit);
 
     public void Commit(IEnumerable<string> paths, string message)
     {

@@ -326,6 +326,54 @@ public sealed class ReleaseWorkflowTests
     }
 
     [Fact]
+    public void RevertsTheReleaseChangesWhenCommittingFails()
+    {
+        using var repository = ReleaseRepository.Create();
+        repository.Commit("fix: correct a typo");
+        var head = repository.Head;
+        repository.RejectCommits();
+
+        var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
+
+        Assert.StartsWith(
+            "The release changes were reverted. 'git commit -m chore(release): 1.0.1' failed with exit code 1.",
+            exception.Message
+        );
+        Assert.True(repository.IsClean);
+        Assert.Equal(head, repository.Head);
+        Assert.Equal("v1.0.0", repository.Git("tag", "--list").Trim());
+        Assert.Equal([GeneratorCheck, Tests, PublishDryRun], _commands.Commands);
+    }
+
+    [Fact]
+    public void RevertsTheReleaseCommitWhenTaggingFails()
+    {
+        using var repository = ReleaseRepository.Create();
+        repository.Commit("fix: correct a typo");
+        var head = repository.Head;
+        var originHead = repository.Origin("rev-parse", "main").Trim();
+        // Someone else creates the tag while the validations run.
+        _commands.OnRun = command =>
+        {
+            if (command == PublishDryRun)
+            {
+                repository.Tag("v1.0.1");
+            }
+        };
+
+        var exception = Assert.Throws<InvalidOperationException>(() => Release(repository));
+
+        Assert.StartsWith(
+            "The release changes were reverted. 'git tag -a v1.0.1 -m v1.0.1' failed with exit code 128.",
+            exception.Message
+        );
+        Assert.True(repository.IsClean);
+        Assert.Equal(head, repository.Head);
+        Assert.Equal(head, repository.Git("rev-parse", "v1.0.1^{commit}").Trim());
+        Assert.Equal(originHead, repository.Origin("rev-parse", "main").Trim());
+    }
+
+    [Fact]
     public void ExplainsHowToFinishWhenPushingFails()
     {
         using var repository = ReleaseRepository.Create();

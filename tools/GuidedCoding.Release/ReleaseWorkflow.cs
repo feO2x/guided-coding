@@ -56,9 +56,7 @@ public sealed class ReleaseWorkflow(
             return ReleaseResult.Cancelled;
         }
 
-        ApplyAndValidate(changes);
-        _git.Commit(changes.Select(change => change.Path), $"chore(release): {version}");
-        _git.CreateTag(tag);
+        CommitRelease(changes, version, tag);
         Push(tag);
         Publish(tag);
 
@@ -155,8 +153,11 @@ public sealed class ReleaseWorkflow(
         return changes;
     }
 
-    private void ApplyAndValidate(IReadOnlyList<FileChange> changes)
+    // Everything up to the push stays local, so a failure, such as a failing hook or signature, is rolled back.
+    private void CommitRelease(IReadOnlyList<FileChange> changes, SemanticVersion version, string tag)
     {
+        var paths = changes.Select(change => change.Path).ToList();
+        var head = _git.Head();
         try
         {
             foreach (var change in changes)
@@ -168,10 +169,15 @@ public sealed class ReleaseWorkflow(
             {
                 commands.Run(command);
             }
+
+            _git.Commit(paths, $"chore(release): {version}");
+            _git.CreateTag(tag);
         }
         catch (Exception exception)
         {
-            _git.Restore(changes.Select(change => change.Path));
+            // The tag is created last, so a failure never leaves one behind.
+            _git.ResetSoft(head);
+            _git.Restore(paths);
             throw new InvalidOperationException(
                 $"The release changes were reverted. {exception.Message}",
                 exception

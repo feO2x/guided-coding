@@ -127,15 +127,10 @@ internal sealed class ReleaseRepository : IDisposable
         RunGit(clone, "push", "origin", "main");
     }
 
-    public void RejectPushes()
-    {
-        var hook = Path.Combine(OriginDirectory, "hooks", "pre-receive");
-        File.WriteAllText(hook, "#!/bin/sh\necho 'Pushes are rejected.' >&2\nexit 1\n");
-        if (!OperatingSystem.IsWindows())
-        {
-            File.SetUnixFileMode(hook, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
-        }
-    }
+    public void RejectPushes() => InstallFailingHook(OriginDirectory, "pre-receive", "Pushes are rejected.");
+
+    public void RejectCommits() =>
+        InstallFailingHook(Path.Combine(WorkingDirectory, ".git"), "pre-commit", "Commits are rejected.");
 
     public string ReadFile(string relativePath) => File.ReadAllText(Path.Combine(WorkingDirectory, relativePath));
 
@@ -160,6 +155,17 @@ internal sealed class ReleaseRepository : IDisposable
         }
 
         Directory.Delete(_root, recursive: true);
+    }
+
+    private static void InstallFailingHook(string gitDirectory, string name, string message)
+    {
+        var hook = Path.Combine(gitDirectory, "hooks", name);
+        Directory.CreateDirectory(Path.GetDirectoryName(hook)!);
+        File.WriteAllText(hook, $"#!/bin/sh\necho '{message}' >&2\nexit 1\n");
+        if (!OperatingSystem.IsWindows())
+        {
+            File.SetUnixFileMode(hook, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+        }
     }
 
     private static string RunGit(string workingDirectory, params string[] arguments) =>
