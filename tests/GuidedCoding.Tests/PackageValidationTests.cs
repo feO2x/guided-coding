@@ -11,7 +11,6 @@ public sealed class PackageValidationTests
 {
     private const string ExplicitInvocation = "Run only when explicitly requested by the user.";
     private const string PluginName = "guided-coding";
-    private const string Version = "2.0.0";
 
     private static readonly string[] ExpectedPortableSkillNames =
     [
@@ -106,7 +105,10 @@ public sealed class PackageValidationTests
 
         AssertPluginMetadataEqual(portable, claude);
         Assert.Equal(PluginName, portable.GetProperty("name").GetString());
-        Assert.Equal(Version, portable.GetProperty("version").GetString());
+        Assert.Matches(
+            @"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",
+            portable.GetProperty("version").GetString()
+        );
         Assert.Equal(
             ReadStringArray(portable, "keywords"),
             ReadStringArray(claude, "keywords")
