@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace GuidedCoding.Release;
 
@@ -21,18 +22,28 @@ public sealed class Git(string repositoryRoot)
     public (int Behind, int Ahead) CompareWithOrigin()
     {
         var counts = Run("rev-list", "--left-right", "--count", $"{Remote}/{MainBranch}...HEAD")
-           .Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+           .Split((char[]?) null, StringSplitOptions.RemoveEmptyEntries);
         return (int.Parse(counts[0], CultureInfo.InvariantCulture), int.Parse(counts[1], CultureInfo.InvariantCulture));
     }
 
-    // Release tags are plain MAJOR.MINOR.PATCH versions. Only tags reachable from HEAD count, so a tag on
-    // another branch cannot become the base of a release.
+    // Every tag is a release tag in the form MAJOR.MINOR.PATCH. Any other tag, such as one with a v prefix
+    // created by a manual 'gh skill publish', stops the release instead of being skipped. Only tags reachable
+    // from HEAD count, so a tag on another branch cannot become the base of a release.
     public SemanticVersion? FindLatestReleaseVersion()
     {
+        var invalidTags = Lines(Run("tag", "--list")).Where(tag => !SemanticVersion.TryParse(tag, out _)).ToList();
+        if (invalidTags.Count > 0)
+        {
+            throw new InvalidOperationException(
+                $"Tags must be versions in the form MAJOR.MINOR.PATCH, but found: {string.Join(", ", invalidTags)}."
+            );
+        }
+
         SemanticVersion? latest = null;
         foreach (var tag in Lines(Run("tag", "--list", "--merged", "HEAD")))
         {
-            if (SemanticVersion.TryParse(tag, out var version) && (latest is null || version > latest.Value))
+            var version = SemanticVersion.Parse(tag);
+            if (latest is null || version > latest.Value)
             {
                 latest = version;
             }

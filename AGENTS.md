@@ -15,7 +15,7 @@ This repository contains skills for Guided Coding. The root package supports the
 
 ## Manifests and versions
 
-- Keep the version synchronized across `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and `MAJOR.MINOR.PATCH` release tags without a `v` prefix.
+- Keep the version synchronized across `plugin.json`, `claude-plugin/.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and `MAJOR.MINOR.PATCH` release tags without a `v` prefix. Every tag is a release tag: the release tool refuses to run while any tag has another form.
 - Do not bump versions manually. Between releases, the manifests hold the last released version. Release with `dotnet run --project tools/GuidedCoding.Release` or the manually triggered Release workflow in GitHub Actions. The tool derives the next version from the commits since the last release tag, updates the manifests and `CHANGELOG.md`, validates, commits, tags, pushes, and runs `gh skill publish`.
 - Describe user-facing changes under `## [Unreleased]` in `CHANGELOG.md`.
 

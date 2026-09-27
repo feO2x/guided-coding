@@ -10,7 +10,7 @@ public sealed class GitTests
     public void FindsTheHighestReleaseTagNumerically()
     {
         using var repository = ReleaseRepository.Create();
-        foreach (var tag in new[] { "1.9.0", "1.10.0", "latest", "2.0", "3.0.0-beta.1", "v4.0.0" })
+        foreach (var tag in new[] { "1.9.0", "1.10.0", "1.2.0" })
         {
             repository.Commit($"fix: prepare {tag}");
             repository.Tag(tag);
@@ -19,6 +19,27 @@ public sealed class GitTests
         var version = new Git(repository.WorkingDirectory).FindLatestReleaseVersion();
 
         Assert.Equal(new SemanticVersion(1, 10, 0), version);
+    }
+
+    [Theory]
+    [InlineData("v1.1.0")]
+    [InlineData("1.1")]
+    [InlineData("1.1.0-beta.1")]
+    [InlineData("01.1.0")]
+    [InlineData("latest")]
+    public void RejectsTagsThatAreNotReleaseVersions(string tag)
+    {
+        using var repository = ReleaseRepository.Create();
+        repository.Git("switch", "--create", "experiment");
+        repository.Commit("fix: try something");
+        repository.Tag(tag);
+        repository.Git("switch", "main");
+
+        var exception = Assert.Throws<InvalidOperationException>(
+            () => new Git(repository.WorkingDirectory).FindLatestReleaseVersion()
+        );
+
+        Assert.Equal($"Tags must be versions in the form MAJOR.MINOR.PATCH, but found: {tag}.", exception.Message);
     }
 
     [Fact]
