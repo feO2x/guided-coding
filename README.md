@@ -141,4 +141,14 @@ version. After you confirm, it updates `plugin.json`, `claude-plugin/.claude-plu
 `.claude-plugin/marketplace.json`, and `CHANGELOG.md`, runs the validations, commits, tags, pushes
 `main` together with the tag, and publishes the Agent Skills with `gh skill publish`. Pushing the new
 version to `main` releases the Claude Code plugin. The first release needs `--version` because there
-is no release tag to start from.
+is no release tag to start from. Pass `--yes` to skip the confirmation.
+
+The repository must carry the `agent-skills` topic for `gh skill publish`. It is already set; the
+tool does not set it because GitHub's workflow token lacks the required admin permission.
+
+#### Releasing from GitHub Actions
+
+Maintainers with write access can also release from the **Actions** tab by running the **Release**
+workflow on `main`. It runs the same tool with `--yes`. Leave **Version** empty to use the proposed
+version. **Dry run** is enabled by default, so a first run only shows the proposal; run the workflow
+again with **Dry run** unchecked to release.
