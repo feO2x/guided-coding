@@ -23,7 +23,7 @@ Write a Plan Deviations document in either of these cases:
 - **Follow-Up Plans exist.** Summarize the changes from the first plan so that the first plan and this document explain the complete work.
 - **The implementation materially changes or rejects an explicit plan decision.** This applies to decisions about at least one Acceptance Criterion, a public contract or data model, an architectural or component boundary, a security or performance constraint, or another design decision future maintainers need to know about.
 
-Routine choices the plans left open are not deviations, and neither are choices within the boundary of a `Delegated:` decision. Leaving that boundary is a deviation. An Acceptance Criterion that is documented but not met remains incomplete; it does not count as a deviation unless an accepted Follow-Up Plan explicitly supersedes it.
+Routine choices the plans left open are not deviations, and neither are choices within the boundary of a `Delegated:` decision. Leaving that boundary is a deviation. So is a difference between a decision's `Rule:` line and its `Members:` list that the implementation found; the rule applies. An Acceptance Criterion that is documented but not met remains incomplete; it does not count as a deviation unless an accepted Follow-Up Plan explicitly supersedes it.
 
 If there is only one plan and no material deviations, report that conclusion to the user, create nothing, and stop.
 

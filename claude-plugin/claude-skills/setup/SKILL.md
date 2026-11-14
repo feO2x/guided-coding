@@ -63,11 +63,11 @@ Content rules are checked against these rules of `guided-coding-write-plan`:
 
 - **Structure:** `# Title`, then exactly `## Goal`, `## Decisions`, `## Out of Scope`, `## Acceptance Criteria`, and optionally `## Implementation Context`, in this order. Subheadings appear only inside Decisions, Acceptance Criteria, and Implementation Context.
 - **Decisions:** numbered consecutively, one reviewable choice each. The plan leaves no choice to the implementer except `Delegated:` decisions, and only the user delegates.
-- **Acceptance criteria:** every decision that changes behavior has a criterion that fails without it. Bypass paths, negative cases, and "nothing was written" assertions are named explicitly; routine coverage is one criterion.
+- **Acceptance criteria:** every decision that changes behavior has a criterion that fails without it. Bypass paths, negative cases, and "nothing was written" assertions are named explicitly; routine coverage is one criterion. A criterion adds a case, a command, or an observable result to its decision.
 - **Reasons:** at most one "because" clause per decision; seriously considered alternatives are recorded as `Rejected: X, because Y.`
 - **Implementation Context:** only verified facts about the repository today, never requirements.
 - **Implementer:** plans are written for an implementer who has not seen the discussion, may be a small model, and makes no decisions.
-- **Brevity:** plans are shortened by removing repetition, routine craft, and nonessential explanation, never decisions, delegation boundaries, test cases, or required reasons.
+- **Brevity:** plans are shortened by removing repetition, routine craft, and nonessential explanation, never decisions, delegation boundaries, test cases, required reasons, or facts that a criterion needs to be checked.
 
 ## 4. Report and Give Customization Tips
 

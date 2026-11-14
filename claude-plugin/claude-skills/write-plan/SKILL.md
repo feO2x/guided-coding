@@ -31,15 +31,21 @@ A decision belongs to one of these categories: public API (types, members, signa
 
 ### 2. Sets
 
-A decision that defines a set has a `Rule:` line (what makes something a member) and a `Members:` list. A criterion may refer to "the members of Decision N".
+A decision that applies to several things lists them in a `Members:` line. A criterion may refer to "the members of Decision N".
+
+Add a `Rule:` line only when membership follows from a property the implementer can check in the repository, so that a member the plan missed can turn up during implementation. Check that the rule, applied to the repository today, yields exactly the listed members. When the implementer finds a difference, the rule applies and the difference is recorded as a deviation.
+
+A list that is complete because the discussion settled it, such as documentation topics, rejected inputs or renamed types, has no `Rule:` line. Never write a rule to describe a list afterwards; a reason for the list is a "because" clause.
 
 ### 3. Acceptance Criteria
 
 Every decision that changes behavior has a criterion that fails without it. When a decision is justified by a claim about how the system behaves ("X is safe because Y runs first"), a criterion tests that claim. Bypass paths, negative cases and "nothing was written" assertions are named explicitly; routine coverage is one criterion. One criterion per independently verifiable outcome.
 
+A criterion adds something to its decision: a case, a command, an observable result. Never write a criterion that only says a decision was carried out. Decisions that are checked by reading the result, such as documentation, comments and renames, share one closing criterion: `- [ ] Every decision without a criterion of its own is implemented as written.`
+
 ### 4. Reasons
 
-At most one "because" clause per decision, and only when the decision would look wrong, inconsistent or incomplete without it. Record each seriously considered alternative as `Rejected: X, because Y.` Reasons come from the discussion or from evidence, never invented afterwards.
+At most one "because" clause per decision, and only when the decision would look wrong, inconsistent or incomplete without it, or would otherwise be re-litigated or quietly undone. Where a mistake is costly and hard to notice, the clause states what is at stake. Record each seriously considered alternative as `Rejected: X, because Y.` Reasons come from the discussion or from evidence, never invented afterwards.
 
 ### 5. Write for an Implementer Without Your Context
 
@@ -58,7 +64,7 @@ Before writing a claim about current behavior, check it by reading or running th
 
 ### 7. Brevity
 
-Shorten by removing repetition, routine craft and nonessential explanation, never by removing decisions, delegation boundaries, test cases or required reasons. Write full sentences and use the qualified name on first mention.
+Shorten by removing repetition, routine craft and nonessential explanation, never by removing decisions, delegation boundaries, test cases, required reasons or facts that a criterion needs to be checked. Write full sentences and use the qualified name on first mention.
 
 ### 8. Self-Check
 

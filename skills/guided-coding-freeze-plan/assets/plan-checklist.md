@@ -9,10 +9,10 @@ Report every item as pass or fail, and quote the passage for every failure.
 - Decisions are numbered consecutively from 1.
 - Every "Decision N" reference points to an existing decision; follow-up plans reference earlier decisions as `<filename> Decision N`.
 - Every acceptance criterion is an unticked `- [ ]` task.
-- No decision or criterion offers the implementer a choice ("or" between alternatives, "e.g.", "for example", "if needed", "is fine", "may", "optionally", "ideally", "where appropriate") unless it is a `Delegated:` item.
+- No decision or criterion offers the implementer a choice ("or" between alternatives, "e.g.", "for example", "such as", "etc.", "if needed", "is fine", "may", "optionally", "ideally", "where appropriate") unless it is a `Delegated:` item.
 - Every `Delegated:` item names a boundary and a verification.
 - Every `Rejected:` line has the form `Rejected: X, because Y.`
-- Every decision that defines a set has a `Rule:` line and a `Members:` list.
+- Every `Rule:` line is followed by a `Members:` list, and every reference to "the members of Decision N" points to a decision with a `Members:` list.
 - Each decision has at most one "because" clause, not counting its `Rejected:` lines.
 - Implementation Context contains no requirements ("must", "should", "do not", "never").
 - A follow-up plan names the plans it follows by filename and lists each superseded decision.

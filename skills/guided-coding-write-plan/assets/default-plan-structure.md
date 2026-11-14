@@ -30,7 +30,7 @@ A numbered list with one independently reviewable choice per item. Number the de
 
 A decision can carry these lines as sub-items:
 
-- `Rule:` what makes something a member of the set the decision defines, followed by `Members:` and the list of members.
+- `Members:` the things the decision applies to. `Rule:` before it, only when membership follows from a property the implementer can check in the repository.
 - `Rejected: X, because Y.` for each seriously considered alternative.
 - `Supersedes: <filename> Decision N` in a follow-up plan, for each earlier decision that this decision replaces or removes.
 

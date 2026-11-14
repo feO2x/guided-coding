@@ -29,8 +29,8 @@ Amongst other things, check for:
 - **Open decisions:** a choice in the decision categories of `guided-coding-write-plan` (public API, observable behavior, wire and storage formats, configuration and options, dependencies, scope, test cases beyond routine coverage) that the plan leaves to the implementer without a `Delegated:` item.
 - **Decisions hidden in Implementation Context:** statements that are true only after the change, or a new pattern to introduce. These belong under Decisions.
 - **Untested decisions:** a decision that changes behavior without a criterion that fails without it, or a decision justified by a claim about how the system behaves without a criterion that tests the claim.
-- **Sets without a rule:** a decision or criterion that refers to a set without a decision that defines it with a `Rule:` line and a `Members:` list.
-- **Acceptance criteria:** each criterion describes an observable, verifiable outcome rather than an implementation step. Bypass paths, negative cases and "nothing was written" assertions are named explicitly.
+- **Sets:** a decision or criterion that applies to several things without a `Members:` list; a `Rule:` line whose rule, applied to the repository today, does not yield exactly the listed members; a `Rule:` line for a list the discussion settled, which describes the list afterwards.
+- **Acceptance criteria:** each criterion describes an observable, verifiable outcome rather than an implementation step. Bypass paths, negative cases and "nothing was written" assertions are named explicitly. No criterion only says that a decision was carried out.
 - **Verifiability:** the required feedback loops exist in repository instructions, build files, scripts, or CI configuration.
 - **Technical decisions:** data structures, abstractions, and framework mechanisms fit the surrounding architecture without unnecessary indirection.
 - **Level of detail:** the plan records decisions without prescribing routine craft or the sequence of edits, and states each decision once.
