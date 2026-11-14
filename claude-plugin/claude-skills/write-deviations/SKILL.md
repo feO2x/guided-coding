@@ -24,7 +24,7 @@ Write a Plan Deviations document in either of these cases:
 - **Follow-Up Plans exist.** Summarize the changes from the first plan so that the first plan and this document explain the complete work.
 - **The implementation materially changes or rejects an explicit plan decision.** This applies to decisions about at least one Acceptance Criterion, a public contract or data model, an architectural or component boundary, a security or performance constraint, or another design decision future maintainers need to know about.
 
-Routine choices the plans left open are not deviations. An Acceptance Criterion that is documented but not met remains incomplete; it does not count as a deviation unless an accepted Follow-Up Plan explicitly supersedes it.
+Routine choices the plans left open are not deviations, and neither are choices within the boundary of a `Delegated:` decision. Leaving that boundary is a deviation. An Acceptance Criterion that is documented but not met remains incomplete; it does not count as a deviation unless an accepted Follow-Up Plan explicitly supersedes it.
 
 If there is only one plan and no material deviations, report that conclusion to the user, create nothing, and stop.
 
@@ -49,10 +49,10 @@ Structure the document as follows:
 1. `# <ticket-id or short-title> Plan Deviations` as the title. Prefer `<ticket-id>` if present.
 2. An opening paragraph that names every compared plan by its exact file name, names the implementation branch, and identifies plans that were not implemented.
 3. `## Summary`: what held up, and how many material decisions changed.
-4. `## Changes Across Follow-Up Plans`, only when Follow-Up Plans exist: one numbered `###` section per superseded decision with **Original decision**, **Superseded by** (exact file name and the replacement decision), **Why**, and **Outcome**.
-5. `## Deviations From the Accepted Plans`, only when material deviations exist: one numbered `###` section per deviation with **Plan decision** (exact file name and decision), **Implemented**, **Why** (required), and **Impact** (trade-offs, consequences, or deferred work; omit only if there are none).
+4. `## Changes Across Follow-Up Plans`, only when Follow-Up Plans exist: one numbered `###` section per superseded decision with **Original decision** (`<filename> Decision N`), **Superseded by** (`<filename> Decision N` of the replacement), **Why**, and **Outcome**.
+5. `## Deviations From the Accepted Plans`, only when material deviations exist: one numbered `###` section per deviation with **Plan decision** (`<filename> Decision N`), **Implemented**, **Why** (required), and **Impact** (trade-offs, consequences, or deferred work; omit only if there are none).
 
-Name the affected types, members, and files. Leave out work that matches the accepted plans. If the implementation matches all Follow-Up Plans, say so in the Summary and omit `## Deviations From the Accepted Plans`.
+Cite decisions as `<filename> Decision N`, with the exact file name of the plan. Name the affected types, members, and files. Leave out work that matches the accepted plans. If the implementation matches all Follow-Up Plans, say so in the Summary and omit `## Deviations From the Accepted Plans`.
 
 ## 5. Stop
 
