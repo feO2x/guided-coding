@@ -1,10 +1,12 @@
 # AGENTS.md for AI plans
 
-<!-- guided-coding-version: 2.0.0 -->
+<!-- guided-coding-version: 3.0.0 -->
 
 This directory is the append-only record of how work in this repository was planned and how it turned out, similar to Event Sourcing. It follows the [Guided Coding](https://kenny-codes.net/docs/guided-coding/) approach.
 
-Frozen Plan file names use `YYYY-MM-DD-HHMM-<ticket-id>-<short-title>.md`, timestamped in UTC. The `<ticket-id>` is omitted when work has no ticket. It also carries a `*Frozen at <timestamp-utc>` line directly below its title. When a plan is not frozen yet, its file name is typically `<short-title>.md`. Plan Deviations filenames use `YYYY-MM-DD-HHMM-<ticket-id>-plan-deviations.md` or `YYYY-MM-DD-HHMM-<short-title>-plan-deviations.md`.
+Frozen Plan file names use `YYYY-MM-DD-HHMM-<ticket-id>-<short-title>.md`, timestamped in UTC. The `<ticket-id>` is omitted when work has no ticket. It also carries a `*Frozen at <timestamp-utc>*` line directly below its title. When a plan is not frozen yet, its file name is typically `<short-title>.md`. Plan Deviations filenames use `YYYY-MM-DD-HHMM-<ticket-id>-plan-deviations.md` or `YYYY-MM-DD-HHMM-<short-title>-plan-deviations.md`.
+
+Plans follow the fixed Guided Coding structure: `## Goal`, `## Decisions`, `## Out of Scope`, `## Acceptance Criteria`, and optionally `## Implementation Context`. Decisions are numbered, and other documents cite them as `<filename> Decision N`. Repository-specific content rules for plans go under `## Plan Content Rules` in this file; they add to the Guided Coding plan rules and never override them.
 
 Plans are frozen when their Planning Phase ends. From then on, the only permitted edit is checking an acceptance criterion (`- [ ]` to `- [x]`) after the implementation and relevant feedback loops verify it. Never reword, add, remove, or reorder criteria in a frozen plan. Plan Deviations documents are frozen once committed.
 
