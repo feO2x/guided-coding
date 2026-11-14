@@ -15,24 +15,28 @@ The target plan should be already mentioned in the conversation, typically in th
 
 If the plan already carries a timestamp in its file name or a `*Frozen at ...*` line below its title, it is frozen. Report this to the user and stop.
 
-## 1. Determine the Timestamp
+## 1. Run the Plan Checklist
+
+Go through the plan checklist in `assets/plan-checklist.md` relative to this skill file. If any item fails, do not freeze the plan: list the failing items with the quoted passages and stop. The user fixes the plan and asks to freeze it again.
+
+## 2. Determine the Timestamp
 
 The `<timestamp>` is UTC in the format `YYYY-MM-DD-HHMM`. Use these commands to get it:
 
 - `date -u +%F-%H%M` on Unix-based shells
 - `(Get-Date).ToUniversalTime().ToString("yyyy-MM-dd-HHmm")` on PowerShell
 
-## 2. Determine an Optional Ticket ID
+## 3. Determine an Optional Ticket ID
 
 Plans are typically associated with a `<ticket-id>`. This is the ID of a work item such as a GitHub issue or a Jira task. If you don't know it from the conversation yet, ask the user to provide it. Note that not each plan needs to be associated with a `<ticket-id>`.
 
-## 3. Change the Plan File Name
+## 4. Change the Plan File Name
 
 - `<timestamp>-<ticket-id>-<short-title>.md` if `<ticket-id>` is present
 - `<timestamp>-<short-title>.md` otherwise
 
 If a file with this name already exists in `ai-plans/`, report the collision and stop. Never overwrite an existing file.
 
-## 4. Stamp the Plan Content
+## 5. Stamp the Plan Content
 
 Right beneath the `# Title`, insert the following line: `*Frozen at <timestamp-utc>*`, where `<timestamp-utc>` is an ISO 8601 timestamp of the existing `<timestamp>` used for the file, precise to the minute. E.g., the `<timestamp>` `2026-09-17-0231` for the file name becomes `2026-09-17T02:31Z`.
