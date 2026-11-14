@@ -19,7 +19,7 @@ The full method is documented at
 | `guided-coding-setup` | Set up or upgrade Guided Coding in a repository. |
 | `guided-coding-write-plan` | After discussing an issue with your agent, write a plan or follow-up plan. |
 | `guided-coding-review-plan` | Review a plan draft against the repository (use in fresh conversation). |
-| `guided-coding-freeze-plan` | Freeze a plan by timestamping its file name and title. |
+| `guided-coding-freeze-plan` | Check a plan against the plan checklist and freeze it by timestamping its file name and title. |
 | `guided-coding-implement` | Implement a frozen plan and verify it through the repository's feedback loops. |
 | `guided-coding-implement-show-me` | (Guided Learning) Implement a frozen plan step-by-step where the agent shows you complete code fragments that you enter and discuss. |
 | `guided-coding-implement-coach-me` | (Guided Learning) Implement a frozen plan yourself through coached, verifiable milestones. The agent reveals implementation hints progressively. |

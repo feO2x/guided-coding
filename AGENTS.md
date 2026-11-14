@@ -24,7 +24,7 @@ This repository contains skills for Guided Coding. The root package supports the
 Use Conventional Commits messages. The commit type decides the next version:
 
 - `feat` releases a minor version, `fix` and `perf` release a patch version.
-- `!` after the type or a `BREAKING CHANGE:` footer releases a major version. Removing or renaming a skill is a breaking change.
+- `!` after the type or a `BREAKING CHANGE:` footer releases a major version. Removing or renaming a skill is a breaking change. Changing the plan structure, or making a skill reject input it accepted before, is a breaking change.
 - Other types, such as `docs`, `test`, `refactor`, and `chore`, do not trigger a release. Changes to shipped skill content are therefore `feat` or `fix`, never `docs` or `chore`.
 - Dependency updates do not reach users, so Dependabot commits as `build(deps)`. Keep this prefix in `.github/dependabot.yml`.
 - Pin third-party actions in workflows to a commit SHA with a version comment. Dependabot keeps both up to date.
@@ -33,6 +33,7 @@ Use Conventional Commits messages. The commit type decides the next version:
 
 - Regenerate the Claude adapter and run `dotnet test` after changing skills or manifests.
 - Run `dotnet run --project tools/GuidedCoding.ClaudeGenerator -- --check` to detect drift.
+- `dotnet test` fails when the copies of a shared asset differ, such as `assets/plan-checklist.md` in `guided-coding-write-plan`, `guided-coding-review-plan` and `guided-coding-freeze-plan`. Change every copy together.
 - Run `claude plugin validate . --strict` when Claude Code is installed.
 - Run `gh skill publish --dry-run` before publishing a release. The release tool runs it for you.
 
