@@ -67,6 +67,14 @@ public sealed class PackageValidationTests
         )
     ];
 
+    // Assets are duplicated on purpose because skills are standalone. Every skill that ships an asset
+    // refers to it from its SKILL.md.
+    private static readonly (string Asset, string[] SkillNames)[] SharedAssets =
+    [
+        ("assets/plan-checklist.md", ["guided-coding-freeze-plan", "guided-coding-review-plan", "guided-coding-write-plan"]),
+        ("assets/profile.md", GuidedLearningSkillNames)
+    ];
+
     private static readonly string[] ForbiddenFrontmatterFields =
     [
         "allowed-tools",
@@ -90,6 +98,10 @@ public sealed class PackageValidationTests
 
     public static TheoryData<string> SharedSnippetLeadIns => new (
         SharedSnippets.Select(shared => shared.LeadIn)
+    );
+
+    public static TheoryData<string> SharedAssetPaths => new (
+        SharedAssets.Select(shared => shared.Asset)
     );
 
     [Fact]
@@ -468,28 +480,37 @@ public sealed class PackageValidationTests
         }
     }
 
-    [Fact]
-    public void GuidedLearningSkillsShipTheSameProfileTemplate()
+    [Theory]
+    [MemberData(nameof(SharedAssetPaths))]
+    public void SkillsSharingAnAssetShipIdenticalCopies(string asset)
     {
-        var templates = GuidedLearningSkillNames
+        var skillNames = SharedAssets.Single(shared => shared.Asset == asset).SkillNames;
+        var copies = skillNames
            .Select(
                 skillName => (
                     SkillName: skillName,
-                    Content: File.ReadAllText(
-                        Path.Combine(RepositoryRoot, "skills", skillName, "assets", "profile.md")
-                    )
+                    Content: File.ReadAllText(Path.Combine(RepositoryRoot, "skills", skillName, asset))
                 )
             )
            .ToArray();
-        var reference = templates[0];
+        var reference = copies[0];
 
-        foreach (var template in templates[1..])
+        foreach (var copy in copies[1..])
         {
             Assert.True(
-                string.Equals(reference.Content, template.Content, StringComparison.Ordinal),
-                $"assets/profile.md differs between {reference.SkillName} and {template.SkillName}. " +
-                "The template is duplicated on purpose because skills are standalone; " +
+                string.Equals(reference.Content, copy.Content, StringComparison.Ordinal),
+                $"{asset} differs between {reference.SkillName} and {copy.SkillName}. " +
+                "The asset is duplicated on purpose because skills are standalone; " +
                 "apply the change to every skill that ships it."
+            );
+        }
+
+        foreach (var skillName in skillNames)
+        {
+            Assert.True(
+                File.ReadAllText(Path.Combine(RepositoryRoot, "skills", skillName, "SKILL.md"))
+                   .Contains($"`{asset}`", StringComparison.Ordinal),
+                $"{skillName} ships {asset} but its SKILL.md does not refer to it."
             );
         }
     }
