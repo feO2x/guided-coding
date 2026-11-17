@@ -39,3 +39,5 @@ Use Conventional Commits messages. The commit type decides the next version:
 ## This is your space
 
 If you find something noteworthy while working in this repository, add it here for discussion.
+
+- The `guided-coding-version` marker in `skills/guided-coding-setup/assets/ai-plans-AGENTS.md` is maintained by hand; the release tool does not update it. When you change the asset, set the marker to the version the next release will get, so that `guided-coding-setup` upgrades existing repositories.
