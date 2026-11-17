@@ -23,7 +23,7 @@ Look for an existing Plan Deviations document of the current ticket in `ai-plans
 
 If there is an existing document, check whether it is already merged into the target branch:
 
-1. Fetch the target branch from its remote, e.g., `git fetch origin main`, and use the remote-tracking branch, e.g., `origin/main`. Only if the repository has no remote at all, use the local target branch. If fetching fails, report the error and stop without changing anything: a stale local branch cannot prove that the document is unmerged.
+1. Fetch the target branch from its remote into its remote-tracking branch with an explicit refspec, e.g., `git fetch origin +refs/heads/main:refs/remotes/origin/main`, and use that remote-tracking branch, e.g., `origin/main`. The explicit refspec updates it regardless of the remote's configured fetch mappings. Only if the repository has no remote at all, use the local target branch. If fetching fails, report the error and stop without changing anything: a stale local branch cannot prove that the document is unmerged.
 2. Verify that the target branch resolves, e.g., `git rev-parse --verify origin/main`. If it does not, report this and stop without changing anything.
 3. Check whether the document's path exists on the target branch, e.g., `git cat-file -e origin/main:ai-plans/<file-name>`. Check the path, not whether commits are ancestors of the target branch: squash and rebase merges rewrite commits but keep the file.
 
