@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "guided-coding",
   "displayName": "Guided Coding",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Skills for Guided Coding, a lightweight approach to developing software with AI agents. Plan, Implement, Guide, Iterate.",
   "author": {
     "name": "Kenny Pflug",

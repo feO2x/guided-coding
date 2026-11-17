@@ -10,7 +10,7 @@
       "name": "guided-coding",
       "source": "./claude-plugin",
       "description": "Skills for Guided Coding, a lightweight approach to developing software with AI agents. Plan, Implement, Guide, Iterate.",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "author": {
         "name": "Kenny Pflug",
         "url": "https://github.com/feO2x"

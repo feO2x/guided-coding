@@ -4,6 +4,8 @@ All notable changes to Guided Coding are documented here.
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-11-17
+
 - Make the implementation skills verify a plan's assumptions against the code before implementing it.
 - Allow workarounds for incorrect plan decisions or factual claims, or acceptance criteria that cannot be met as written. All of these conditions must be met:
 
