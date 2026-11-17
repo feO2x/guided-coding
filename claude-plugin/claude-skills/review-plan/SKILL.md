@@ -1,13 +1,13 @@
 ---
 name: review-plan
-description: "Review a completed Guided Coding plan draft against the codebase before its Planning Phase ends. Run only when explicitly requested by the user."
+description: "Review a completed Guided Coding plan draft against the codebase before its Planning Phase ends. Run only when explicitly requested by the user or by another Guided Coding skill."
 license: "MIT"
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Review a Plan
 
-Review the plan named by the user. If none is named, proceed only when exactly one uncommitted plan draft exists in `ai-plans/`; otherwise ask for its path. Report findings only; never edit the plan or any other file.
+Review the plan named by the user or by the invoking skill. If none is named, proceed only when exactly one uncommitted plan draft exists in `ai-plans/`; otherwise ask for its path. Report findings only; never edit the plan or any other file.
 
 Read the plan, applicable repository instructions, the code it discusses, and every earlier document for the same issue, including legacy filenames. Verify assertions about existing types, members, files, APIs, and extension points. Do not reject files or types merely because the plan intends to create them.
 

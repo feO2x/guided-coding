@@ -1,0 +1,7 @@
+interface:
+  display_name: "Plan and Review with Guided Coding"
+  short_description: "Write a plan and refine it through independent reviewers"
+  default_prompt: "Use $guided-coding-plan-and-review to write the agreed plan for this work and refine it through independent reviewers."
+
+policy:
+  allow_implicit_invocation: false

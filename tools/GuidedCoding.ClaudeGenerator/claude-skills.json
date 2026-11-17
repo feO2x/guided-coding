@@ -16,9 +16,13 @@
       "name": "implement-show-me",
       "disableModelInvocation": true
     },
+    "guided-coding-plan-and-review": {
+      "name": "plan-and-review",
+      "disableModelInvocation": true
+    },
     "guided-coding-review-plan": {
       "name": "review-plan",
-      "disableModelInvocation": true
+      "disableModelInvocation": false
     },
     "guided-coding-setup": {
       "name": "setup",
@@ -30,7 +34,7 @@
     },
     "guided-coding-write-plan": {
       "name": "write-plan",
-      "disableModelInvocation": true
+      "disableModelInvocation": false
     }
   }
 }

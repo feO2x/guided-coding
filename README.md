@@ -19,13 +19,30 @@ The full method is documented at
 | `guided-coding-setup` | Set up or upgrade Guided Coding in a repository. |
 | `guided-coding-write-plan` | After discussing an issue with your agent, write a plan or follow-up plan. |
 | `guided-coding-review-plan` | Review a plan draft against the repository (use in fresh conversation). |
+| `guided-coding-plan-and-review` | Write a plan and refine it through independent reviewer subagents in rounds before you review it. |
 | `guided-coding-freeze-plan` | Freeze a plan by timestamping its file name and title. |
 | `guided-coding-implement` | Implement a frozen plan and verify it through the repository's feedback loops. |
 | `guided-coding-implement-show-me` | (Guided Learning) Implement a frozen plan step-by-step where the agent shows you complete code fragments that you enter and discuss. |
 | `guided-coding-implement-coach-me` | (Guided Learning) Implement a frozen plan yourself through coached, verifiable milestones. The agent reveals implementation hints progressively. |
 | `guided-coding-write-deviations` | Summarize follow-up plans and record material implementation differences. |
 
-In most Agent Harnesses, these workflows must be invoked explicitly. All workflows set `allow_implicit_invocation: false` for Agent Plugins and `disable-model-invocation: true` for Claude Plugins, respectively.
+In most Agent Harnesses, these workflows must be invoked explicitly. They set `allow_implicit_invocation: false` for Agent Plugins and `disable-model-invocation: true` for Claude Plugins, respectively. The exceptions are `guided-coding-write-plan` and `guided-coding-review-plan`: `guided-coding-plan-and-review` invokes them, so models may invoke them too. Their descriptions still tell the model to run them only when the user or another Guided Coding skill asks for it.
+
+## Plan and Review
+
+`guided-coding-plan-and-review` writes a plan with `guided-coding-write-plan`, or picks up an existing draft, and has it reviewed by reviewers that do not share your conversation (subagents, threads, or separate sessions). Each reviewer runs `guided-coding-review-plan` in a fresh context and classifies its findings as `blocking`, `gap`, or `nit`. The planner applies every finding, rejects it with a reason, or leaves it open for you; it never changes a decision you made explicitly. The run stops when a round finds no `blocking` or `gap` findings, or after the round limit. The report lists every finding with its resolution and, separately, every decision and scope change the planner made.
+
+Configure it in a `## Plan Review` section of `ai-plans/AGENTS.md`, or with arguments when invoking the skill:
+
+```markdown
+## Plan Review
+
+- Reviewers: two, one on GPT-6.1-Sol and one on Claude Fable 5.2
+- Round limit: 3
+- User decisions: collect
+```
+
+The defaults are one reviewer on the harness default model, a round limit of 3, and `collect`, which continues and reports findings against your decisions as open for you; `pause` stops the round and asks you instead. Each round starts one subagent per reviewer, so a run costs reviewers × rounds subagent runs at most, plus one replacement for each reviewer that fails.
 
 ## Plan Structures
 

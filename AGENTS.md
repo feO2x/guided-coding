@@ -7,7 +7,7 @@ This repository contains skills for Guided Coding. The root package supports the
 - Keep canonical skill instructions under `skills/<skill-name>/SKILL.md`.
 - Use only `name`, `description`, and `license` in `SKILL.md` frontmatter.
 - Keep the skill directory and frontmatter name identical.
-- State in every description that the skill runs only when explicitly requested.
+- State in every description that the skill runs only when explicitly requested by the user. Skills that another Guided Coding skill invokes (`guided-coding-write-plan` and `guided-coding-review-plan`) state that they run only when explicitly requested by the user or by another Guided Coding skill, and allow model invocation in `agents/openai.yaml` and `claude-skills.json`. Keep every other skill blocked; `implement`, `freeze-plan`, and `write-deviations` change code or freeze decisions.
 - Put Codex-specific interface and invocation policy in `agents/openai.yaml`.
 - Configure Claude-specific names and frontmatter in `tools/GuidedCoding.ClaudeGenerator/claude-skills.json`.
 - Do not edit `claude-plugin/claude-skills` directly. Regenerate it with `dotnet run --project tools/GuidedCoding.ClaudeGenerator`.

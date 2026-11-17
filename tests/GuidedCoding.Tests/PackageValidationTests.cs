@@ -9,7 +9,10 @@ namespace GuidedCoding.Tests;
 
 public sealed class PackageValidationTests
 {
-    private const string ExplicitInvocation = "Run only when explicitly requested by the user.";
+    private const string UserInvocation = "Run only when explicitly requested by the user.";
+
+    private const string SkillInvocation =
+        "Run only when explicitly requested by the user or by another Guided Coding skill.";
     private const string PluginName = "guided-coding";
 
     private static readonly string[] ExpectedPortableSkillNames =
@@ -18,9 +21,17 @@ public sealed class PackageValidationTests
         "guided-coding-implement",
         "guided-coding-implement-coach-me",
         "guided-coding-implement-show-me",
+        "guided-coding-plan-and-review",
         "guided-coding-review-plan",
         "guided-coding-setup",
         "guided-coding-write-deviations",
+        "guided-coding-write-plan"
+    ];
+
+    // guided-coding-plan-and-review invokes these skills, so models may invoke them too.
+    private static readonly string[] ModelInvocableSkillNames =
+    [
+        "guided-coding-review-plan",
         "guided-coding-write-plan"
     ];
 
@@ -32,6 +43,7 @@ public sealed class PackageValidationTests
         ["guided-coding-implement"] = "implement",
         ["guided-coding-implement-coach-me"] = "implement-coach-me",
         ["guided-coding-implement-show-me"] = "implement-show-me",
+        ["guided-coding-plan-and-review"] = "plan-and-review",
         ["guided-coding-review-plan"] = "review-plan",
         ["guided-coding-setup"] = "setup",
         ["guided-coding-write-deviations"] = "write-deviations",
@@ -83,6 +95,9 @@ public sealed class PackageValidationTests
     );
 
     private static string RepositoryRoot { get; } = FindRepositoryRoot();
+
+    private static bool IsModelInvocable(string skillName) =>
+        ModelInvocableSkillNames.Contains(skillName, StringComparer.Ordinal);
 
     public static TheoryData<string> SharedSectionNames => new (
         SharedSections.Select(shared => shared.Section)
@@ -171,7 +186,7 @@ public sealed class PackageValidationTests
 
     [Theory]
     [MemberData(nameof(PortableSkillNames))]
-    public void SkillIsPortableAndRequiresExplicitInvocation(string skillName)
+    public void SkillIsPortableAndStatesWhoMayInvokeIt(string skillName)
     {
         var skillPath = Path.Combine(RepositoryRoot, "skills", skillName, "SKILL.md");
         var skill = File.ReadAllText(skillPath);
@@ -179,7 +194,11 @@ public sealed class PackageValidationTests
 
         Assert.Equal(["description", "license", "name"], frontmatter.Keys.Order(StringComparer.Ordinal));
         Assert.Equal(skillName, frontmatter["name"]);
-        Assert.Contains(ExplicitInvocation, frontmatter["description"], StringComparison.Ordinal);
+        Assert.EndsWith(
+            IsModelInvocable(skillName) ? SkillInvocation : UserInvocation,
+            frontmatter["description"],
+            StringComparison.Ordinal
+        );
         Assert.NotEqual(
             ReadJson("plugin.json").GetProperty("description").GetString(),
             frontmatter["description"]
@@ -195,7 +214,7 @@ public sealed class PackageValidationTests
 
     [Theory]
     [MemberData(nameof(PortableSkillNames))]
-    public void CodexMetadataRequiresExplicitInvocation(string skillName)
+    public void CodexMetadataMatchesTheInvocationPolicy(string skillName)
     {
         var metadataPath = Path.Combine(RepositoryRoot, "skills", skillName, "agents", "openai.yaml");
         var metadata = File.ReadAllText(metadataPath);
@@ -204,7 +223,11 @@ public sealed class PackageValidationTests
         Assert.Contains("short_description:", metadata, StringComparison.Ordinal);
         Assert.Contains("default_prompt:", metadata, StringComparison.Ordinal);
         Assert.Contains($"${skillName}", metadata, StringComparison.Ordinal);
-        Assert.Contains("allow_implicit_invocation: false", metadata, StringComparison.Ordinal);
+        Assert.Contains(
+            $"allow_implicit_invocation: {(IsModelInvocable(skillName) ? "true" : "false")}",
+            metadata,
+            StringComparison.Ordinal
+        );
         Assert.DoesNotContain(
             ReadJson("plugin.json").GetProperty("description").GetString()!,
             metadata,
@@ -282,7 +305,10 @@ public sealed class PackageValidationTests
                 )
         );
         Assert.Equal(claudeName, claudeFrontmatter["name"]);
-        Assert.Equal("true", claudeFrontmatter["disable-model-invocation"]);
+        Assert.Equal(
+            IsModelInvocable(portableName) ? "false" : "true",
+            claudeFrontmatter["disable-model-invocation"]
+        );
         Assert.Equal(
             portableFrontmatter["description"],
             JsonSerializer.Deserialize<string>(claudeFrontmatter["description"])
