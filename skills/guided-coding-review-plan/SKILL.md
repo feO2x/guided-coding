@@ -6,7 +6,7 @@ license: MIT
 
 # Review a Plan
 
-Review the plan named by the user or by the invoking skill. If none is named, proceed only when exactly one uncommitted plan draft exists in `ai-plans/`; otherwise ask for its path. Report findings only; never edit the plan or any other file.
+Review the plan named by the user or by the invoking skill. If none is named, proceed only when exactly one uncommitted plan draft exists in `ai-plans/`, otherwise ask for its path. Report findings only, never edit the plan or any other file.
 
 Read the plan, applicable repository instructions, the code it discusses, and every earlier document for the same issue, including legacy filenames. Verify assertions about existing types, members, files, APIs, and extension points. Do not reject files or types merely because the plan intends to create them.
 
@@ -19,4 +19,4 @@ Amongst other things, check for:
 - **Omissions:** Judge relevant risks such as error handling, compatibility, migration, performance, security boundaries, and observability against the change at hand.
 - **History:** A follow-up plan explicitly identifies and explains any earlier decisions it supersedes.
 
-Say explicitly when there are no findings. If the plan is already frozen (timestamp in its file name and a `*Frozen at ...*` line below its title), note that it can no longer be edited; changes are decided in the Guiding Phase and recorded in a Follow-Up Plan.
+Say explicitly when there are no findings. If the plan is already frozen (timestamp in its file name and a `*Frozen at ...*` line below its title), note that it can no longer be edited. Changes are decided in the Guiding Phase and recorded in a Follow-Up Plan.

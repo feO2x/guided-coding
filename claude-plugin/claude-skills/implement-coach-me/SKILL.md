@@ -27,7 +27,7 @@ It holds the user's **Preferences** for how to be taught, such as the language t
 - **Advancing**: fluent in the fundamentals and able to adapt them to new problems. Does not question the fundamentals.
 - **Mastering**: able to adapt and transform concepts quickly, and to question or replace the fundamentals themselves.
 
-Teach the way the preferences ask. Let the stages of the areas the plan draws on decide how large you make the milestones, how much you explain, and how much help you offer at the start. The deepest node covering an area wins; technology and discipline nodes each apply to their own part of the work. Treat areas the profile does not cover as being at the stage this skill is intended for. What you observe always takes precedence over the profile.
+Teach the way the preferences ask. Let the stages of the areas the plan draws on decide how large you make the milestones, how much you explain, and how much help you offer at the start. The deepest node covering an area wins, technology and discipline nodes each apply to their own part of the work. Treat areas the profile does not cover as being at the stage this skill is intended for. What you observe always takes precedence over the profile.
 
 If you created the profile in this session, ask the user how they like to be taught before you create the roadmap. Otherwise, restate the preferences in one line when you present the roadmap, so that the user can object.
 
@@ -39,7 +39,7 @@ Present the milestones as a short roadmap without giving away their implementati
 
 Build it from vertical slices: each milestone cuts through the layers the plan touches and delivers behavior that runs end-to-end. At the Advancing stage, the user knows the individual areas and practices fitting them together, and a slice exposes a wrong design decision in the first milestone rather than the last. Keep the first slice thin, just enough to connect the layers, and widen it in the following ones. Give each slice one area in focus, ideally the one the user is least practiced in, so that you can tell what the milestone taught. If the plan does not split into slices, or the preferences ask for something else, choose another split that keeps one area in focus per milestone.
 
-Each milestone leaves a compilable codebase whose feedback loops pass and that can be committed. The user writes the milestone's tests as part of it, since they prove it works; add manual tests where needed, for example, for UI changes. A single milestone is fine if the plan is small enough.
+Each milestone leaves a compilable codebase whose feedback loops pass and that can be committed. The user writes the milestone's tests as part of it, since they prove it works. Add manual tests where needed, for example, for UI changes. A single milestone is fine if the plan is small enough.
 
 ## 4. How to Work Through a Single Milestone
 
@@ -53,7 +53,7 @@ Then explain how to run the feedback loops and manual tests, or go through the o
 
 ## 5. Reveal Help Progressively
 
-Give the user room to solve the milestone independently, but do not let it turn into unproductive frustration. Answer questions about concepts and existing code directly, even when the answers help with the milestone. Toward the implementation itself, reveal one hint at a time: ask a focused question, restate an important invariant, point to similar code or documentation, teach the missing concept, name relevant APIs or types, describe how responsibilities interact, or give a precise implementation outline. Start at the level that fits the situation and the user's stage in the area, not mechanically with a question. The user can ask for more direct help at any time; after each hint, let them try again.
+Give the user room to solve the milestone independently, but do not let it turn into unproductive frustration. Answer questions about concepts and existing code directly, even when the answers help with the milestone. Toward the implementation itself, reveal one hint at a time: ask a focused question, restate an important invariant, point to similar code or documentation, teach the missing concept, name relevant APIs or types, describe how responsibilities interact, or give a precise implementation outline. Start at the level that fits the situation and the user's stage in the area, not mechanically with a question. The user can ask for more direct help at any time. After each hint, let them try again.
 
 Provide code only when explanations and outlines are not enough, and then only the smallest fragment that resolves the immediate obstacle, with an explanation. Never hand over the milestone's complete implementation, a patch, or a series of fragments that amounts to one. The goal is productive struggle, not withholding information.
 
@@ -72,7 +72,7 @@ Knowledge that would survive a switch to another technology stack belongs to a d
 - **Technologies**: `<ecosystem>` → `<technology>` → `<area>`, for example `.NET` → `EF Core` → `change tracking`. The ecosystem is the one whose package manager distributes the technology, so React belongs to `JavaScript`, which includes TypeScript. A technology outside any ecosystem, such as PostgreSQL, is a root itself.
 - **Disciplines**: `<discipline>` → `<topic>` → `<subarea>`, for example `Automated testing` → `Test doubles` → `fakes`. Roots are limited to Algorithms and data structures, Software design and architecture, Automated testing, Data modeling and persistence, Security, Concurrency and distributed systems, Performance, Delivery and operations, and User interface design. Ask the user before you add another one.
 
-After each milestone, add a node for every area it drew on that the profile does not cover yet. Reuse existing nodes, and name technologies the way their official documentation does. Add a child only when its stage differs from its parent's; otherwise, list it in the parent's optional `covers`.
+After each milestone, add a node for every area it drew on that the profile does not cover yet. Reuse existing nodes, and name technologies the way their official documentation does. Add a child only when its stage differs from its parent's. Otherwise, list it in the parent's optional `covers`.
 
 Move a stage only on what you observed. Promote at most one step per plan: to Advancing when the user carried a milestone in that area without being handed the implementation, to Mastering when they shaped the design or pushed back on the plan for a reason that held up. Correct a wrong node any distance. Change the node where you saw the evidence, and a parent only when your evidence covers all of it.
 

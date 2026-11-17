@@ -21,7 +21,7 @@ Use the first plan structure that applies:
 2. A plan structure that `ai-plans/AGENTS.md` names in the same way or describes itself.
 3. `assets/default-plan-structure.md` relative to this skill file.
 
-A bare file name refers to a file in `assets/` relative to this skill file. Resolve other relative paths from the repository root. If the selected file does not exist, stop and report it; do not fall back.
+A bare file name refers to a file in `assets/` relative to this skill file. Resolve other relative paths from the repository root. If the selected file does not exist, stop and report it, do not fall back.
 
 ## What Happens After Writing a Plan?
 

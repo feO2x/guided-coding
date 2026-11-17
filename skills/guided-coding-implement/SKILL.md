@@ -43,11 +43,11 @@ Otherwise, do not work around the problem and do not ask the user mid-run. Stop 
 
 Report:
 
-- what was implemented, which feedback loops ran, and their results;
-- which Acceptance Criteria are checked, and which remain unchecked and why;
-- each workaround: the decision it departs from, the evidence, and what you did instead;
-- each problem you did not work around: what the plan says, what you observed and how, and the options you see;
-- the discrepancies that changed nothing.
+- What was implemented, which feedback loops ran, and their results.
+- Which Acceptance Criteria are checked, and which remain unchecked and why.
+- Each workaround: the decision it departs from, the evidence, and what you did instead.
+- Each problem you did not work around: what the plan says, what you observed and how, and the options you see.
+- The discrepancies that changed nothing.
 
 Reference a decision by the plan's file name and its Decision ID, such as `<plan-file-name> D3`, when the plan has Decision IDs. Otherwise, name the plan's file name and section, and quote the decision.
 
