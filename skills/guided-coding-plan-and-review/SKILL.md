@@ -1,28 +1,33 @@
 ---
 name: guided-coding-plan-and-review
-description: Write a Guided Coding plan and refine it through independent reviewers in bounded rounds before presenting it to the user. Run only when explicitly requested by the user.
+description: Write a Guided Coding plan, improve it through independent reviews within a round limit, and present it to the user. Run only when explicitly requested by the user.
 license: MIT
 ---
 
 # Plan and Review
 
-Your goal is to write a plan draft into `ai-plans/`, refine it through independent reviewers in rounds, report the result, and stop. You are the planner: you keep the planning conversation, the reviewers never see it. Never freeze the plan.
+Write a plan draft in `ai-plans/`, improve it through independent review rounds, report the result, and stop. You are the planner. Only you have access to the planning conversation. Reviewers must not see it. Never freeze the plan.
 
 Harnesses may shorten or namespace skill names, e.g., `guided-coding:write-plan` in Claude Code. Use the name under which each skill is installed.
 
 ## 1. Read the Configuration
 
-Read the `## Plan Review` section of `ai-plans/AGENTS.md` if it exists. Arguments given when invoking this skill override the corresponding configured values. Use the defaults for values that neither sets:
+Read the `## Plan Review` section of `ai-plans/AGENTS.md` if it exists. Options supplied when invoking this skill override the configuration. Use these defaults for values absent from both the invocation options and the configuration:
 
 - **Reviewers:** one reviewer on the harness default model. The configuration can name several, each with a model preference.
 - **Round limit:** 3.
-- **User decisions:** findings against a decision the user made explicitly in the conversation are never applied without the user. `collect`: continue, and report the finding as open for the user. `pause`: stop the round, ask the user, and continue with the answer. The default is `collect`.
+- **User decisions:** do not change a decision the user explicitly made in the conversation without their approval. Use the policy set by the invocation options or configuration:
+
+  - `collect` (default): continue and report the finding as open for the user.
+  - `pause`: stop the round, ask the user, and continue after they answer.
 
 Model names are harness-specific. If a configured model is unavailable, run that reviewer on the harness default and say so in the report.
 
 ## 2. Get the Plan Draft
 
-If the user named a plan draft, use it. Otherwise use an uncommitted draft in `ai-plans/` only if it clearly belongs to the work discussed in this conversation. Ask the user when several could. Without a draft, invoke `guided-coding-write-plan` to write it, passing on a plan structure the user named. If you cannot invoke it, stop and tell the user to run `guided-coding-write-plan` first and then this skill. Never write the plan without that skill.
+If the user named a plan draft, use it. Otherwise use an uncommitted draft in `ai-plans/` only if it clearly belongs to the work discussed in this conversation. If several drafts could match the current work, ask the user which one to use.
+
+Without a draft, invoke `guided-coding-write-plan` to write it, passing on any plan structure the user named. If you cannot invoke it, stop and tell the user to run `guided-coding-write-plan` first and then this skill. Never write the plan without that skill.
 
 Record the plan's word count.
 
@@ -47,17 +52,17 @@ The finding classes are:
 - `gap`: a missing scenario or fact.
 - `nit`: everything else.
 
-A round is complete when every reviewer has returned its findings. Replace a reviewer that fails or times out once with a fresh one. If the replacement fails too, address the findings already returned, then report the incomplete round and stop.
+A round is complete when every reviewer has returned its findings. If a reviewer fails or times out, start one replacement reviewer. If the replacement also fails or times out, do not retry. Address the findings already returned, then report the incomplete round and stop.
 
 Then address every finding of every class:
 
 - Handle a finding against a decision the user made explicitly as configured under **User decisions**.
-- Apply every other finding or reject it with a one-line reason. You may change anything else in the plan, including decisions you made alone and the scope.
+- Address every other finding by changing the plan or rejecting the finding with a one-line reason. You may change anything else in the plan, including decisions you made alone and the scope.
 - When findings contradict each other, apply at most one and reject the others with a reason. Treat findings that say the same thing as one, with the highest class among them.
-- A fix corrects a decision, criterion, or fact. It adds only the explanation the plan structure requires for a changed decision, never review commentary, and never turns a `nit` into a new rule.
+- When revising the plan, correct the decision, criterion, or fact and include only the explanation the plan structure requires for a changed decision. Keep review commentary out of the plan. Do not turn a `nit` into a new rule.
 - The plan keeps following the rules of `guided-coding-write-plan` and the plan structure it selected.
 
-Keep the reviewers' classes. Stop when a complete round reports no `blocking` or `gap` findings, after addressing its `nit` findings, or when the round limit is reached.
+Keep the reviewers' classifications. After addressing all findings, stop if the completed round reported no `blocking` or `gap` findings. Otherwise, start another round unless the round limit has been reached.
 
 ## 5. Report
 

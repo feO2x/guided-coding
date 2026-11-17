@@ -2,11 +2,11 @@
 
 <!-- guided-coding-version: 2.1.0 -->
 
-This directory is the append-only record of how work in this repository was planned and how it turned out, similar to Event Sourcing. It follows the [Guided Coding](https://kenny-codes.net/docs/guided-coding/) approach.
+This directory records how work in this repository was planned and how it turned out. Preserve frozen documents and record later decisions in new plans. It follows the [Guided Coding](https://kenny-codes.net/docs/guided-coding/) approach.
 
-Frozen Plan file names use `YYYY-MM-DD-HHMM-<ticket-id>-<short-title>.md`, timestamped in UTC. The `<ticket-id>` is omitted when work has no ticket. It also carries a `*Frozen at <timestamp-utc>` line directly below its title. When a plan is not frozen yet, its file name is typically `<short-title>.md`. Plan Deviations filenames use `YYYY-MM-DD-HHMM-<ticket-id>-plan-deviations.md` or `YYYY-MM-DD-HHMM-<short-title>-plan-deviations.md`.
+Frozen Plan filenames use `YYYY-MM-DD-HHMM-<ticket-id>-<short-title>.md`, timestamped in UTC. The `<ticket-id>` is omitted when work has no ticket. Each frozen plan also contains a `*Frozen at <timestamp-utc>*` line directly below its title. When a plan is not frozen yet, its filename is typically `<short-title>.md`. Plan Deviations filenames use `YYYY-MM-DD-HHMM-<ticket-id>-plan-deviations.md` or `YYYY-MM-DD-HHMM-<short-title>-plan-deviations.md`.
 
-Plans are frozen when their Planning Phase ends. From then on, the only permitted edit is checking an acceptance criterion (`- [ ]` to `- [x]`) after the implementation and relevant feedback loops verify it. Never reword, add, remove, or reorder criteria in a frozen plan. Plan Deviations documents are frozen once they are merged into the target branch. Until then, it is rewritten under a fresh timestamp whenever it needs to change, e.g., when a review of the PR/MR leads to another Follow-Up Plan, so that it always sorts after all plans of its work item.
+Plans are frozen when their Planning Phase ends. From then on, the only permitted edit is checking off an acceptance criterion (`- [ ]` to `- [x]`) after the implementation and relevant feedback loops verify it. Never reword, add, remove, or reorder criteria in a frozen plan. Plan Deviations documents are frozen when merged into the target branch. Until then, rename and rewrite the document with a new timestamp whenever it changes, for example, when a PR/MR review leads to another Follow-Up Plan. Its filename must sort after all plans for the work item.
 
 A Follow-Up Plan supersedes decisions of a Frozen Plan. The decision to write one is made in the Guiding Phase, when the review of the implementation calls for larger changes.
 
