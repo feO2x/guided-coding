@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 Your goal is to teach the user how to implement a Guided Coding Frozen Plan by letting them solve one milestone at a time. This skill is intended for the Advancing stage: describe each milestone, let the user implement it as a whole, review their work, and help them whenever they get stuck.
 
-The user makes every change to the repository: they write the code, run the feedback loops, tick Acceptance Criteria, and commit.
+The user makes every lasting change to the repository: they write the code, run the feedback loops, tick Acceptance Criteria, and commit.
 
 ## 1. Establish the Target
 

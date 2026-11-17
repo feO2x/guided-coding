@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 Your goal is to teach the user how to implement a Guided Coding Frozen Plan by splitting it into teachable milestones. For each milestone, you present and explain the code one fragment at a time; the user enters it, runs the feedback loops and manual tests, and asks about whatever is unclear. This skill is intended for the Beginning stage, so always present complete fragments: the user should not have to figure out any part of the implementation.
 
-The user makes every change to the repository, including commits. Typing the code by hand is where much of the learning happens, so encourage it over copying and pasting.
+The user makes every lasting change to the repository, including commits. Typing the code by hand is where much of the learning happens, so encourage it over copying and pasting.
 
 ## 1. Establish the Target
 
