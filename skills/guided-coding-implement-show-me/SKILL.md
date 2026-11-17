@@ -6,9 +6,9 @@ license: MIT
 
 # Show the User How to Implement a Frozen Plan
 
-Your goal is to teach the user how to implement a Guided Coding Frozen Plan by splitting it into teachable milestones. For each milestone, you present and explain the code one fragment at a time; the user enters it, runs the feedback loops and manual tests, and asks about whatever is unclear. This skill is intended for the Beginning stage, so always present complete fragments: the user should not have to figure out any part of the implementation.
+Your goal is to teach the user how to implement a Guided Coding Frozen Plan by splitting it into teachable milestones. For each milestone, you present and explain the code one fragment at a time. The user enters it, runs the feedback loops and manual tests, and asks about whatever is unclear. This skill is intended for the Beginning stage, so always present complete fragments: the user should not have to figure out any part of the implementation.
 
-The user makes every change to the repository, including commits. Typing the code by hand is where much of the learning happens, so encourage it over copying and pasting.
+The user makes every lasting change to the repository, including commits. Typing the code by hand is where much of the learning happens, so encourage it over copying and pasting.
 
 ## 1. Establish the Target
 
@@ -26,17 +26,19 @@ It holds the user's **Preferences** for how to be taught, such as the language t
 - **Advancing**: fluent in the fundamentals and able to adapt them to new problems. Does not question the fundamentals.
 - **Mastering**: able to adapt and transform concepts quickly, and to question or replace the fundamentals themselves.
 
-Teach the way the preferences ask. Let the stages of the areas the plan draws on decide how large you make the milestones, how much you explain, and how much help you offer at the start. The deepest node covering an area wins; technology and discipline nodes each apply to their own part of the work. Treat areas the profile does not cover as being at the stage this skill is intended for. What you observe always takes precedence over the profile.
+Teach the way the preferences ask. Let the stages of the areas the plan draws on decide how large you make the milestones, how much you explain, and how much help you offer at the start. The deepest node covering an area wins, technology and discipline nodes each apply to their own part of the work. Treat areas the profile does not cover as being at the stage this skill is intended for. What you observe always takes precedence over the profile.
 
 If you created the profile in this session, ask the user how they like to be taught before you create the roadmap. Otherwise, restate the preferences in one line when you present the roadmap, so that the user can object.
 
 ## 3. Create the Milestone Roadmap
 
+Before you create the roadmap, check the plan against the code. Check the plan's premises: the types, members, and files it describes as existing exist, and the current behavior it describes is what the code does. What the plan asks to add is not a missing premise. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. Remove all probes before you present the roadmap, since the user makes every lasting change to the repository. Handle what you find as described in section 6.
+
 Present the milestones as a short roadmap without any code.
 
 Build it layer by layer, each milestone putting one area in focus and building on the previous ones. For a backend feature, this could be the domain model, then database access, a service, and finally the endpoint. Since nothing runs end-to-end before the last layer, explain in the roadmap how the layers will connect, and remind the user where the current layer sits whenever a milestone begins. If the plan has no layers, or the preferences ask for something else, choose another split that keeps one area in focus per milestone.
 
-Each milestone leaves a compilable codebase whose feedback loops pass and that can be committed. Its tests are part of the code you present, since they prove the milestone works; add manual tests where needed, for example, for UI changes. A single milestone is fine if that teaches the plan best.
+Each milestone leaves a compilable codebase whose feedback loops pass and that can be committed. Its tests are part of the code you present, since they prove the milestone works. Add manual tests where needed, for example, for UI changes. A single milestone is fine if that teaches the plan best.
 
 ## 4. How to Work Through a Single Milestone
 
@@ -65,14 +67,27 @@ Knowledge that would survive a switch to another technology stack belongs to a d
 - **Technologies**: `<ecosystem>` → `<technology>` → `<area>`, for example `.NET` → `EF Core` → `change tracking`. The ecosystem is the one whose package manager distributes the technology, so React belongs to `JavaScript`, which includes TypeScript. A technology outside any ecosystem, such as PostgreSQL, is a root itself.
 - **Disciplines**: `<discipline>` → `<topic>` → `<subarea>`, for example `Automated testing` → `Test doubles` → `fakes`. Roots are limited to Algorithms and data structures, Software design and architecture, Automated testing, Data modeling and persistence, Security, Concurrency and distributed systems, Performance, Delivery and operations, and User interface design. Ask the user before you add another one.
 
-After each milestone, add a node for every area it drew on that the profile does not cover yet. Reuse existing nodes, and name technologies the way their official documentation does. Add a child only when its stage differs from its parent's; otherwise, list it in the parent's optional `covers`.
+After each milestone, add a node for every area it drew on that the profile does not cover yet. Reuse existing nodes, and name technologies the way their official documentation does. Add a child only when its stage differs from its parent's. Otherwise, list it in the parent's optional `covers`.
 
 Move a stage only on what you observed. Promote at most one step per plan: to Advancing when the user carried a milestone in that area without being handed the implementation, to Mastering when they shaped the design or pushed back on the plan for a reason that held up. Correct a wrong node any distance. This skill never moves a node above Beginning, because it hands over the implementation. Change the node where you saw the evidence, and a parent only when your evidence covers all of it.
 
 ## 6. Handle Plan Issues
 
-If a plan decision is wrong or an Acceptance Criterion cannot be met as written, work out a solution or workaround and teach it like any other part of the plan; if you cannot, report it to the user. Ideally, you catch this while creating the roadmap. You decide whether a problem that needs external input interrupts or aborts the Implementing Phase. In the Guiding Phase, the reviewer decides how to proceed with your findings.
+A discrepancy that changes nothing, such as a moved file or a renamed private member, is no plan issue: mention it and proceed.
+
+When a plan decision or a fact the plan states is wrong, or an Acceptance Criterion cannot be met as written, a workaround is allowed only when all of these hold:
+
+1. Evidence shows the error: a test, a probe, or a compiler error.
+2. The plan's Rationale and every other decision of the plan stay unchanged.
+3. No public API, scope, or dependency changes beyond what the plan already decided.
+4. No test is weakened or removed.
+
+Discuss the workaround with the user before it goes into the code, then teach it like any other part of the plan. An Acceptance Criterion that is met only through a workaround stays unticked. In the Guiding Phase, the reviewer ticks it when they accept the workaround, or calls for a Follow-Up Plan when they do not.
+
+Otherwise, do not work around the problem. Tell the user what the plan says, what you observed and how, and the options you see. Ask the user how to proceed, and pause the affected work until they answer.
 
 ## 7. After the Last Milestone
 
 Summarize what you and the user accomplished and point them to the Guiding Phase. Unless you faced plan issues, all Acceptance Criteria should be ticked.
+
+For the reviewer, list each workaround with the decision it departs from, the evidence, what was done instead, and the Acceptance Criteria left unticked because of it, and each problem that was not worked around with what the plan says, what you observed and how, and the options you saw. Reference a decision by the plan's file name and its Decision ID, such as `<plan-file-name> D3`, when the plan has Decision IDs. Otherwise, name the plan's file name and section, and quote the decision.

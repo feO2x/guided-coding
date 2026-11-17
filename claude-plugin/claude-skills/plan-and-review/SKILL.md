@@ -23,7 +23,7 @@ Model names are harness-specific. If a configured model is unavailable, run that
 
 ## 2. Get the Plan Draft
 
-If the user named a plan draft, use it. Otherwise use an uncommitted draft in `ai-plans/` only if it clearly belongs to the work discussed in this conversation; ask the user when several could. Without a draft, invoke `guided-coding-write-plan` to write it, passing on a plan structure the user named. If you cannot invoke it, stop and tell the user to run `guided-coding-write-plan` first and then this skill. Never write the plan without that skill.
+If the user named a plan draft, use it. Otherwise use an uncommitted draft in `ai-plans/` only if it clearly belongs to the work discussed in this conversation. Ask the user when several could. Without a draft, invoke `guided-coding-write-plan` to write it, passing on a plan structure the user named. If you cannot invoke it, stop and tell the user to run `guided-coding-write-plan` first and then this skill. Never write the plan without that skill.
 
 Record the plan's word count.
 
@@ -35,9 +35,9 @@ A reviewer must not share this conversation: it runs as a subagent, thread, or s
 
 In each round, start a fresh reviewer for every configured reviewer and run them in parallel where the harness allows. Never reuse a reviewer from an earlier round. Give each reviewer:
 
-- the instruction to invoke `guided-coding-review-plan` on the plan path, return its findings, and write nothing;
-- the paths of the earlier documents for the same work;
-- the finding classes below, asking it to classify every finding;
+- the instruction to invoke `guided-coding-review-plan` on the plan path, return its findings, and write nothing.
+- the paths of the earlier documents for the same work.
+- the finding classes below, asking it to classify every finding.
 - from round 2 on, every earlier finding with its resolution. This is context, not a limit: the reviewer may report anything, but repeats a rejected finding only with a new argument.
 
 Never give a reviewer the planning conversation or your reasoning.
@@ -64,11 +64,11 @@ Keep the reviewers' classes. Stop when a complete round reports no `blocking` or
 
 Report to the user:
 
-- the plan path, the rounds run, and why the run stopped;
-- the reviewers and the models actually used, including fallbacks;
-- every finding with its round, class, a one-line summary, and its resolution: applied, rejected with the reason, or open for the user;
-- a separate list of the decision and scope changes you applied, including those the user approved during a pause, so the user can confirm them without comparing versions;
-- the plan's word count before and after review;
+- the plan path, the rounds run, and why the run stopped.
+- the reviewers and the models actually used, including fallbacks.
+- every finding with its round, class, a one-line summary, and its resolution: applied, rejected with the reason, or open for the user.
+- a separate list of the decision and scope changes you applied, including those the user approved during a pause, so the user can confirm them without comparing versions.
+- the plan's word count before and after review.
 - whether the plan changed after the last review round. Those changes are unreviewed.
 
 Then stop. The user reviews the plan before it is frozen.

@@ -22,9 +22,9 @@ Read the root `AGENTS.md` and `ai-plans/AGENTS.md` if they exist, plus build man
 
 Identify the feedback loops and their exact commands. Look for:
 
-- compilers, type checkers, static analyzers, and linters;
-- automated tests, code coverage, and mutation testing tools;
-- benchmarks; and
+- compilers, type checkers, static analyzers, and linters
+- automated tests, code coverage, and mutation testing tools
+- benchmarks and
 - dependency, secret, container, and source-code security scans.
 
 Only select commands that are immediately executable in the repository. Do not list tools merely because they are common for the detected language.
@@ -36,7 +36,7 @@ Create `AGENTS.md` in the repository root if it does not exist. Otherwise, make 
 Ensure it contains:
 
 1. `## Feedback Loops`: each command and what it verifies. Report to the user when no feedback loops could be found, and warn that `guided-coding-write-plan` refuses to write plans until at least one is listed.
-2. `## Guided Coding`: a link to `ai-plans/AGENTS.md`, noting that it holds the file naming conventions and the rules for working with Frozen Plans. Do not restate those rules here; they live next to the plans they govern, and agents pick them up when they read the folder.
+2. `## Guided Coding`: a link to `ai-plans/AGENTS.md`, noting that it holds the file naming conventions and the rules for working with Frozen Plans. Do not restate those rules here, they live next to the plans they govern, and agents pick them up when they read the folder.
 
 If both sections already exist and are current, leave the file alone.
 

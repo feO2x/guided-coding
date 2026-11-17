@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 Your goal is to decide whether the completed implementation needs a Plan Deviations document and, if so, to write it into the `ai-plans/` folder at the repository root or update the existing one. After writing, report the document path and stop.
 
-A Plan Deviations document summarizes how the completed implementation differs from the original plan. Reading the initial plan together with this document should be enough to understand the complete work. A work item has at most one Plan Deviations document. It stays editable until it is merged into the target branch, because reviews of the PR/MR can still lead to Follow-Up Plans; from then on, it is frozen.
+A Plan Deviations document summarizes how the completed implementation differs from the original plan. Reading the initial plan together with this document should be enough to understand the complete work. A work item has at most one Plan Deviations document. It stays editable until it is merged into the target branch, because reviews of the PR/MR can still lead to Follow-Up Plans. From then on, it is frozen.
 
 ## 1. Inspect the Plans and the Implementation
 
@@ -19,7 +19,7 @@ Determine the target branch and the implementation range. Use the PR/MR if there
 
 ## 2. Check for an Existing Plan Deviations Document
 
-Look for an existing Plan Deviations document of the current ticket in `ai-plans/`. Its file name ends with `-<ticket-id>-plan-deviations.md` or `-<short-title>-plan-deviations.md`, using the same `<ticket-id>` or `<short-title>` as the Initial Plan. If you find more than one, report them and stop; the user decides which one to keep.
+Look for an existing Plan Deviations document of the current ticket in `ai-plans/`. Its file name ends with `-<ticket-id>-plan-deviations.md` or `-<short-title>-plan-deviations.md`, using the same `<ticket-id>` or `<short-title>` as the Initial Plan. If you find more than one, report them and stop. The user decides which one to keep.
 
 If there is an existing document, check whether it is already merged into the target branch:
 
@@ -38,7 +38,7 @@ Write a Plan Deviations document in either of these cases:
 - **Follow-Up Plans exist.** Summarize the changes from the first plan so that the first plan and this document explain the complete work.
 - **The implementation materially changes or rejects an explicit plan decision.** This applies to decisions about at least one Acceptance Criterion, a public contract or data model, an architectural or component boundary, a security or performance constraint, or another design decision future maintainers need to know about.
 
-Routine choices the plans left open are not deviations. An Acceptance Criterion that is documented but not met remains incomplete; it does not count as a deviation unless an accepted Follow-Up Plan explicitly supersedes it.
+Routine choices the plans left open are not deviations. An Acceptance Criterion that is documented but not met remains incomplete. It does not count as a deviation unless an accepted Follow-Up Plan explicitly supersedes it.
 
 If there is only one plan and no material deviations, report that conclusion to the user, create nothing, and stop. If an existing, unmerged document is no longer needed, also report this, leave the document unchanged, and let the user decide whether to delete it.
 
@@ -60,7 +60,7 @@ If a plan or another Plan Deviations document with this file name already exists
 
 ## 5. Write the Document
 
-When you update an existing document, first move it to the new file name. Use `git mv <old> <new>` if the old file is tracked by Git, so that Git can detect the rename; otherwise, rename the file. Then rewrite the whole document from the plans and the implementation you inspected in step 1. Do not append to the previous content, and do not mention earlier versions of the document.
+When you update an existing document, first move it to the new file name. Use `git mv <old> <new>` if the old file is tracked by Git, so that Git can detect the rename. Otherwise, rename the file. Then rewrite the whole document from the plans and the implementation you inspected in step 1. Do not append to the previous content, and do not mention earlier versions of the document.
 
 Structure the document as follows:
 

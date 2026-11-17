@@ -15,18 +15,41 @@ Use the plan named by the user. If none is named, proceed only when there is exa
 
 Verify that the plan is frozen: its file name has a timestamp, and it has a `*Frozen at ...*` line below its title. If either marker is missing, explain that the Planning Phase is unfinished and stop.
 
-## 2. Implement and Verify
+## 2. Check the Plan Against the Code
+
+Before you write code, check the plan's premises: the types, members, and files it describes as existing exist, and the current behavior it describes is what the code does. What the plan asks you to add is not a missing premise. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. Remove all probes before you finish.
+
+## 3. Implement and Verify
 
 Implement the plan, use the feedback loops to verify your code changes.
 
 The only allowed plan edit is ticking an Acceptance Criterion from `- [ ]` to `- [x]`. Never check a criterion unless it is genuinely satisfied by a feedback loop. The reviewer would otherwise have to identify the gap later in the Guiding Phase, which is one of the hardest errors to spot.
 
-## 3. Handle Plan Issues
+## 4. Handle Plan Issues
 
-If a plan decision is wrong or an Acceptance Criterion cannot be met as written, try to solve it or find a workaround, and report it. If a problem genuinely cannot be solved, that's totally fine - simply report it.
+A discrepancy that changes nothing, such as a moved file or a renamed private member, is no plan issue: proceed and mention it in your report.
 
-In the Guiding Phase, the reviewer can decide how to proceed with your findings.
+When a plan decision or a fact the plan states is wrong, or an Acceptance Criterion cannot be met as written, work around it only when all of these hold:
 
-## 4. Finish
+1. Evidence shows the error: a test, a probe, or a compiler error.
+2. The plan's Rationale and every other decision of the plan stay unchanged.
+3. No public API, scope, or dependency changes beyond what the plan already decided.
+4. No test is weakened or removed.
 
-Report what was implemented, which feedback loops ran and their results, which Acceptance Criteria are checked, and which remain unchecked and why. Do not create commits, open or update a pull request, publish anything, etc. - unless the user asked you to do so.
+An Acceptance Criterion that is met only through a workaround stays unticked. In the Guiding Phase, the reviewer ticks it when they accept the workaround, or calls for a Follow-Up Plan when they do not.
+
+Otherwise, do not work around the problem and do not ask the user mid-run. Stop the work that depends on the wrong decision or fact, finish the work that does not, and report the problem. That is totally fine: in the Guiding Phase, the reviewer decides how to proceed.
+
+## 5. Finish
+
+Report:
+
+- What was implemented, which feedback loops ran, and their results.
+- Which Acceptance Criteria are checked, and which remain unchecked and why.
+- Each workaround: the decision it departs from, the evidence, and what you did instead.
+- Each problem you did not work around: what the plan says, what you observed and how, and the options you see.
+- The discrepancies that changed nothing.
+
+Reference a decision by the plan's file name and its Decision ID, such as `<plan-file-name> D3`, when the plan has Decision IDs. Otherwise, name the plan's file name and section, and quote the decision.
+
+Do not create commits, open or update a pull request, publish anything, etc. - unless the user asked you to do so.
