@@ -1,6 +1,6 @@
 # RDAT Guided Coding Plan Structure
 
-RDAT stands for Rationale, Decisions, Acceptance Criteria, and Technical Details and describes the main sections of this plan.
+RDAT stands for Rationale, Decisions, Acceptance Criteria, and Technical Details.
 
 ## Plan Structure
 
@@ -16,7 +16,7 @@ Decisions are the main point for communication with superiors: a reader who read
 
 A Decision is a point where another choice was possible and would change the behavior, a public contract, the scope, or the dependencies. State the choice, not options left to the implementer, and give a one-sentence reason when the choice is not obvious. Leave routine implementation choices and what stays unchanged out.
 
-Each Decision gets a **Decision ID** in the format `Dx` where `x` is a positive incrementing integer number. Keep existing Decision IDs when revising the draft. Be conservative with the number of Decisions, use as few as the plan needs.
+Each Decision gets a **Decision ID**: `D1`, `D2`, etc. Keep existing Decision IDs when revising the draft. Use as few Decisions as the plan needs.
 
 Check the premises of each Decision against the code, including relevant claims of the ticket. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. State in the plan any premise you could not verify. If a check invalidates a premise of a Decision you made, refine the Decision. If it invalidates a premise of a Decision the user made, ask the user.
 
@@ -31,7 +31,7 @@ Choose the Feedback Loops of AGENTS.md and its referenced documents that actuall
 - When behavior changes, require automated tests and name the cases they must cover, including negative and failure cases.
 - Do not add ACs for checks every change must pass anyway, such as building or running the whole test suite.
 - Require benchmarks only when performance is a material risk or requirement.
-- Consider how long a Feedback Loop runs and weigh it against its benefits. E.g., mutation testing typically takes a long time - the corresponding AC should have a high impact to warrant it.
+- Consider how long a Feedback Loop runs and weigh it against its benefits. For slow loops such as mutation testing, the corresponding AC should have a high impact to warrant it.
 - Some ACs need human review, e.g., the quality of documentation or platform behavior that the available Feedback Loops do not cover. State what is checked and who verifies it.
 - If a plan requires a missing Feedback Loop, adding it is a Decision with its own AC.
 
@@ -51,4 +51,4 @@ Leave out the history of your investigation and routine details the implementer 
 
 ## One Additional Section: `## Notes for the Guided Learning Teacher`
 
-When it is known that it is implemented using the `guided-coding-implement-show-me` or the `guided-coding-implement-coach-me` skills, a plan might hold this additional section. It usually contains additional instructions for the Coding Agent on further topics it should teach during the Implementing Phase, such as SOLID, TDD, technology internals, etc.
+When a plan will be implemented using the `guided-coding-implement-show-me` or the `guided-coding-implement-coach-me` skill, it may include this additional section. Use it for further topics to teach during the Implementing Phase, such as SOLID, TDD, or technology internals.
