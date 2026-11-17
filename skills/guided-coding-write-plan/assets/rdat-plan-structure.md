@@ -18,13 +18,13 @@ A Decision is a point where another choice was possible and would change the beh
 
 Each Decision gets a **Decision ID**: `D1`, `D2`, etc. Keep existing Decision IDs when revising the draft. Use as few Decisions as the plan needs.
 
-Check the premises of each Decision against the code, including relevant claims of the ticket. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. State in the plan any premise you could not verify. If a check invalidates a premise of a Decision you made, refine the Decision. If it invalidates a premise of a Decision the user made, ask the user.
+Check the premises of each Decision against the code, including relevant claims of the ticket and the behavior of existing code you plan to reuse. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. If a premise that matters remains unverified, state it in the affected Decision, together with its consequence and what would resolve it. If a check invalidates a premise of a Decision you made, refine the Decision. If it invalidates a premise of a Decision the user made, ask the user.
 
 The last Decision may be an `Out-of-Scope` Decision, listing what the ticket or the discussion mentioned and the plan deliberately does not address. Do not invent exclusions.
 
 ### 3. `## Acceptance Criteria`
 
-This is a list of **observable, verifiable outcomes** as unticked Markdown tasks (`- [ ]`). Each Decision except the `Out-of-Scope` Decision must be verifiable through at least one AC. ACs must not introduce behavior, contracts, scope, or dependencies that no Decision states.
+This is a list of **observable, verifiable outcomes** as unticked Markdown tasks (`- [ ]`). Each Decision except the `Out-of-Scope` Decision must be verifiable through at least one AC. ACs must not introduce behavior, contracts, scope, or dependencies that no Decision states. Tests and routine documentation that verify or explain a Decision refer to it and need no Decision of their own.
 
 Choose the Feedback Loops of AGENTS.md and its referenced documents that actually verify an AC's outcome, such as compilers, static code analyzers, automated tests and code coverage, mutation testing, and automated benchmarks. If no Feedback Loops are listed, stop and report this to the user.
 

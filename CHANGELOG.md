@@ -4,6 +4,8 @@ All notable changes to Guided Coding are documented here.
 
 ## [Unreleased]
 
+- Add RDAT (Rationale, Decisions, Acceptance Criteria, Technical Details), an opt-in plan structure next to the default one: numbered Decisions summarize what a reviewer approves, and each section adds information instead of repeating earlier ones.
+
 ## [2.0.0] - 2026-09-27
 
 - Add UTC timestamps to plan and Plan Deviations filenames.
