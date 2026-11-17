@@ -5,6 +5,7 @@ All notable changes to Guided Coding are documented here.
 ## [Unreleased]
 
 - Add RDAT (Rationale, Decisions, Acceptance Criteria, Technical Details), an opt-in plan structure next to the default one: numbered Decisions summarize what a reviewer approves, and each section adds information instead of repeating earlier ones.
+- Let `guided-coding-write-plan` take a plan structure when invoked, either a path to a Markdown file or the name of a bundled structure such as `rdat-plan-structure.md`. `ai-plans/AGENTS.md` can name one the same way.
 
 ## [2.0.0] - 2026-09-27
 

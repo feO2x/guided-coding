@@ -14,7 +14,13 @@ The initial file name of the new plan file is `<short-title>.md`. `<short-title>
 
 ## Plan Structure
 
-Check whether `ai-plans/AGENTS.md` contains the plan structure. If not, fall back to `assets/default-plan-structure.md` relative to this skill file.
+Use the first plan structure that applies:
+
+1. A plan structure the user names when invoking this skill: a path to a Markdown file, or the name of a file in `assets/` relative to this skill file, such as `rdat-plan-structure.md`.
+2. A plan structure that `ai-plans/AGENTS.md` names in the same way or describes itself.
+3. `assets/default-plan-structure.md` relative to this skill file.
+
+If a named file does not exist, stop and report it.
 
 ## What Happens After Writing a Plan?
 

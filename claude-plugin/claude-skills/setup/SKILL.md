@@ -54,7 +54,7 @@ List the files you created, updated, or left unchanged, the feedback loops you d
 
 Then explain how Guided Coding can be customized, so the user knows the defaults are only a starting point:
 
-- **Plan structure:** `guided-coding-write-plan` uses a default structure with `## Rationale`, `## Acceptance Criteria`, and `## Technical Details`. Describing a different structure in `ai-plans/AGENTS.md` overrides the default.
+- **Plan structure:** `guided-coding-write-plan` uses a default structure with `## Rationale`, `## Acceptance Criteria`, and `## Technical Details`. It also ships the RDAT structure (`rdat-plan-structure.md`), which adds numbered `## Decisions` as a summary for the reviewer. Name a structure file when invoking `guided-coding-write-plan`, or name it or describe your own structure in `ai-plans/AGENTS.md` to override the default.
 - **File names:** the skills use the placeholders `<timestamp>` (UTC, `YYYY-MM-DD-HHMM`), `<ticket-id>`, and `<short-title>` (kebab-case, shortened ticket title). Conventions for these, e.g., a `<ticket-id>` format or a maximum length for `<short-title>`, belong in `ai-plans/AGENTS.md`.
 - **Feedback loops:** plans should reference the feedback loops in the root `AGENTS.md` to make Acceptance Criteria verifiable. Adding or removing a feedback loop later only requires updating that list.
 - **Deviations:** the threshold for what counts as a material deviation can be tightened or relaxed in `ai-plans/AGENTS.md`.
