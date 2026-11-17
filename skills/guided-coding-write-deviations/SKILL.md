@@ -22,8 +22,9 @@ Look for an existing Plan Deviations document of the current ticket in `ai-plans
 
 If there is an existing document, check whether it is already merged into the target branch:
 
-1. Fetch the target branch from its remote, e.g., `git fetch origin main`. If fetching fails, use the local target branch and mention this in your report.
-2. Check whether the document's path exists on the fetched target branch, e.g., `git cat-file -e origin/main:ai-plans/<file-name>`. Check the path, not whether commits are ancestors of the target branch: squash and rebase merges rewrite commits but keep the file.
+1. Fetch the target branch from its remote, e.g., `git fetch origin main`, and use the remote-tracking branch, e.g., `origin/main`. Only if the repository has no remote at all, use the local target branch. If fetching fails, report the error and stop without changing anything: a stale local branch cannot prove that the document is unmerged.
+2. Verify that the target branch resolves, e.g., `git rev-parse --verify origin/main`. If it does not, report this and stop without changing anything.
+3. Check whether the document's path exists on the target branch, e.g., `git cat-file -e origin/main:ai-plans/<file-name>`. Check the path, not whether commits are ancestors of the target branch: squash and rebase merges rewrite commits but keep the file.
 
 If the document exists on the target branch, it is frozen. Report that it was merged into the target branch, and that the user can delete it and run this skill again to recreate it from scratch. Do not delete or change it yourself, and stop.
 
@@ -47,16 +48,18 @@ The file name is:
 - `<timestamp>-<ticket-id>-plan-deviations.md` if a `<ticket-id>` is present
 - `<timestamp>-<short-title>-plan-deviations.md` otherwise
 
-Take `<ticket-id>` or `<short-title>` from the file name of the Initial Plan. The `<timestamp>` is the current time in UTC in the format `YYYY-MM-DD-HHMM`, also when you update an existing document, so that the Plan Deviations document always sorts after all plans of the ticket. Use these commands to get it:
+Take `<ticket-id>` or `<short-title>` from the file name of the Initial Plan. The `<timestamp>` is the current time in UTC in the format `YYYY-MM-DD-HHMM`, also when you update an existing document. Use these commands to get it:
 
 - `date -u +%F-%H%M` on Unix-based shells
 - `(Get-Date).ToUniversalTime().ToString("yyyy-MM-dd-HHmm")` on PowerShell
+
+The Plan Deviations document must sort after all plans of the ticket. Therefore, the `<timestamp>` must be strictly later than the timestamps in the file names of all plans of the ticket and of the existing Plan Deviations document. If it is not, wait until the next minute and get the timestamp again.
 
 If a plan or another Plan Deviations document with this file name already exists, report the collision and stop. Never overwrite a plan or a frozen Plan Deviations document.
 
 ## 5. Write the Document
 
-When you update an existing document, first move it to the new file name. Use `git mv <old> <new>` if the old file is tracked by Git, so that Git can detect the rename; otherwise, rename the file. Skip this if the file name did not change. Then rewrite the whole document from the plans and the implementation you inspected in step 1. Do not append to the previous content, and do not mention earlier versions of the document.
+When you update an existing document, first move it to the new file name. Use `git mv <old> <new>` if the old file is tracked by Git, so that Git can detect the rename; otherwise, rename the file. Then rewrite the whole document from the plans and the implementation you inspected in step 1. Do not append to the previous content, and do not mention earlier versions of the document.
 
 Structure the document as follows:
 
