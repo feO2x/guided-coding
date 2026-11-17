@@ -34,7 +34,7 @@ In most Agent Harnesses, these workflows must be invoked explicitly. All workflo
 - `default-plan-structure.md` (the default): Rationale, Acceptance Criteria, Technical Details.
 - `rdat-plan-structure.md` (RDAT): Rationale, Decisions, Acceptance Criteria, Technical Details. The numbered Decisions summarize what the reviewer approves, and each section adds information instead of repeating earlier ones.
 
-To choose a structure for one plan, name its file when invoking the skill, e.g. `/write-plan rdat-plan-structure.md` in Claude Code or `$guided-coding-write-plan rdat-plan-structure.md` in Codex. To choose it for a repository, name it in `ai-plans/AGENTS.md`, e.g. "Use the RDAT plan structure (`rdat-plan-structure.md`)." You can also describe your own structure there or pass a path to your own structure file.
+To choose a structure for one plan, name its file when invoking the skill, e.g. `/guided-coding:write-plan rdat-plan-structure.md` with the Claude Code plugin or `$guided-coding-write-plan rdat-plan-structure.md` in a Codex prompt. To choose it for a repository, name it in `ai-plans/AGENTS.md`, e.g. "Use the RDAT plan structure (`rdat-plan-structure.md`)." You can also describe your own structure there or pass a path to your own structure file.
 
 ## Guided Learning
 
