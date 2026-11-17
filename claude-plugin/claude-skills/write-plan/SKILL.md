@@ -15,7 +15,13 @@ The initial file name of the new plan file is `<short-title>.md`. `<short-title>
 
 ## Plan Structure
 
-Check whether `ai-plans/AGENTS.md` contains the plan structure. If not, fall back to `assets/default-plan-structure.md` relative to this skill file.
+Use the first plan structure that applies:
+
+1. A plan structure the user names when invoking this skill: a path to a Markdown file, or the name of a file in `assets/` relative to this skill file, such as `rdat-plan-structure.md`.
+2. A plan structure that `ai-plans/AGENTS.md` names in the same way or describes itself.
+3. `assets/default-plan-structure.md` relative to this skill file.
+
+A bare file name refers to a file in `assets/` relative to this skill file. Resolve other relative paths from the repository root. If the selected file does not exist, stop and report it; do not fall back.
 
 ## What Happens After Writing a Plan?
 
@@ -25,7 +31,7 @@ The user reviews the plan. They will provide feedback, aspects of the plan might
 
 A Follow-Up Plan supersedes decisions of a Frozen Plan. The decision to write one is made in the Guiding Phase, when the review of the implementation calls for larger changes.
 
-Use the same format and file naming convention. Read every earlier document for the ticket. In the opening section of the plan (`## Rationale` in the default structure), name the plans this one follows by exact filename.
+Use the plan structure selected above and the same file naming convention. Read every earlier document for the ticket. In the opening section of the plan (`## Rationale` in the default structure), name the plans this one follows by exact filename.
 
 Record only the changed decisions and outcomes. State exactly which earlier decisions this plan supersedes and why. Do not repeat unchanged decisions or contradict earlier plans silently.
 

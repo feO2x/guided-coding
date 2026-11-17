@@ -27,6 +27,16 @@ The full method is documented at
 
 In most Agent Harnesses, these workflows must be invoked explicitly. All workflows set `allow_implicit_invocation: false` for Agent Plugins and `disable-model-invocation: true` for Claude Plugins, respectively.
 
+## Plan Structures
+
+`guided-coding-write-plan` ships two plan structures:
+
+- `default-plan-structure.md` (the default): Rationale, Acceptance Criteria, Technical Details.
+- `rdat-plan-structure.md` (RDAT): Rationale, Decisions, Acceptance Criteria, Technical Details. The numbered Decisions summarize what the reviewer approves, and each section adds information instead of repeating earlier ones. This is intended as an improvement over the default plan structure, available as of version 2.1.0.
+
+To choose a structure for one plan, name its file when invoking the skill, e.g. `/guided-coding-write-plan rdat-plan-structure.md`. To choose it for a repository, name it in `ai-plans/AGENTS.md`, e.g. "Use the RDAT plan structure (`rdat-plan-structure.md`)." You can also describe your own str
+ucture there or pass a path to your own structure file.
+
 ## Guided Learning
 
 Guided Learning is a variation of Guided Coding where the agent does not implement the plan itself but teaches you how to implement it. The `guided-coding-implement-show-me` and `guided-coding-implement-coach-me` skills give you two approaches for Beginning and Advanced developers that want to increase their capabilities. The regular `guided-coding-implement` skill should be used for regular Guided Coding.
