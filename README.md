@@ -30,7 +30,7 @@ In most Agent Harnesses, these workflows must be invoked explicitly. They set `a
 
 ## Plan and Review
 
-`guided-coding-plan-and-review` writes a plan with `guided-coding-write-plan`, or picks up an existing draft, and has it reviewed by reviewers that do not share your conversation (subagents, threads, or separate sessions). Each reviewer runs `guided-coding-review-plan` in a fresh context and classifies its findings as `blocking`, `gap`, or `nit`. The planner applies or rejects every finding, but never changes a decision you made explicitly. The run stops when a round finds no `blocking` or `gap` findings, or after the round limit. The report lists every finding with its resolution and, separately, every decision and scope change the planner made.
+`guided-coding-plan-and-review` writes a plan with `guided-coding-write-plan`, or picks up an existing draft, and has it reviewed by reviewers that do not share your conversation (subagents, threads, or separate sessions). Each reviewer runs `guided-coding-review-plan` in a fresh context and classifies its findings as `blocking`, `gap`, or `nit`. The planner applies every finding, rejects it with a reason, or leaves it open for you; it never changes a decision you made explicitly. The run stops when a round finds no `blocking` or `gap` findings, or after the round limit. The report lists every finding with its resolution and, separately, every decision and scope change the planner made.
 
 Configure it in a `## Plan Review` section of `ai-plans/AGENTS.md`, or with arguments when invoking the skill:
 
