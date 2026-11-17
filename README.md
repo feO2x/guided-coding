@@ -42,7 +42,7 @@ Configure it in a `## Plan Review` section of `ai-plans/AGENTS.md`, or with argu
 - User decisions: collect
 ```
 
-The defaults are one reviewer on the harness default model, a round limit of 3, and `collect`, which gathers findings against your decisions for the report; `pause` asks you instead. Each round starts one subagent per reviewer, so a run costs up to reviewers × rounds subagent runs.
+The defaults are one reviewer on the harness default model, a round limit of 3, and `collect`, which gathers findings against your decisions for the report; `pause` asks you instead. Each round starts one subagent per reviewer, so a run costs reviewers × rounds subagent runs at most, plus one replacement for each reviewer that fails.
 
 ## Plan Structures
 

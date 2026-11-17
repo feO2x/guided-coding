@@ -47,7 +47,7 @@ The finding classes are:
 - `gap`: a missing scenario or fact.
 - `nit`: everything else.
 
-A round is complete when every reviewer has returned its findings. Replace a reviewer that fails or times out once with a fresh one; if that fails too, stop and report the incomplete round.
+A round is complete when every reviewer has returned its findings. Replace a reviewer that fails or times out once with a fresh one. If the replacement fails too, address the findings already returned, then report the incomplete round and stop.
 
 Then address every finding of every class:
 
