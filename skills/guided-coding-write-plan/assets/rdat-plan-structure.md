@@ -8,45 +8,46 @@ Start with `# Title`, followed by exactly these sections in order.
 
 ### 1. `## Rationale`
 
-Briefly state the background and the overarching problem this plan is trying to solve.
+In one or two sentences, state the background and the problem this plan solves.
 
 ### 2. `## Decisions`
 
-Each plan must have at least one high-level Decision that drives the changes of the plan. Consider Decisions as the main point for communication with superiors on why the plan exists and should be implemented.
+Decisions are the main point for communication with superiors: a reader who reads only this section knows what will be built and why.
 
-Try to validate each Decision by inspecting the code. Create throwaway probes (throwaway tests or throwaway projects) for further validation if required. If any of your checks fail, try to refine the Decision by yourself, or ask for input if you deem it necessary.
+A Decision is a point where another choice was possible and would change the behavior, a public contract, the scope, or the dependencies. State the choice, not options left to the implementer, and give a one-sentence reason when the choice is not obvious. Leave routine implementation choices and what stays unchanged out.
 
-The last Decision may be an `Out-of-Scope` Decision, defining what the plan will explicitly not address.
+Each Decision gets a **Decision ID** in the format `Dx` where `x` is a positive incrementing integer number. Be conservative with the number of Decisions, use as few as the plan needs.
 
-Each Decision gets a **Decision ID** in the format `Dx` where `x` is a positive incrementing integer number.
+Validate each Decision by inspecting the code, and check the claims of the ticket the same way. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. If a check contradicts a Decision you made, refine it. If it contradicts a Decision the user made, ask the user.
 
-Be conservative with the number of Decisions, use as few as the plan needs.
+The last Decision may be an `Out-of-Scope` Decision, listing what the ticket or the discussion mentioned and the plan deliberately does not address. Do not invent exclusions.
 
 ### 3. `## Acceptance Criteria`
 
-This is a list of **observable, verifiable outcomes** as unticked Markdown tasks (`- [ ]`). The implementer will use this list later as a major means to verify their changes to the codebase.
+This is a list of **observable, verifiable outcomes** as unticked Markdown tasks (`- [ ]`). The implementer will use this list later as a major means to verify their changes to the codebase. Each Decision except the `Out-of-Scope` Decision must be verifiable through at least one AC.
 
-Choose the appropriate Feedback Loops of AGENTS.md and its referenced documents for this plan to make an Acceptance Criterion verifiable in an automated fashion. Typical Feedback Loops run compilers, static code analyzers, automated tests and code coverage, mutation testing, automated benchmarks, etc. When behavior changes, require automated tests in the Acceptance Criteria. Require benchmarks only when performance is a material risk or requirement.
+Choose the appropriate Feedback Loops of AGENTS.md and its referenced documents to make an AC verifiable in an automated fashion. Typical Feedback Loops run compilers, static code analyzers, automated tests and code coverage, mutation testing, automated benchmarks, etc. Make sure the Feedback Loop actually checks the outcome; a loop that passes without checking anything verifies nothing.
 
-Some ACs cannot be automatically verified, e.g., the quality of documentation. It's OK that a human needs to review these ACs.
-
-Consider how long a Feedback Loop runs and weigh it against its benefits. E.g., mutation testing typically takes a long time - the corresponding AC should have a high impact to warrant it.
-
-If a plan requires a missing feedback loop, make this explicit in the Decisions and Acceptance Criteria.
-
-Each Decision must have at least one AC which provides the means to check whether the Decision has been implemented. List the affected AC at the end in the format `(D1, D3)`. Each AC must reference at least one Decision. 
+- When behavior changes, require automated tests and name the cases they must cover, including negative and failure cases.
+- Do not add ACs for checks every change must pass anyway, such as building or running the whole test suite.
+- Require benchmarks only when performance is a material risk or requirement.
+- Consider how long a Feedback Loop runs and weigh it against its benefits. E.g., mutation testing typically takes a long time - the corresponding AC should have a high impact to warrant it.
+- Some ACs cannot be automatically verified, e.g., the quality of documentation or behavior on another operating system. State what a human checks.
+- If a plan requires a missing Feedback Loop, adding it is a Decision with its own AC.
 
 ### 4. `## Technical Details`
 
-Provide additional information here that doesn't belong in the Decisions or Acceptance Criteria sections. These might be hints on how to implement certain aspects, like Principles or Patterns to follow, which code artifacts to create or extend, performance or threading insights, security aspects, how to structure automated tests and/or documentation.
+Provide only what the implementer, who has not seen the planning conversation, cannot quickly see in the code: where a change goes when it is not obvious, existing code to follow, interactions with other parts of the codebase, pitfalls, performance, threading or security aspects, and how to structure automated tests. Nothing here adds a behavior, a contract, or an exclusion: that is a Decision.
 
-Avoid step-by-step instructions and exhaustive listings. Use minimal code samples only when they clarify an important contract, such as an API signature, interface, or DTO shape. Say whether an example is exact or illustrative. Avoid providing finished implementations.
+Avoid step-by-step instructions and exhaustive listings. Use minimal code samples only when they clarify an important contract, such as an API signature, interface, or DTO shape. Say whether an example is exact or illustrative; an exact example must compile. Avoid providing finished implementations.
 
 ## How to Keep Plans Short and to the Point
 
-The main idea is to not repeat information that has already been stated. Decisions shouldn't be repeated in the Acceptance Criteria or Technical Details, they should be referenced instead. Acceptance Criteria statements shouldn't be repeated in the Technical Details. This leads to the principle "a section adds information to the previous sections and avoids duplication".
+State each fact once. Decisions are not repeated in the Acceptance Criteria or Technical Details; refer to them by their Decision ID instead. An exact contract, such as an error message or a verdict table, appears in one place, and the other sections refer to it. This leads to the principle "a section adds information to the previous sections and avoids duplication".
 
 The same goes for general guidance in AGENTS.md or its referenced documents. Refer to them by a link to their section or by their rule ID instead of duplicating their information.
+
+Leave out the history of your investigation and everything the implementer can see in the code.
 
 ## One Additional Section: `## Notes for the Guided Learning Teacher`
 
