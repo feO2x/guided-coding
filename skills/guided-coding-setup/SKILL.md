@@ -14,7 +14,7 @@ Guided Coding needs these artifacts:
 - `ai-plans/`, the folder holding all plans and Plan Deviations documents.
 - `ai-plans/AGENTS.md`, describing the folder, its file naming rules, and how Frozen Plans are treated.
 
-The outcome must be idempotent. Running this skill on a repository sets the artifacts up from scratch, brings outdated ones up to date, or leaves current ones untouched. Content unrelated to Guided Coding, such as project-specific instructions or user-authored notes, is never changed.
+Create missing files and folders, update outdated Guided Coding instructions, and leave current content unchanged. Preserve unrelated content, including project-specific instructions and user-authored notes.
 
 ## 1. Inspect the Repository
 
@@ -24,8 +24,8 @@ Identify the feedback loops and their exact commands. Look for:
 
 - compilers, type checkers, static analyzers, and linters
 - automated tests, code coverage, and mutation testing tools
-- benchmarks and
-- dependency, secret, container, and source-code security scans.
+- benchmarks
+- dependency, secret, container, and source-code security scans
 
 Only select commands that are immediately executable in the repository. Do not list tools merely because they are common for the detected language.
 
@@ -36,7 +36,7 @@ Create `AGENTS.md` in the repository root if it does not exist. Otherwise, make 
 Ensure it contains:
 
 1. `## Feedback Loops`: each command and what it verifies. Report to the user when no feedback loops could be found, and warn that `guided-coding-write-plan` refuses to write plans until at least one is listed.
-2. `## Guided Coding`: a link to `ai-plans/AGENTS.md`, noting that it holds the file naming conventions and the rules for working with Frozen Plans. Do not restate those rules here, they live next to the plans they govern, and agents pick them up when they read the folder.
+2. `## Guided Coding`: a link to `ai-plans/AGENTS.md`, noting that it holds the file naming conventions and the rules for working with Frozen Plans. Link to those rules instead of repeating them in the root file.
 
 If both sections already exist and are current, leave the file alone.
 
@@ -45,18 +45,21 @@ If both sections already exist and are current, leave the file alone.
 Create `ai-plans/` if it is missing. Compare `ai-plans/AGENTS.md` with `assets/ai-plans-AGENTS.md` relative to this skill file.
 
 - If the file is missing, copy the asset.
-- If the file exists with an older `guided-coding-version` marker or without one, update the Guided Coding paragraphs and the marker. Keep every repository-specific addition, such as a custom plan structure, naming conventions, or notes about legacy file names.
+- If the file exists with an older `guided-coding-version` marker or without one, update the Guided Coding paragraphs and the marker. Keep every repository-specific addition, such as a custom plan structure, naming conventions, or notes about legacy filenames.
 
 ## 4. Report and Give Customization Tips
 
-List the files you created, updated, or left unchanged, the feedback loops you documented, and which commands you ran. Report to the user that they should verify the changes.
+List the files you created, updated, or left unchanged, the feedback loops you documented, and which commands you ran. Ask the user to verify the changes.
 
 Then explain how Guided Coding can be customized, so the user knows the defaults are only a starting point:
 
 - **Plan structure:** `guided-coding-write-plan` uses a default structure with `## Rationale`, `## Acceptance Criteria`, and `## Technical Details`. It also ships the RDAT structure (`rdat-plan-structure.md`), which adds a `## Decisions` section with numbered Decisions as a summary for the reviewer. Name a structure file when invoking `guided-coding-write-plan`, or name it or describe your own structure in `ai-plans/AGENTS.md` to override the default.
-- **File names:** the skills use the placeholders `<timestamp>` (UTC, `YYYY-MM-DD-HHMM`), `<ticket-id>`, and `<short-title>` (kebab-case, shortened ticket title). Conventions for these, e.g., a `<ticket-id>` format or a maximum length for `<short-title>`, belong in `ai-plans/AGENTS.md`.
-- **Feedback loops:** plans should reference the feedback loops in the root `AGENTS.md` to make Acceptance Criteria verifiable. Adding or removing a feedback loop later only requires updating that list.
-- **Plan review:** `guided-coding-plan-and-review` reads an optional `## Plan Review` section in `ai-plans/AGENTS.md`: the number of reviewers and a model preference for each, the round limit (default 3), and how findings against the user's decisions are handled: `collect` (default) reports them as open for the user, `pause` stops the round and asks the user. Each round starts one subagent per reviewer, so a run costs reviewers × rounds subagent runs at most, plus one replacement for each reviewer that fails.
+- **Filenames:** the skills use the placeholders `<timestamp>` (UTC, `YYYY-MM-DD-HHMM`), `<ticket-id>`, and `<short-title>` (kebab-case, shortened ticket title). Conventions for these, e.g., a `<ticket-id>` format or a maximum length for `<short-title>`, belong in `ai-plans/AGENTS.md`.
+- **Feedback loops:** plans should reference the feedback loops in the root `AGENTS.md` to make acceptance criteria verifiable. Adding or removing a feedback loop later only requires updating that list.
+- **Plan review:** configure `guided-coding-plan-and-review` in an optional `## Plan Review` section in `ai-plans/AGENTS.md`. It supports a reviewer list with a model preference for each, a round limit (default 3), and a policy for findings that challenge the user's explicit decisions. `collect` (default) reports them as open for the user. `pause` stops the round and asks the user.
+
+  Each round starts one subagent per reviewer. The maximum number of subagent runs is the number of reviewers multiplied by the round limit, plus one replacement for each reviewer that fails.
+
 - **Deviations:** the threshold for what counts as a material deviation can be tightened or relaxed in `ai-plans/AGENTS.md`.
 
 Repository-specific conventions in `AGENTS.md` files take precedence over the skills' defaults.

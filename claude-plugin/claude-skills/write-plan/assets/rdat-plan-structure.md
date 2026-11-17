@@ -12,40 +12,46 @@ In one or two sentences, state the background and the problem this plan solves.
 
 ### 2. `## Decisions`
 
-Decisions are the main point for communication with superiors: a reader who reads only this section knows what will be built and why.
+A reviewer who reads only this section should know what will be built and why, and be able to approve the plan.
 
-A Decision is a point where another choice was possible and would change the behavior, a public contract, the scope, or the dependencies. State the choice, not options left to the implementer, and give a one-sentence reason when the choice is not obvious. Leave routine implementation choices and what stays unchanged out.
+Record a Decision when an alternative choice would affect behavior, public contracts, scope, or dependencies. State the choice, not options left to the implementer, and give a one-sentence reason when the choice is not obvious. Leave routine implementation choices and what stays unchanged out.
 
 Each Decision gets a **Decision ID**: `D1`, `D2`, etc. Keep existing Decision IDs when revising the draft. Use as few Decisions as the plan needs.
 
-Check the premises of each Decision against the code, including relevant claims of the ticket and the behavior of existing code you plan to reuse. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. If a premise that matters remains unverified, state it in the affected Decision, together with its consequence and what would resolve it. If a check invalidates a premise of a Decision you made, refine the Decision. If it invalidates a premise of a Decision the user made, ask the user.
+Check the assumptions behind each Decision against the code, including relevant claims made in the ticket and the behavior of existing code you plan to reuse. If reading the code is not enough, use temporary tests or projects to check the actual behavior. A simulation alone does not confirm it.
+
+If an important assumption remains unverified, state it in the affected Decision, along with its consequence and what would resolve it. If a check disproves an assumption behind your own Decision, revise that Decision. If it disproves an assumption behind the user's Decision, ask the user.
 
 The last Decision may be an `Out-of-Scope` Decision, listing what the ticket or the discussion mentioned and the plan deliberately does not address. Do not invent exclusions.
 
 ### 3. `## Acceptance Criteria`
 
-This is a list of **observable, verifiable outcomes** as unticked Markdown tasks (`- [ ]`). Each Decision except the `Out-of-Scope` Decision must be verifiable through at least one AC. ACs must not introduce behavior, contracts, scope, or dependencies that no Decision states. Tests and routine documentation that verify or explain a Decision refer to it and need no Decision of their own.
+List **observable, verifiable outcomes** as unchecked Markdown tasks (`- [ ]`). Each Decision, except the `Out-of-Scope` Decision, must have at least one acceptance criterion that verifies it. Criteria must not introduce behavior, contracts, scope, or dependencies absent from the Decisions.
 
-Choose the Feedback Loops of AGENTS.md and its referenced documents that actually verify an AC's outcome, such as compilers, static code analyzers, automated tests and code coverage, mutation testing, and automated benchmarks. If no Feedback Loops are listed, stop and report this to the user.
+Tests and routine documentation that verify or explain a Decision should refer to it. They do not need separate Decisions.
+
+Choose feedback loops listed in `AGENTS.md` or its referenced documents that verify the criterion's outcome, such as compilers, static analyzers, automated tests, code coverage, mutation testing, and benchmarks. If no feedback loops are listed, stop and report this to the user.
 
 - When behavior changes, require automated tests and name the cases they must cover, including negative and failure cases.
-- Do not add ACs for checks every change must pass anyway, such as building or running the whole test suite.
+- Do not add acceptance criteria for checks every change must pass anyway, such as building or running the whole test suite.
 - Require benchmarks only when performance is a material risk or requirement.
-- Consider how long a Feedback Loop runs and weigh it against its benefits. For slow loops such as mutation testing, the corresponding AC should have a high impact to warrant it.
-- Some ACs need human review, e.g., the quality of documentation or platform behavior that the available Feedback Loops do not cover. State what is checked and who verifies it.
-- If a plan requires a missing Feedback Loop, adding it is a Decision with its own AC.
+- Weigh each feedback loop's runtime against its benefits. Reserve slow checks, such as mutation testing, for criteria important enough to justify the time.
+- Some acceptance criteria need human review, e.g., the quality of documentation or platform behavior that the available feedback loops do not cover. State what is checked and who verifies it.
+- If a plan requires a missing feedback loop, adding it is a Decision with its own acceptance criterion.
 
 ### 4. `## Technical Details`
 
 Provide only what the implementer, who has not seen the planning conversation, cannot quickly see in the code: where a change goes when it is not obvious, existing code to follow, interactions with other parts of the codebase, pitfalls, performance, threading or security aspects, and how to structure automated tests. Nothing here adds a behavior, a contract, or an exclusion: that is a Decision.
 
-Avoid step-by-step instructions and exhaustive listings. Use minimal code samples only when they clarify an important contract, such as an API signature, interface, or DTO shape. Say whether an example is exact or illustrative; an exact example must compile. Avoid providing finished implementations.
+Avoid step-by-step instructions and exhaustive listings. Use minimal code samples only when they clarify an important contract, such as an API signature, interface, or DTO shape. Say whether an example is exact or illustrative. An exact example must compile. Avoid providing finished implementations.
 
 ## How to Keep Plans Short and to the Point
 
-State each fact once: a section adds information to the previous sections and avoids duplication. Decisions are not repeated in the Acceptance Criteria or Technical Details; refer to them by their Decision ID instead. An exact contract, such as an error message or a verdict table, appears in one place, and the other sections refer to it. Acceptance Criteria add how an outcome is verified, such as test inputs, expected results, and failure cases; Technical Details add how to implement it.
+State each fact once. Each section adds information to the previous sections. In Acceptance Criteria and Technical Details, refer to Decisions by their Decision IDs instead of repeating them. Keep exact contracts, such as error messages or verdict tables, in one place and refer to them from other sections.
 
-The same goes for general guidance in AGENTS.md or its referenced documents. Refer to them by a link to their section or by their rule ID instead of duplicating their information.
+Acceptance Criteria explain how to verify outcomes, including test inputs, expected results, and failure cases. Technical Details explain how to implement them.
+
+The same goes for general guidance in `AGENTS.md` or its referenced documents. Refer to them by a link to their section or by their rule ID instead of duplicating their information.
 
 Leave out the history of your investigation and routine details the implementer can quickly find in the code.
 

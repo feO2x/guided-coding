@@ -10,7 +10,7 @@ Your goal is to write an Initial Plan or Follow-Up Plan into the `ai-plans/` fol
 
 ## Plan File Name
 
-The initial file name of the new plan file is `<short-title>.md`. `<short-title>` is a shortened kebab-case version of the ticket title. At this point in the conversation, you should be able to derive a full title from the discussion that you can shorten. If not, ask the user to provide one and shorten it.
+Name the draft `<short-title>.md`, using a shortened kebab-case version of the ticket title. If no ticket title is available, derive one from the discussion. Ask the user for a title only if you cannot derive one.
 
 ## Plan Structure
 
@@ -20,11 +20,13 @@ Use the first plan structure that applies:
 2. A plan structure that `ai-plans/AGENTS.md` names in the same way or describes itself.
 3. `assets/default-plan-structure.md` relative to this skill file.
 
-A bare file name refers to a file in `assets/` relative to this skill file. Resolve other relative paths from the repository root. If the selected file does not exist, stop and report it, do not fall back.
+A bare filename refers to a file in `assets/` relative to this skill file. Resolve other relative paths from the repository root. If the selected file does not exist, stop and report it. Do not fall back to another structure.
 
 ## What Happens After Writing a Plan?
 
-The user reviews the plan. They will provide feedback, aspects of the plan might change. Once both you and the user agree on the plan being ready for implementation, it is frozen and becomes largely immutable (except for checking off Acceptance Criteria). When a plan is frozen, its file name is changed to `<timestamp>-<ticket-id>-<short-title>.md`, or `<timestamp>-<short-title>.md` (if no `<ticket-id>` is present). Also, a `*Frozen at ...*` line is inserted right below the `# Title` of the plan. All this doesn't happen in this step of the conversation.
+The user reviews the draft and may request changes. Once you and the user agree it is ready for implementation, it can be frozen. The only permitted edits after freezing are checking off acceptance criteria.
+
+Freezing renames the file to `<timestamp>-<ticket-id>-<short-title>.md`, or `<timestamp>-<short-title>.md` when there is no ticket ID. It also adds a `*Frozen at ...*` line directly below the title. Do not freeze the plan while running this skill.
 
 ## Follow-up Plans
 
@@ -36,4 +38,4 @@ Record only the changed decisions and outcomes. State exactly which earlier deci
 
 ## Most Importantly
 
-Try to keep each plan as concise as possible. Simpler language is preferred over elaborate prose.
+Keep plans concise. Use plain language.
