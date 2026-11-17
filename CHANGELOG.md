@@ -4,6 +4,8 @@ All notable changes to Guided Coding are documented here.
 
 ## [Unreleased]
 
+- Add `guided-coding-plan-and-review`, which writes a plan and refines it through independent reviewers in bounded rounds. Reviewers run `guided-coding-review-plan` in fresh contexts; the planner addresses every finding but never changes a decision the user made explicitly, and reports every finding with its resolution.
+- Let models invoke `guided-coding-write-plan` and `guided-coding-review-plan`, so other Guided Coding skills can use them. Their descriptions limit them to explicit requests by the user or by another Guided Coding skill.
 - Add RDAT (Rationale, Decisions, Acceptance Criteria, Technical Details), an opt-in plan structure next to the default one: numbered Decisions summarize what a reviewer approves, and each section adds information instead of repeating earlier ones.
 - Let `guided-coding-write-plan` take a plan structure when invoked, either a path to a Markdown file or the name of a bundled structure such as `rdat-plan-structure.md`. `ai-plans/AGENTS.md` can name one the same way.
 

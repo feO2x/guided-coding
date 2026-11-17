@@ -1,12 +1,12 @@
 ---
 name: guided-coding-write-plan
-description: Write a Guided Coding plan or follow-up plan after its approach has been discussed. Run only when explicitly requested by the user.
+description: Write a Guided Coding plan or follow-up plan after its approach has been discussed. Run only when explicitly requested by the user or by another Guided Coding skill.
 license: MIT
 ---
 
 # Write a Plan
 
-Your goal is to write an Initial Plan or Follow-Up Plan into the `ai-plans/` folder at the repository root. After writing, report the plan path and stop.
+Your goal is to write an Initial Plan or Follow-Up Plan into the `ai-plans/` folder at the repository root. After writing, report the plan path and stop. When another Guided Coding skill invoked this one, return to it instead of stopping.
 
 ## Plan File Name
 
