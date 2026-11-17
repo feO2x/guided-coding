@@ -24,9 +24,9 @@ The last Decision may be an `Out-of-Scope` Decision, listing what the ticket or 
 
 ### 3. `## Acceptance Criteria`
 
-This is a list of **observable, verifiable outcomes** as unticked Markdown tasks (`- [ ]`). The implementer will use this list later as a major means to verify their changes to the codebase. Each Decision except the `Out-of-Scope` Decision must be verifiable through at least one AC. ACs must not introduce behavior, contracts, scope, or dependencies that no Decision states.
+This is a list of **observable, verifiable outcomes** as unticked Markdown tasks (`- [ ]`). Each Decision except the `Out-of-Scope` Decision must be verifiable through at least one AC. ACs must not introduce behavior, contracts, scope, or dependencies that no Decision states.
 
-Choose the appropriate Feedback Loops of AGENTS.md and its referenced documents to make an AC verifiable in an automated fashion. Typical Feedback Loops run compilers, static code analyzers, automated tests and code coverage, mutation testing, automated benchmarks, etc. If no Feedback Loops are listed, stop and report this to the user. Make sure the Feedback Loop actually checks the outcome; a loop that passes without checking anything verifies nothing.
+Choose the Feedback Loops of AGENTS.md and its referenced documents that actually verify an AC's outcome, such as compilers, static code analyzers, automated tests and code coverage, mutation testing, and automated benchmarks. If no Feedback Loops are listed, stop and report this to the user.
 
 - When behavior changes, require automated tests and name the cases they must cover, including negative and failure cases.
 - Do not add ACs for checks every change must pass anyway, such as building or running the whole test suite.
@@ -43,7 +43,7 @@ Avoid step-by-step instructions and exhaustive listings. Use minimal code sample
 
 ## How to Keep Plans Short and to the Point
 
-State each fact once. Decisions are not repeated in the Acceptance Criteria or Technical Details; refer to them by their Decision ID instead. An exact contract, such as an error message or a verdict table, appears in one place, and the other sections refer to it. Acceptance Criteria add how an outcome is verified, such as test inputs, expected results, and failure cases. Technical Details add how to implement it. This leads to the principle "a section adds information to the previous sections and avoids duplication".
+State each fact once: a section adds information to the previous sections and avoids duplication. Decisions are not repeated in the Acceptance Criteria or Technical Details; refer to them by their Decision ID instead. An exact contract, such as an error message or a verdict table, appears in one place, and the other sections refer to it. Acceptance Criteria add how an outcome is verified, such as test inputs, expected results, and failure cases; Technical Details add how to implement it.
 
 The same goes for general guidance in AGENTS.md or its referenced documents. Refer to them by a link to their section or by their rule ID instead of duplicating their information.
 
