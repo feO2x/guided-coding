@@ -33,7 +33,7 @@ If you created the profile in this session, ask the user how they like to be tau
 
 ## 3. Create the Milestone Roadmap
 
-Before you create the roadmap, check the plan against the code. Read the root `AGENTS.md`, the documents the plan names, and the `AGENTS.md` of each directory the plan changes; do not crawl every document they reference. When the work later reaches another directory, read its `AGENTS.md` first. Check the plan's premises: the types, members, and files it describes as existing exist, and the current behavior it describes is what the code does. What the plan asks to add is not a missing premise. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. Remove all probes before you present the roadmap, since the user makes every lasting change to the repository. Handle what you find as described in section 6.
+Before you create the roadmap, check the plan against the code. Check the plan's premises: the types, members, and files it describes as existing exist, and the current behavior it describes is what the code does. What the plan asks to add is not a missing premise. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. Remove all probes before you present the roadmap, since the user makes every lasting change to the repository. Handle what you find as described in section 6.
 
 Present the milestones as a short roadmap without any code.
 

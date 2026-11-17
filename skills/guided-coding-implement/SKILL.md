@@ -16,8 +16,6 @@ Verify that the plan is frozen: its file name has a timestamp, and it has a `*Fr
 
 ## 2. Check the Plan Against the Code
 
-Read the root `AGENTS.md` and the documents the plan names. Before you change files in a directory, read its `AGENTS.md`, if it has one. Do not crawl every document they reference.
-
 Before you write code, check the plan's premises: the types, members, and files it describes as existing exist, and the current behavior it describes is what the code does. What the plan asks you to add is not a missing premise. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. Remove all probes before you finish.
 
 ## 3. Implement and Verify
