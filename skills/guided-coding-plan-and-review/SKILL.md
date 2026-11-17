@@ -16,7 +16,7 @@ Read the `## Plan Review` section of `ai-plans/AGENTS.md` if it exists. Argument
 
 - **Reviewers:** one reviewer on the harness default model. The configuration can name several, each with a model preference.
 - **Round limit:** 3.
-- **User decisions:** `collect` gathers findings against a decision the user made explicitly for the report. `pause` asks the user about each such finding before continuing.
+- **User decisions:** findings against a decision the user made explicitly in the conversation are never applied without the user. `collect`: continue, and report the finding as open for the user. `pause`: stop the round, ask the user, and continue with the answer. The default is `collect`.
 
 Model names are harness-specific. If a configured model is unavailable, run that reviewer on the harness default and say so in the report.
 
@@ -51,8 +51,9 @@ A round is complete when every reviewer has returned its findings. Replace a rev
 
 Then address every finding of every class:
 
-- A finding against a decision the user made explicitly in this conversation is never applied. With `collect`, keep it open for the user. With `pause`, ask the user and follow the answer.
-- Apply every other finding or reject it with a one-line reason. You may change anything else in the plan, including decisions you made alone and the scope. Reject one of two contradicting findings.
+- Handle a finding against a decision the user made explicitly as configured under **User decisions**.
+- Apply every other finding or reject it with a one-line reason. You may change anything else in the plan, including decisions you made alone and the scope.
+- When findings contradict each other, apply at most one and reject the others with a reason. Treat findings that say the same thing as one, with the highest class among them.
 - A fix corrects a decision, criterion, or fact. It adds only the explanation the plan structure requires for a changed decision, never review commentary, and never turns a `nit` into a new rule.
 - The plan keeps following the rules of `guided-coding-write-plan` and the plan structure it selected.
 
@@ -65,7 +66,7 @@ Report to the user:
 - the plan path, the rounds run, and why the run stopped;
 - the reviewers and the models actually used, including fallbacks;
 - every finding with its round, class, a one-line summary, and its resolution: applied, rejected with the reason, or open for the user;
-- a separate list of the decision and scope changes you applied, so the user can confirm them without comparing versions;
+- a separate list of the decision and scope changes you applied, including those the user approved during a pause, so the user can confirm them without comparing versions;
 - the plan's word count before and after review;
 - whether the plan changed after the last review round. Those changes are unreviewed.
 
