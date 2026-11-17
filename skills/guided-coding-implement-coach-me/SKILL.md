@@ -32,6 +32,8 @@ If you created the profile in this session, ask the user how they like to be tau
 
 ## 3. Create the Milestone Roadmap
 
+Before you create the roadmap, check the plan against the code. Read the root `AGENTS.md`, the `AGENTS.md` of each directory the plan touches, and the documents the plan names; do not crawl every document they reference. Check the plan's premises: the types, members, and files it names exist, and the current behavior it describes is what the code does. Create throwaway probes (throwaway tests or throwaway projects) when reading the code is not enough. A probe that only simulates the behavior does not confirm it. Remove all probes before you present the roadmap, since the user makes every lasting change to the repository. Handle what you find as described in section 7.
+
 Present the milestones as a short roadmap without giving away their implementations.
 
 Build it from vertical slices: each milestone cuts through the layers the plan touches and delivers behavior that runs end-to-end. At the Advancing stage, the user knows the individual areas and practices fitting them together, and a slice exposes a wrong design decision in the first milestone rather than the last. Keep the first slice thin, just enough to connect the layers, and widen it in the following ones. Give each slice one area in focus, ideally the one the user is least practiced in, so that you can tell what the milestone taught. If the plan does not split into slices, or the preferences ask for something else, choose another split that keeps one area in focus per milestone.
@@ -75,8 +77,21 @@ Move a stage only on what you observed. Promote at most one step per plan: to Ad
 
 ## 7. Handle Plan Issues
 
-If a plan decision is wrong or an Acceptance Criterion cannot be met as written, work out a solution or workaround and teach it like any other part of the plan; if you cannot, report it to the user. Ideally, you catch this while creating the roadmap. You decide whether a problem that needs external input interrupts or aborts the Implementing Phase. In the Guiding Phase, the reviewer decides how to proceed with your findings.
+A discrepancy that changes nothing, such as a moved file or a renamed private member, is no plan issue: mention it and proceed.
+
+When a plan decision or a fact the plan states is wrong, or an Acceptance Criterion cannot be met as written, a workaround is allowed only when all of these hold:
+
+1. Evidence shows the error: a test, a probe, or a compiler error.
+2. The plan's Rationale and every other decision of the plan stay unchanged.
+3. No public API, scope, or dependency changes beyond what the plan already decided.
+4. No test is weakened or removed.
+
+Discuss the workaround with the user before it goes into the code, then teach it like any other part of the plan. An Acceptance Criterion that is met only through a workaround stays unticked. In the Guiding Phase, the reviewer ticks it when they accept the workaround, or calls for a Follow-Up Plan when they do not.
+
+Otherwise, do not work around the problem. Tell the user what the plan says, what you observed and how, and the options you see. You decide whether a problem that needs external input interrupts or aborts the Implementing Phase.
 
 ## 8. After the Last Milestone
 
 Summarize what you and the user accomplished and point them to the Guiding Phase. Unless you faced plan issues, all Acceptance Criteria should be ticked.
+
+For the reviewer, list each workaround with the decision it departs from, the evidence, and what was done instead, and each problem that was not worked around with what the plan says, what you observed and how, and the options you saw. Reference a decision by the plan's file name and its Decision ID, such as `<plan-file-name> D3`, when the plan has Decision IDs. Otherwise, name the plan's file name and section, and quote the decision.
